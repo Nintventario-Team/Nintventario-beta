@@ -1,0 +1,106 @@
+<section id="name-page">
+    <p> BUSQUEDA </p>
+</section>
+<main>
+    <section id="filters">
+        <div class="filter">
+            <h3>
+                PRECIO
+            </h3>
+            <div class="filter-options">
+                <div class="filter-option">
+                    <input type="radio" name="price" (click)="updatePriceRange(0, 150)"> Todos
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="price" (click)="updatePriceRange(0, 50)"> $0 - $50
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="price" (click)="updatePriceRange(51, 100)"> $51 - $100
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="price" (click)="updatePriceRange(101, 150)"> $101 - $150
+                </div>
+            </div>
+        </div>
+        <div class="filter">
+            <h3>
+                ORDENAR POR
+            </h3>
+            <div class="filter-options">
+                <div class="filter-option">
+                    <input type="radio" name="orderBy" (click)="sortByPriceAscending()"> Más baratos primero
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="orderBy" (click)="sortByPriceDescending()"> Más caros primero
+                </div>
+            </div>
+        </div>
+        <div class="filter">
+            <h3>
+                GÉNERO
+            </h3>
+            <div class="filter-options">
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="todos" (click)="getFilteredData()"> Todos
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="aventura" (click)="filterByGenre('Aventura')"> Aventura
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="accion" (click)="filterByGenre('Acción')"> Acción
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="deporte" (click)="filterByGenre('Deporte')"> Deporte
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="simulacion" (click)="filterByGenre('Simulación')"> Simulación
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="lucha" (click)="filterByGenre('Lucha')"> Lucha
+                </div>
+                <div class="filter-option">
+                    <input type="radio" name="genre" value="estrategia" (click)="filterByGenre('Estrategia')"> Estrategia
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products-container">
+        <div id="products-paginator">
+            <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente">
+            </pagination-controls>
+        </div>
+        <div id="products">
+            <div class="product-message" *ngIf="data.length === 0">
+                <p id="no-products-message">No hay productos con estas características</p>
+            </div>
+            <div class="product-item" *ngFor="let producto of data | paginate: {itemsPerPage: 12, currentPage: page}"
+                (click)="
+                openDetails(producto)">
+                <img class="img-product" src="{{producto.url_imagen}}">
+                <p class="price-product">${{producto.precio}}</p>
+                <div class="product-info">
+                    <p class="product-name">{{producto.nombre}}</p>
+                </div>
+                <div class="cart-icon"><img class="addToCart-icon" src="../../../assets/img/add-cart-icon.png" alt="+">
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div class="details" *ngIf="showDetails && selectedProduct !== undefined">
+    <div class="details-container">
+        <img id="img-detalles" src="{{selectedProduct.url_imagen}}">
+        <p id="nombre-text">{{selectedProduct.nombre}}</p>
+        <p id="desc-text">{{selectedProduct.descripcion}}</p>
+        <p id="precio-text">Precio unitario: ${{selectedProduct.precio}}</p>
+        <h2> Detalles </h2>
+        <div *ngFor="let detalle of (selectedProduct.detalles.split(',') || [])">
+            <p id="detalles-text">{{detalle.trim()}}</p>
+        </div>
+        <button id="addToCart-detalles" (click)="addCart()"  >
+            <img id="cart-icon-detalles" src="../../../assets/img/white-add-cart-icon.png">
+            AGREGAR AL CARRITO</button>
+        <button id="closeButton-detalles" (click)="closeDetails()">X</button>
+    </div>
+</div>

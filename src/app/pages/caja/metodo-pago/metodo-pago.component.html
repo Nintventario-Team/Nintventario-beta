@@ -1,0 +1,57 @@
+<h2 class="section_name">Elige el Metodo de Pago</h2>
+<div class="bar">
+  <div class="circle circle1">
+    <div class="circle_n circle_s">1</div>
+  </div>
+  <div class="circle circle2">
+    <div class="circle_n circle_p">2</div>
+  </div>
+  <div class="circle circle3">
+    <div class="circle_n circle_s">3</div>
+  </div>
+</div>
+
+<div class="method_type">
+<h3>Seleccione el metododo de pago: </h3>
+    <div class="methods">
+        <input type="checkbox" name="tarjeta" id="tarjeta" [(ngModel)]="checkbox1" class="checkbox-input" (change)="verifySelection(1)">
+        <label for="tarjeta">tarjeta (credito/debito)</label>
+
+        <input type="checkbox" name="paypal" id="paypal" [(ngModel)]="checkbox2" class="checkbox-input" (change)="verifySelection(2)">
+        <label for="paypal">paypal</label>
+
+    </div>
+</div>
+
+<form class="form_tarjeta" *ngIf="showForm1">
+  <label for="nombre">Nombre del titular:</label>
+  <input type="text" id="nombre" name="nombre" required />
+
+  <label for="numero">Numero:</label>
+  <input type="text" id="numero" name="numero" required />
+
+  <label for="fecha">Fecha de Vencimiento:</label>
+  <input type="date" id="fecha" name="fecha" required />
+
+  <label for="cvv">cvv:</label>
+  <input type="tel" id="cvv" name="cvv" required />
+</form>
+
+<form class="form_paypal" *ngIf="showForm2">
+    <label for="correo">correo:</label>
+    <input type="email" id="correo" name="correo" required />
+  
+    <label for="contraseña">contraseña:</label>
+    <input type="password" id="contraseña" name="contraseña" required />
+  
+    <label for="codigo">codigo de seguridad:</label>
+    <input type="text" id="codigo" name="codigo" required />
+  
+  </form>
+  
+<div class="buttons">
+  <button id="keepBuying" routerLink="/caja/datos-personales">atras</button>
+  <button id="goToCheckout" routerLink="/caja/confirmar-compra">
+    Siguiente
+  </button>
+</div>

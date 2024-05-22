@@ -1,0 +1,50 @@
+<section id="name-page">
+  <p>CARRITO DE COMPRAS</p>
+</section>
+<main class="main_container">
+  <table id="articles">
+    <thead>
+      <tr>
+        <th>Articulo</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+        <th>IVA</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      @for (product of productshop; track $index) {
+        <tr>
+          <td>
+            <div class="article_info">
+              <img src="{{getCorrespondingProduct(product.producto_id)?.url_imagen}}" alt="img" />
+              <div class="article_details">
+                <span class="article_name">{{getCorrespondingProduct(product.producto_id)?.nombre}}</span>
+                <span class="article_type">{{getCorrespondingProduct(product.producto_id)?.detalles}}</span>
+              </div>
+            </div>
+          </td>
+          <td><input class="quantity" min="1" max="{{getCorrespondingProduct(product.producto_id)?.cantidad}}" type="number" value="{{product.cantidad}}" (change)="updateQuantity($event,product.id)" /></td>
+          <td>$<span>{{getSubtotal(product.producto_id,product.cantidad)}}</span></td>
+          <td>$<span>{{getIVA(product.producto_id,product.cantidad)}}</span></td>
+          <td><b>$</b><span class="total">{{getTotal(product.producto_id,product.cantidad)}}</span></td>
+        </tr>
+
+      }@empty {
+
+        <tr>
+          <td colspan="5">
+            <div class="empty">Sin productos que mostrar, continue comprando!</div>
+
+          </td>
+        </tr>
+      }
+    
+    </tbody>
+  </table>
+
+  <div class="buttons">
+    <button id="keepBuying" (click)="keepBuying()" >Seguir Comprando</button>
+    <button id="goToCheckout" (click)="goToCheckout()">Ir a La Caja</button>
+  </div>
+</main>

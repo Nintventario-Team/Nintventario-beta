@@ -21,6 +21,14 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+LOCALS = (
+    ('0', 'Ceibos'),
+    ('1', 'Entre_Rios'),
+    ('2', 'CCT_terrestre'),
+    ('3', 'Entregado'),
+    ('4', 'Paseo_Shopping_Machala'),
+)
+
 class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -28,7 +36,8 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField()
     category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True)
     date_added = models.DateField()
-
+    local = models.CharField(max_length=20, default='Ceibos', choices=LOCALS)
+    image = models.TextField(default='https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png')
     def __str__(self):
         return self.name
     

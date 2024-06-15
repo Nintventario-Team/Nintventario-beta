@@ -26,3 +26,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+
+def get_all_products(request):
+    products = Product.objects.all()
+    products_list = list(products.values())
+    return JsonResponse(products_list, safe=False)

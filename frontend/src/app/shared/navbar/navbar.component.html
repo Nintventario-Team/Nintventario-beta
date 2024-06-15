@@ -1,0 +1,29 @@
+<header>
+    <div class="header-background">
+      <div class="header-content">
+        <a id="logo-container" routerLink="/">
+          <img src="../../../assets/logo.png" alt="Logo de la tienda" width="70">
+          <div id="text-logo">
+            <p>Mundo magico del <span>Nintendo</span></p>
+          </div>
+        </a>
+        
+        <div id="searcher">
+          <nav>
+            <a routerLink="/videojuegos">INICIO</a>
+            <a routerLink="/funkos">CATEGORIAS</a>
+            <a routerLink="/figuras">BLOG</a>
+            <a routerLink="/consolas">CONTACTO</a>
+          </nav>
+          <img class="cart_icon" src="../../../assets/person.svg" routerLink="" alt="User" width="30">
+          <img class="cart_icon" src="../../../assets/shopping-cart-icon.svg" routerLink="/carrito" alt="Carrito de compras" width="30">
+          <img src="../../../assets/search-icon.svg" alt="search" width="23" (click)="toggleSearchBar()">
+        </div>
+      </div>
+      <div class="search-bar" *ngIf="isSearchBarVisible">
+        <input type="text" placeholder="Buscar producto...">
+        <img src="../../../assets/x.svg" alt="close" (click)="toggleSearchBar()">
+      </div>
+    </div>
+  </header>
+  

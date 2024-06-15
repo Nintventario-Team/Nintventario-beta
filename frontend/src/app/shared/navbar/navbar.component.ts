@@ -1,28 +1,34 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  isSearchBarVisible = false;
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const header = document.querySelector('header');
-    if (window.pageYOffset > 0) {
-      header?.classList.add('scrolled');
-    } else {
-      header?.classList.remove('scrolled');
+
+    if (header) {
+      const headerPaddingTop = 0.02 * window.innerHeight;
+
+      if (window.pageYOffset > headerPaddingTop) {
+        header.classList.add('scrolled');
+        header.classList.add('expanded');
+      } else {
+        header.classList.remove('scrolled');
+        header.classList.remove('expanded');
+      }
     }
   }
-
-  isSearchBarVisible = false;
 
   toggleSearchBar() {
     this.isSearchBarVisible = !this.isSearchBarVisible;
   }
-
-
 }

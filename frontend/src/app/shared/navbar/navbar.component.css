@@ -5,13 +5,15 @@ header {
   width: 100%;
   z-index: 1000;
   background-color: transparent;
+  padding-top: 2%;
+  transition: transform 0.3s ease, padding-top 0.3s ease;
 }
 
 .header-background {
   width: 75%;
   margin: 0 auto;
   background-color: #ffffff;
-  transition: width 0.3s;
+  transition: width 0.3s ease;
 }
 
 .header-content {
@@ -21,9 +23,32 @@ header {
   padding: 10px 20px;
 }
 
-header.scrolled .header-background {
+header.scrolled {
+  transform: translateY(0);
+  padding-top: 0;
+}
+
+header.expanded .header-background {
   width: 100%;
 }
+
+header:not(.expanded) .header-background {
+  width: 75%;
+}
+
+.categories-link {
+  position: relative;
+}
+
+.categories-link::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  bottom: -37px;
+  left: -10px;
+  right: -10px;
+}
+
 
 #logo-container {
   display: flex;
@@ -113,4 +138,44 @@ header.scrolled .header-background {
 
 .search-bar img{
   cursor: pointer;
+}
+
+/* Estilos para el menú desplegable */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  top: 100%; /* Hace que aparezca justo debajo del dropdown */
+  left: 0;
+  margin-top: 46px; /* Ajusta esta cantidad para la separación deseada */
+}
+
+.dropdown-content a {
+  color: var(--acento-turqueza);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-family: "Montserrat", sans-serif;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-content a:last-child {
+  border-bottom: none;
+}
+
+
+.dropdown-content a:hover {
+  background-color: #54a6f3;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

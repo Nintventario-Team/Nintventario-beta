@@ -4,7 +4,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
-    font-weight: 900;
 }
 .pie-pagina{
     width: 100%;
@@ -62,6 +61,7 @@
 }
 .pie-pagina .grupo-2 small{
     font-size: 15px;
+    font-weight: 0;
 }
 
 @media screen and (max-width:800px){

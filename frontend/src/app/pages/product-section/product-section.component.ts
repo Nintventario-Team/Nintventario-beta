@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { BusquedaService } from '../../services/busqueda.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Product } from '../../interfaces/product';
-
+import { CartItem } from '../../interfaces/cartItem';
 
 @Component({
   selector: 'app-product-section',
@@ -24,7 +24,7 @@ export class ProductSectionComponent implements OnInit {
   data : Product[]=[]; 
   page = 1; 
   showDetails = false;
-  selectedProduct: any;
+  selectedProduct: Product | undefined;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -78,6 +78,37 @@ export class ProductSectionComponent implements OnInit {
   }
 
   addCart(): void {
-    // Agregar el producto al carrito
+    let cartItem: CartItem={
+        id: this.selectedProduct!.id,
+        name: this.selectedProduct!.name,
+        price: this.selectedProduct!.price,
+        maxQuantity:this.selectedProduct!.quantity,
+        quantityToBuy: 1,
+        details: this.selectedProduct!.details,
+        image: this.selectedProduct!.image,
+    }
+
+    if(localStorage.getItem("cart")===null){
+      let cart : CartItem[]=[]
+      cart.push(cartItem)
+      localStorage.setItem("cart",JSON.stringify(cart))
+    }else{
+      let storedCart:CartItem[] = JSON.parse(localStorage.getItem("cart") as string)
+
+      let itemIndex=storedCart.findIndex((item)=> item.id === cartItem.id)
+
+      if(itemIndex<0){
+        storedCart.push(cartItem)
+        localStorage.setItem("cart",JSON.stringify(storedCart))
+      }else{
+
+        let storedItem: CartItem=storedCart[itemIndex]
+        storedItem.quantityToBuy++
+        storedCart[itemIndex] = storedItem
+
+        localStorage.setItem("cart",JSON.stringify(storedCart))
+      }
+    }
+
   }
 }

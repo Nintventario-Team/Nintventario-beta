@@ -36,7 +36,7 @@ export class IndexComponent {
   public newProducts: Product[] = [];
   showDetails: boolean = false;
   public selectedProduct!: Product;
-  public notice: News[] = this.newsService.updateNoticias().slice(0, 4);
+  public notice: News[] = this.newsService.updateNews().slice(0, 4);
 
   constructor(
    // private dataProvider: DataProviderService,

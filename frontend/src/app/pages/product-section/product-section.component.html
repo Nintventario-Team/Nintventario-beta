@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="filter" *ngIf="section === 'videojuegos'">
         <h3>GÉNERO</h3>
         <div class="filter-options">
@@ -86,10 +86,10 @@
           <p id="no-products-message">No hay productos con estas características</p>
         </div>
         <div class="product-item" *ngFor="let producto of data | paginate: { itemsPerPage: 12, currentPage: page }" (click)="openDetails(producto)">
-          <img class="img-product" src="{{producto.url_imagen}}">
-          <p class="price-product">${{producto.precio}}</p>
+          <img class="img-product" src="{{producto.image}}">
+          <p class="price-product">${{producto.price}}</p>
           <div class="product-info">
-            <p class="product-name">{{producto.nombre}}</p>
+            <p class="product-name">{{producto.name}}</p>
           </div>
           <div class="cart-icon"><img class="addToCart-icon" src="../../../assets/img/add-cart-icon.png" alt="+"></div>
         </div>
@@ -98,12 +98,12 @@
   </main>
   <div class="details" *ngIf="showDetails && selectedProduct !== undefined">
     <div class="details-container">
-      <img id="img-detalles" src="{{selectedProduct.url_imagen}}">
-      <p id="nombre-text">{{selectedProduct.nombre}}</p>
-      <p id="desc-text">{{selectedProduct.descripcion}}</p>
-      <p id="precio-text">Precio unitario: ${{selectedProduct.precio}}</p>
+      <img id="img-detalles" src="{{selectedProduct.image}}">
+      <p id="nombre-text">{{selectedProduct.name}}</p>
+      <p id="desc-text">{{selectedProduct.description}}</p>
+      <p id="precio-text">Precio unitario: ${{selectedProduct.price}}</p>
       <h2>Detalles</h2>
-      <div *ngFor="let detalle of (selectedProduct.detalles.split(',') || [])">
+      <div *ngFor="let detalle of (selectedProduct.details.split(',') || [])">
         <p id="detalles-text">{{detalle.trim()}}</p>
       </div>
       <button id="addToCart-detalles" (click)="addCart()">

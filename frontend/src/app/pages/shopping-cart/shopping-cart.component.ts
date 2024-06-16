@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Product } from '../../interfaces/product';
 
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
-//import { Carrito } from '../../interfaces/carrito';
+import { CartItem } from '../../interfaces/cartItem';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
 @Component({
@@ -18,73 +18,59 @@ import { forkJoin } from 'rxjs/internal/observable/forkJoin';
   styleUrl: './shopping-cart.component.css'
 })
 export class ShoppingCartComponent {
-  public products?: Product[];
-  //public productshop?: Carrito[];
+ // public products?: Product[];
+  public productshop?: CartItem[];
 
   //simula el id del usuario logeado
-  public userID: number = 1;
+ // public userID: number = 1;
 isCartEmpty: boolean=true;
 
-  constructor(
-   // private dataProvider: DataProviderService,
-    private router: Router,
-    private location: Location
-  ) {/*
-    this.dataProvider.getShoppingCart(this.userID).subscribe((cartResponse) => {
-      this.productshop = cartResponse as Carrito[];
-
-      if (this.productshop && this.productshop.length > 0) {
+constructor(
+  private router: Router,
+  private location: Location
+) {
+  const cartItem = localStorage.getItem("cart");
+  if (cartItem !== null) {
+     try {
+        this.productshop = JSON.parse(cartItem);
         this.isCartEmpty = false;
-        const productObservables = this.productshop.map((cart) => {
-          return this.dataProvider.getProductByID(cart.producto_id);
-        });
+     } catch (e) {
+        console.error('Error parsing cart data:', e);
+     }
+  }
+  //TO-DO actualizar maxquantity
+}
 
-        forkJoin(productObservables).subscribe((productResponses) => {
-          this.products = productResponses.map((response) => {
-            var res = response as Producto[];
-            return res[0];
-          });
-        });
-      }
-    });*/
-  }
-  getCorrespondingProduct(productID: number): Product | undefined {
-    return this.products?.find((product) => product.id === productID);
-  }
 
-  getSubtotal(productID: number, cantidad: number): number {
-    var product = this.getCorrespondingProduct(productID);
-    return product ? parseFloat((product.precio * cantidad).toFixed(2)) : 0;
+  getSubtotal(productID: number): number {
+    var product = this.productshop?.find((item)=>item.id===productID);
+    return product ? parseFloat((product.price * product.quantityToBuy).toFixed(2)) : 0;
   }
-  getIVA(productID: number, cantidad: number): number {
+  getIVA(productID: number): number {
     return parseFloat(
-      (this.getSubtotal(productID, cantidad) * 0.12).toFixed(2)
+      (this.getSubtotal(productID) * 0.12).toFixed(2)
     );
   }
-  getTotal(productID: number, cantidad: number): number {
+  getTotal(productID: number): number {
     return parseFloat(
       (
-        this.getSubtotal(productID, cantidad) + this.getIVA(productID, cantidad)
+        this.getSubtotal(productID) + this.getIVA(productID)
       ).toFixed(2)
     );
   }
 
-  updateQuantity($event: Event, id: number) {/*
+  updateQuantity($event: Event, id: number) {
     var input = $event.target as HTMLInputElement;
     var product = this.productshop?.find((product) => product.id === id);
-    product!.cantidad = parseInt(input.value);*/
+    product!.quantityToBuy = parseInt(input.value);
   }
 
-  goToCheckout() {/*
-    this.productshop?.map((cart) =>
-      this.dataProvider.updateCart(cart).subscribe()
-    );
-    this.router.navigate(['/caja']);*/
+  goToCheckout() {
+    localStorage.setItem("cart",JSON.stringify(this.productshop))
+    this.router.navigate(['/caja']);
   }
-  keepBuying() {/*
-    this.productshop?.map((cart) =>
-      this.dataProvider.updateCart(cart).subscribe()
-    );
-    this.location.back(); */
+  keepBuying() {
+    localStorage.setItem("cart",JSON.stringify(this.productshop))
+    this.location.back(); 
   }
 }

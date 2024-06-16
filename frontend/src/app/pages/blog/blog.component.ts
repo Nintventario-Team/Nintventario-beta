@@ -16,6 +16,6 @@ export class BlogComponent {
   constructor(private newsService: NewsService) {}
 
   ngOnInit() {
-    this.notice = this.newsService.updateNoticias();
+    this.notice = this.newsService.updateNews();
   }
 }

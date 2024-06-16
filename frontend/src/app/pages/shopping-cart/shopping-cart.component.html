@@ -13,22 +13,22 @@
         </tr>
       </thead>
       <tbody id="tableBody">
-        <!--
+        
         @for (product of productshop; track $index) {
           <tr>
             <td>
               <div class="article_info">
-                <img src="{{getCorrespondingProduct(product.producto_id)?.url_imagen}}" alt="img" />
+                <img src="{{product.image}}" alt="img" />
                 <div class="article_details">
-                  <span class="article_name">{{getCorrespondingProduct(product.producto_id)?.nombre}}</span>
-                  <span class="article_type">{{getCorrespondingProduct(product.producto_id)?.detalles}}</span>
+                  <span class="article_name">{{product.name}}</span>
+                  <span class="article_type">{{product.details}}</span>
                 </div>
               </div>
             </td>
-            <td><input class="quantity" min="1" max="{{getCorrespondingProduct(product.producto_id)?.cantidad}}" type="number" value="{{product.cantidad}}" (change)="updateQuantity($event,product.id)" /></td>
-            <td>$<span>{{getSubtotal(product.producto_id,product.cantidad)}}</span></td>
-            <td>$<span>{{getIVA(product.producto_id,product.cantidad)}}</span></td>
-            <td><b>$</b><span class="total">{{getTotal(product.producto_id,product.cantidad)}}</span></td>
+            <td><input class="quantity" min="1" max="{{product.maxQuantity}}" type="number" value="{{product.quantityToBuy}}" (change)="updateQuantity($event,product.id)" /></td>
+            <td>$<span>{{getSubtotal(product.id)}}</span></td>
+            <td>$<span>{{getIVA(product.id)}}</span></td>
+            <td><b>$</b><span class="total">{{getTotal(product.id)}}</span></td>
           </tr>
   
         }@empty {
@@ -40,7 +40,7 @@
             </td>
           </tr>
         }
-      -->
+      
       </tbody>
     </table>
   

@@ -78,7 +78,9 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
+              "src/favicon.ico",
               {
+                
                 "glob": "**/*",
                 "input": "public"
               }

@@ -9,6 +9,10 @@ header {
   transition: transform 0.3s ease, padding-top 0.3s ease;
 }
 
+.videojuegosLetter {
+  color: black;
+}
+
 .header-background {
   width: 75%;
   margin: 0 auto;
@@ -166,6 +170,7 @@ header:not(.expanded) .header-background {
   display: block;
   font-family: "Montserrat", sans-serif;
   border-bottom: 1px solid #ddd;
+  color: black;
 }
 
 .dropdown-content a:last-child {

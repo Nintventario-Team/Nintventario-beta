@@ -1,8 +1,8 @@
 <header>
     <div class="header-background">
       <div class="header-content">
-        <a id="logo-container" routerLink="/">
-          <img src="../../../assets/logo.png" alt="Logo de la tienda" width="70">
+        <a id="logo-container" routerLink="">
+          <img src="../../../assets/logo.png" alt="Logo de la tienda" width="70" (click)="navigateToHome()" routerLink="">
           <div id="text-logo">
             <p>Mundo magico del <span>Nintendo</span></p>
           </div>
@@ -10,7 +10,7 @@
         
         <div id="searcher">
           <nav>
-            <a routerLink="/">INICIO</a>
+            <a class="videojuegosLetter" routerLink="/">INICIO</a>
             <div class="dropdown">
               <a routerLink="/categorias" class="categories-link">CATEGORIAS</a>
               <div class="dropdown-content">

@@ -1,12 +1,11 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [CommonModule, RouterLinkActive, RouterLink],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
@@ -33,6 +32,10 @@ export class NavbarComponent {
 
   navigateToLogin() {
     this.router.navigateByUrl('/login');
+  }
+
+  navigateToHome() {
+    this.router.navigateByUrl('');
   }
 
   toggleSearchBar() {

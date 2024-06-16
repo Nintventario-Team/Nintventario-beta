@@ -1,3 +1,4 @@
+from itertools import count
 from django.urls import get_resolver
 from rest_framework import viewsets
 from .models import User, Client, Category, Product, Order, OrderItem
@@ -6,11 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-def debug_urls(request):
-    url_patterns = get_resolver(None).url_patterns
-    url_patterns_str = '\n'.join(str(p) for p in url_patterns)
-    return HttpResponse(url_patterns_str, content_type='text/plain')
+from django.db.models import Count
 
 def get_all_products(request):
     products = Product.objects.all()
@@ -68,3 +65,15 @@ def register_view(request):
             return JsonResponse({'error': str(e)}, status=400)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+#INDEX METHOD PAGE
+
+def newest_products(request):
+    newest_products = Product.objects.order_by('-date_added')[:4]
+    serialized_products = [{'name': product.name, 'description': product.description, 'price': product.price, 'image': product.image} for product in newest_products]
+    return JsonResponse(serialized_products, safe=False)
+
+def bestselling_products(request):
+    bestselling_products = Product.objects.annotate(total_quantity=Count('order_items__quantity')).order_by('-total_quantity')[:4]
+    serialized_products = [{'name': product.name, 'description': product.description, 'price': product.price, 'image': product.image} for product in bestselling_products]
+    return JsonResponse(serialized_products, safe=False)

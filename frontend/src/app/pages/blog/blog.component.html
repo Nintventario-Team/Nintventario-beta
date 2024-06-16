@@ -1,0 +1,13 @@
+<div class="projcard-container">
+    <div *ngFor="let noticia of notice" class="projcard projcard-blue">
+        <div class="projcard-innerbox">
+            <img class="projcard-img" [src]="noticia.urlImagen" />
+            <div class="projcard-textbox">
+                <div class="projcard-title">{{ noticia.titulo }}</div>
+                <div class="projcard-subtitle">{{ noticia.autor }}</div>
+                <div class="projcard-bar"></div>
+                <div class="projcard-description">{{ noticia.descripcion }}</div>
+            </div>
+        </div>
+    </div>
+</div>

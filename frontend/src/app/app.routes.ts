@@ -1,4 +1,7 @@
-import { Routes } from '@angular/router';
+
+import {  Routes } from '@angular/router';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 import { IndexComponent } from './pages/index/index.component';
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
@@ -13,7 +16,8 @@ export const routes: Routes = [
     { path: 'consolas', component: ProductSectionComponent, data: { section: 'consolas' } },
     { path: 'coleccionables', component: ProductSectionComponent, data: { section: 'coleccionables' } },
     
-
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
     {path:'shoppingCart',component:ShoppingCartComponent},
 
     { path: '**', redirectTo: '' },

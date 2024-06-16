@@ -6,13 +6,17 @@ import { ProductService } from './services/product.service';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { BannerComponent } from './shared/banner/banner.component';
+import { MidBannerComponent } from './shared/mid-banner/mid-banner.component';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, NavbarComponent, FooterComponent, BannerComponent],
+  imports: [RouterOutlet, CommonModule, NavbarComponent, FooterComponent, BannerComponent, FormsModule, MidBannerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent {
   title = 'MundoNintendo';
   isIndexPage: boolean;
@@ -24,13 +28,5 @@ export class AppComponent {
       }
     });
   }
-  products: any[] = [];
-  categories: any;
   
-  ngOnInit(): void {
-    this.productService.getProducts().subscribe(data => {
-      this.products = data;
-    });
-  }
-
 }

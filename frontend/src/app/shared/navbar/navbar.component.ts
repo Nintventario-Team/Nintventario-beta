@@ -1,11 +1,12 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterLink],
+  imports: [CommonModule, RouterLinkActive, RouterLink,RouterModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
@@ -27,6 +28,11 @@ export class NavbarComponent {
         header.classList.remove('expanded');
       }
     }
+  }
+  constructor(private router: Router) { }
+
+  navigateToLogin() {
+    this.router.navigateByUrl('/login');
   }
 
   toggleSearchBar() {

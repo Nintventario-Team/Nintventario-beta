@@ -78,37 +78,49 @@ export class ProductSectionComponent implements OnInit {
   }
 
   addCart(): void {
-    let cartItem: CartItem={
-        id: this.selectedProduct!.id,
-        name: this.selectedProduct!.name,
-        price: this.selectedProduct!.price,
-        maxQuantity:this.selectedProduct!.quantity,
+    if (!this.selectedProduct) {
+        console.error('No product selected.');
+        return;
+    }
+
+    console.log(this.selectedProduct.id)
+
+    const cartItem: CartItem = {
+        id: this.selectedProduct.id,
+        name: this.selectedProduct.name,
+        price: this.selectedProduct.price,
+        maxQuantity: this.selectedProduct.quantity,
         quantityToBuy: 1,
-        details: this.selectedProduct!.details,
-        image: this.selectedProduct!.image,
+        details: this.selectedProduct.details,
+        image: this.selectedProduct.image,
+    };
+
+
+    let cart: CartItem[] = [];
+
+    const cartJson = localStorage.getItem("cart");
+    if (cartJson) {
+        try {
+            cart = JSON.parse(cartJson);
+        } catch (e) {
+            console.error('Error parsing cart data:', e);
+            cart = [];
+        }
     }
 
-    if(localStorage.getItem("cart")===null){
-      let cart : CartItem[]=[]
-      cart.push(cartItem)
-      localStorage.setItem("cart",JSON.stringify(cart))
-    }else{
-      let storedCart:CartItem[] = JSON.parse(localStorage.getItem("cart") as string)
+    console.log(cart)
 
-      let itemIndex=storedCart.findIndex((item)=> item.id === cartItem.id)
+    const itemIndex = cart.findIndex((item) => item.id === cartItem.id);
 
-      if(itemIndex<0){
-        storedCart.push(cartItem)
-        localStorage.setItem("cart",JSON.stringify(storedCart))
-      }else{
+    console.log(itemIndex)
 
-        let storedItem: CartItem=storedCart[itemIndex]
-        storedItem.quantityToBuy++
-        storedCart[itemIndex] = storedItem
-
-        localStorage.setItem("cart",JSON.stringify(storedCart))
-      }
+    if (itemIndex < 0) {
+        cart.push(cartItem);
+    } else {
+        cart[itemIndex].quantityToBuy++;
     }
 
-  }
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
 }

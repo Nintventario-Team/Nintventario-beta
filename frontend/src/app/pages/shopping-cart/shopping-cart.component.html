@@ -25,7 +25,7 @@
                 </div>
               </div>
             </td>
-            <td><input class="quantity" min="1" max="{{product.maxQuantity}}" type="number" value="{{product.quantityToBuy}}" (change)="updateQuantity($event,product.id)" /></td>
+            <td><input class="quantity" min="1" max="{{product.maxQuantity}}" type="number" value="{{product.quantityToBuy}}" (change)="updateQuantity($event,product.id)"     (keydown)="preventTyping($event)"          /></td>
             <td>$<span>{{getSubtotal(product.id)}}</span></td>
             <td>$<span>{{getIVA(product.id)}}</span></td>
             <td><b>$</b><span class="total">{{getTotal(product.id)}}</span></td>

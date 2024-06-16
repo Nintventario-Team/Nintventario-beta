@@ -70,10 +70,10 @@ def register_view(request):
 
 def newest_products(request):
     newest_products = Product.objects.order_by('-date_added')[:4]
-    serialized_products = [{'name': product.name, 'description': product.description, 'price': product.price, 'image': product.image} for product in newest_products]
+    serialized_products = [{'id':product.pk,'name': product.name, 'description': product.description, 'price': product.price,'quantity':product.quantity, 'image': product.image} for product in newest_products]
     return JsonResponse(serialized_products, safe=False)
 
 def bestselling_products(request):
     bestselling_products = Product.objects.annotate(total_quantity=Count('order_items__quantity')).order_by('-total_quantity')[:4]
-    serialized_products = [{'name': product.name, 'description': product.description, 'price': product.price, 'image': product.image} for product in bestselling_products]
+    serialized_products = [{'id':product.pk,'name': product.name, 'description': product.description, 'price': product.price,'quantity':product.quantity, 'image': product.image} for product in bestselling_products]
     return JsonResponse(serialized_products, safe=False)

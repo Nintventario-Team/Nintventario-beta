@@ -10,6 +10,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  getAllProducts():Observable<any[]> {
+    return this.http.get<any[]>(`${this.backendUrl}/products/`);
+  }
+
   getNewestProducts(): Observable<any[]> {
     return this.http.get<any[]>(`${this.backendUrl}/newest-products/`);
   }

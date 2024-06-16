@@ -4,11 +4,9 @@ import { Location } from '@angular/common';
 //Importación del servicio
 //import { DataProviderService } from '../../providers/data-provider.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Product } from '../../interfaces/product';
 
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { CartItem } from '../../interfaces/cartItem';
-import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -62,7 +60,10 @@ constructor(
   updateQuantity($event: Event, id: number) {
     var input = $event.target as HTMLInputElement;
     var product = this.productshop?.find((product) => product.id === id);
-    product!.quantityToBuy = parseInt(input.value);
+
+    if (parseInt(input.value)<=product!.maxQuantity){
+      product!.quantityToBuy = parseInt(input.value);
+    }
   }
 
   goToCheckout() {
@@ -73,4 +74,11 @@ constructor(
     localStorage.setItem("cart",JSON.stringify(this.productshop))
     this.location.back(); 
   }
+
+
+  preventTyping($event: KeyboardEvent) {
+
+      $event.preventDefault();
+  }
+
 }

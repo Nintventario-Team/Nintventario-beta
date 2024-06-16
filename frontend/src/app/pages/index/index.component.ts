@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-//import { DataProviderService } from '../../providers/data-provider.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
@@ -8,13 +7,9 @@ import { ProductService } from '../../services/product.service';
 import { Product } from '../../interfaces/product';
 import { News } from '../../interfaces/news';
 import { NewsService } from '../../services/news.service';
+import { CartItem } from '../../interfaces/cartItem';
 
-/*import { NgxPaginationModule } from 'ngx-pagination';
-import { Product } from '../../interfaces/product';
-import { Noticia } from '../../interfaces/noticia';
-import { Carrito } from '../../interfaces/carrito';
-import { NoticiasService } from '../../services/noticias.service';
-*/
+
 @Component({
   selector: 'app-index',
   standalone: true,
@@ -36,12 +31,12 @@ export class IndexComponent {
   public newProducts: any[] = [];
   showDetails: boolean = false;
   selectedProduct: any;
-  public notice: News[] = this.newsService.updateNews().slice(0, 4);
+ // public notice: News[] = this.newsService.updateNews().slice(0, 4);
 
   constructor(
    // private dataProvider: DataProviderService,
-    private router: Router,
-    private newsService: NewsService,
+    //private router: Router,
+    //private newsService: NewsService,
     private productService: ProductService
   ) {}
 
@@ -82,43 +77,52 @@ export class IndexComponent {
     this.selectedProduct = undefined;
   }
 
-  addCart() {/*
-    var productCart: Carrito = {
-      id: 1,
-      usuario_id: this.userID,
-      product_id: this.selectedProduct.id,
-      cantidad: 1,
+
+  addCart(): void {
+    if (!this.selectedProduct) {
+        console.error('No product selected.');
+        return;
+    }
+
+    console.log(this.selectedProduct.id)
+
+    const cartItem: CartItem = {
+        id: this.selectedProduct.id,
+        name: this.selectedProduct.name,
+        price: this.selectedProduct.price,
+        maxQuantity: this.selectedProduct.quantity,
+        quantityToBuy: 1,
+        details: this.selectedProduct.details,
+        image: this.selectedProduct.image,
     };
-    this.dataProvider.addToCart(productCart).subscribe(
-      (response: any) => {
-        console.log(response);
-      },
-      (error: any) => {
-        console.error(error);
-        this.router.navigate(['/carrito']);
-      }
-    );*/
-  }
 
-  getData() {/*
-    this.dataProvider.getProductsMostSold().subscribe((response) => {
-      if (Array.isArray(response)) {
-        let dataArray = response as Product[];
-        this.bestSellers = dataArray.slice(0, 4);
-      } else {
-        this.bestSellers = [];
-        console.error('La respuesta no es un array:', response);
-      }
-    });
 
-    this.dataProvider.getProductsByNews().subscribe((response) => {
-      if (Array.isArray(response)) {
-        let dataArray = response as Product[];
-        this.newProducts = dataArray.slice(0, 4);
-      } else {
-        this.newProducts = [];
-        console.error('La respuesta no es un array:', response);
-      }
-    });*/
-  }
+    let cart: CartItem[] = [];
+
+    const cartJson = localStorage.getItem("cart");
+    if (cartJson) {
+        try {
+            cart = JSON.parse(cartJson);
+        } catch (e) {
+            console.error('Error parsing cart data:', e);
+            cart = [];
+        }
+    }
+
+    console.log(cart)
+
+    const itemIndex = cart.findIndex((item) => item.id === cartItem.id);
+
+    console.log(itemIndex)
+
+    if (itemIndex < 0) {
+        cart.push(cartItem);
+    } else {
+        cart[itemIndex].quantityToBuy++;
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+
 }

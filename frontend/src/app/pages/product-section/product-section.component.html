@@ -41,10 +41,10 @@
         <h3>ORDENAR POR</h3>
         <div class="filter-options">
           <div class="filter-option">
-            <input type="radio" name="orderBy" (click)="sortByPriceAscending()"> Más baratos primero
+            <input type="radio" name="orderBy" (click)="sortProducts('asc')"> Más baratos primero
           </div>
           <div class="filter-option">
-            <input type="radio" name="orderBy" (click)="sortByPriceDescending()"> Más caros primero
+            <input type="radio" name="orderBy" (click)="sortProducts('desc')"> Más caros primero
           </div>
         </div>
       </div>

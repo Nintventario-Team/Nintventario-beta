@@ -5,6 +5,7 @@ import { BusquedaService } from '../../services/busqueda.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Product } from '../../interfaces/product';
 import { CartItem } from '../../interfaces/cartItem';
+import { ProductService} from '../../services/product.service'
 
 @Component({
   selector: 'app-product-section',
@@ -22,50 +23,83 @@ import { CartItem } from '../../interfaces/cartItem';
 export class ProductSectionComponent implements OnInit {
   section!: 'videojuegos' | 'funkopop' | 'consolas' | 'coleccionables';
   data : Product[]=[]; 
+  public totalProducts: Product[] = [];
   page = 1; 
   showDetails = false;
   selectedProduct: Product | undefined;
+  minPrice?: number = 0;
+  maxPrice?: number = 1000;
 
-  constructor(private route: ActivatedRoute) { }
+
+  constructor(private route: ActivatedRoute, private productService:ProductService) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       this.section = data['section'] as ('videojuegos' | 'funkopop' | 'consolas' | 'coleccionables');
-      this.loadData();
+      this.getFilteredData();
     });
   }
 
-  loadData(): void {
+  getFilteredData(): void {
+    let sectionToFilter:string = '' ;
     if (this.section === 'consolas') {
-      // Cargar datos de consolas
+      sectionToFilter = 'consola'
     } else if (this.section === 'videojuegos') {
-      // Cargar datos de videojuegos
+      sectionToFilter = 'jue'
     } else if (this.section === 'funkopop') {
-      // Cargar datos de funkopop
+      sectionToFilter = 'pop'
     } else if (this.section === 'coleccionables') {
-      // Cargar datos de coleccionables
+      sectionToFilter = 'muñecos'
     }
-  }
+
+    this.productService.getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter)
+    .subscribe(
+      (products) => {
+        this.data = this.totalProducts = products;
+        this.sortProducts(this.sortOrder)
+
+      }
+    );
+}
 
   updatePriceRange(min: number, max: number): void {
-    // Filtrar los productos por rango de precio
+    this.minPrice = min;
+    this.maxPrice = max;
+    this.getFilteredData();
+    }
+/*
+  sortByPriceAscending() {
+    this.page = 1; 
+    this.data.sort((a, b) => a.price - b.price);
   }
 
-  sortByPriceAscending(): void {
-    // Ordenar los productos por precio ascendente
+  sortByPriceDescending() {
+    this.page = 1; 
+    this.data.sort((a, b) => b.price - a.price);
   }
+*/
+  sortOrder: 'asc' | 'desc' = 'asc'; 
+  
 
-  sortByPriceDescending(): void {
-    // Ordenar los productos por precio descendente
+  sortProducts(order: 'asc' | 'desc') {
+    this.page = 1; 
+    this.sortOrder = order;
+
+    if (this.sortOrder === 'asc') {
+      this.data.sort((a, b) => a.price - b.price);
+    } else {
+      this.data.sort((a, b) => b.price - a.price); 
+    }
   }
+  
+  
+
 
   filterByGenre(genre: string): void {
     // Filtrar los videojuegos por género
   }
 
-  getFilteredData(): void {
-    // Obtener datos filtrados
-  }
+ 
 
   openDetails(producto: any): void {
     this.selectedProduct = producto;

@@ -21,7 +21,7 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe(
       response => {
         console.log('Login successful', response);
-        // Aquí puedes redirigir al usuario a otra página, por ejemplo, al dashboard
+        this.router.navigateByUrl('/');
       },
       error => {
         this.errorMessage = 'Invalid credentials';
@@ -29,6 +29,7 @@ export class LoginComponent {
       }
     );
   }
+  
   navigateToRegister() {
     this.router.navigateByUrl('/register');
   }

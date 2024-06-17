@@ -22,15 +22,10 @@ export class RegisterComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   onSubmit(): void {
-    if (this.password !== this.password2) {
-      this.errorMessage = 'Passwords do not match';
-      return;
-    }
-
     this.authService.register(this.email, this.password, this.password2, this.first_name, this.last_name).subscribe(
       response => {
         console.log('Registration successful', response);
-        // Aquí puedes redirigir al usuario a otra página, por ejemplo, al login
+        this.router.navigateByUrl('/');
       },
       error => {
         this.errorMessage = error.error.error || 'An error occurred';

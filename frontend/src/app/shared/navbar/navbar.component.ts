@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,7 @@ import { RouterModule } from '@angular/router';
 })
 export class NavbarComponent {
   isSearchBarVisible = false;
-
+  isLoggedIn: boolean | undefined;
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const header = document.querySelector('header');
@@ -29,10 +30,19 @@ export class NavbarComponent {
       }
     }
   }
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) { 
+    this.isLoggedIn = this.authService.checkLoginStatus();
+    this.authService.isLoggedIn$.subscribe(
+      isLoggedIn => this.isLoggedIn = isLoggedIn
+    );
+  }
 
   navigateToLogin() {
     this.router.navigateByUrl('/login');
+  }
+
+  navigateToUserDetails() {
+    this.router.navigateByUrl('/userDetails');
   }
 
   navigateToHome() {
@@ -42,4 +52,5 @@ export class NavbarComponent {
   toggleSearchBar() {
     this.isSearchBarVisible = !this.isSearchBarVisible;
   }
+
 }

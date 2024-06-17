@@ -9,11 +9,30 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db.models import Count
 
+#PRODUCT METHODS
 def get_all_products(request):
     products = Product.objects.all()
     products_list = list(products.values())
     return JsonResponse(products_list, safe=False)
 
+def get_filtered_products(request):
+    price_min = request.GET.get('price_min', None)
+    price_max = request.GET.get('price_max', None)
+    product_type = request.GET.get('product_type', None)
+
+    filters = {}
+    if price_min is not None:
+        filters['price__gte'] = price_min
+    if price_max is not None:
+        filters['price__lte'] = price_max
+    if product_type is not None:
+        filters['category__name__icontains'] = product_type
+
+    products = Product.objects.filter(**filters)
+    serializer = ProductSerializer(products, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+#AUTH METHODS
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':

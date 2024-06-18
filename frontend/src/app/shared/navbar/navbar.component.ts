@@ -2,16 +2,18 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterLink,RouterModule],
+  imports: [CommonModule, RouterLinkActive, RouterLink, RouterModule,FormsModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
   isSearchBarVisible = false;
+  inputValue: string = '';
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -29,7 +31,7 @@ export class NavbarComponent {
       }
     }
   }
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   navigateToLogin() {
     this.router.navigateByUrl('/login');
@@ -41,5 +43,15 @@ export class NavbarComponent {
 
   toggleSearchBar() {
     this.isSearchBarVisible = !this.isSearchBarVisible;
+  }
+
+  searchProduct($event: KeyboardEvent) {
+    var codeValue = $event.code;
+    if (codeValue === 'Enter') {
+      const trimmedValue = this.inputValue.trim();
+      if (trimmedValue) { 
+        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } });
+      }
+    }
   }
 }

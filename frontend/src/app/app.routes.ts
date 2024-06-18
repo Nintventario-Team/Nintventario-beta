@@ -12,10 +12,13 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'blog', component: BlogComponent},
+    { path: 'todos', component: ProductSectionComponent, data: { section: 'todos' } },
     { path: 'videojuegos', component: ProductSectionComponent, data: { section: 'videojuegos' } },
     { path: 'funkopop', component: ProductSectionComponent, data: { section: 'funkopop' } },
     { path: 'consolas', component: ProductSectionComponent, data: { section: 'consolas' } },
     { path: 'coleccionables', component: ProductSectionComponent, data: { section: 'coleccionables' } },
+    { path: 'accesorios', component: ProductSectionComponent, data: { section: 'accesorios' } },
+
     { path:'shoppingCart',component:ShoppingCartComponent},
 
     { path: '**', redirectTo: '' },

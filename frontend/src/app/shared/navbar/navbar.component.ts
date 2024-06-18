@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class NavbarComponent {
   isSearchBarVisible = false;
+  isLoggedIn: boolean | undefined; 
   inputValue: string = '';
 
   @HostListener('window:scroll', [])
@@ -31,10 +33,19 @@ export class NavbarComponent {
       }
     }
   }
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) { 
+    this.isLoggedIn = this.authService.checkLoginStatus();
+    this.authService.isLoggedIn$.subscribe(
+      isLoggedIn => this.isLoggedIn = isLoggedIn
+    );
+  }
 
   navigateToLogin() {
     this.router.navigateByUrl('/login');
+  }
+
+  navigateToUserDetails() {
+    this.router.navigateByUrl('/userDetails');
   }
 
   navigateToHome() {

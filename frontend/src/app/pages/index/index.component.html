@@ -7,7 +7,7 @@
                 <div class="product-bg"></div>
                 <div class="price">{{ product.price | currency: 'USD' }}</div>
                 <img [src]="product.image" [alt]="product.name" class="product-image" />
-                <div class="product-name">{{ product.name.split("_").join(" ") }}</div>
+                <div class="product-name">{{  product.name.split("_").slice(0, 3).join(" ") }}</div>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
                 <div class="product-bg"></div>
                 <div class="price">{{ product.price | currency: 'USD' }}</div>
                 <img [src]="product.image" [alt]="product.name" class="product-image" />
-                <div class="product-name">{{ product.name.split("_").join(" ")  }}</div>
+                <div class="product-name">{{  product.name.split("_").slice(0, 3).join(" ")  }}</div>
             </div>
         </div>
     </div>

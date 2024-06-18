@@ -5,6 +5,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { IndexComponent } from './pages/index/index.component';
 import {ProductSectionComponent} from './pages/product-section/product-section.component'
 import {BlogComponent } from './pages/blog/blog.component'
+import {UserDetailsComponent } from './pages/user-details/user-details.component'
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
 
 export const routes: Routes = [
@@ -13,6 +14,7 @@ export const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'blog', component: BlogComponent},
     { path: 'todos', component: ProductSectionComponent, data: { section: 'todos' } },
+    { path: 'userDetails', component: UserDetailsComponent},
     { path: 'videojuegos', component: ProductSectionComponent, data: { section: 'videojuegos' } },
     { path: 'funkopop', component: ProductSectionComponent, data: { section: 'funkopop' } },
     { path: 'consolas', component: ProductSectionComponent, data: { section: 'consolas' } },

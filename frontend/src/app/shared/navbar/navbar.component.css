@@ -95,7 +95,7 @@ header:not(.expanded) .header-background {
 }
 
 #searcher nav a {
-  color: var(--acento-turqueza);
+  color: black;
   font-family: "Montserrat", sans-serif;
   text-decoration: none;
   padding: 10px;

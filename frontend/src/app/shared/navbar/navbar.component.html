@@ -1,39 +1,44 @@
 <header>
-    <div class="header-background">
-      <div class="header-content">
-        <a id="logo-container" routerLink="">
-          <img src="../../../assets/logo.png" alt="Logo de la tienda" width="70" (click)="navigateToHome()" routerLink="">
-          <div id="text-logo">
-            <p>Mundo magico del <span>Nintendo</span></p>
-          </div>
-        </a>
-        
-        <div id="searcher">
-          <nav>
-            <a class="videojuegosLetter" routerLink="/">INICIO</a>
-            <div class="dropdown">
-              <a routerLink="/categorias" class="categories-link">CATEGORIAS</a>
-              <div class="dropdown-content">
-                <a routerLink="/todos">TODOS</a>
-                <a routerLink="/videojuegos">VIDEOJUEGOS</a>
-                <a routerLink="/funkopop">FUNKO POPS</a>
-                <a routerLink="/consolas">CONSOLAS</a>
-                <a routerLink="/coleccionables">COLECCIONABLES</a>
-                <a routerLink="/accesorios">ACCESORIOS</a>
-              </div>
-            </div>
-            <a routerLink="/blog">BLOG</a>
-            <a routerLink="/contacto">CONTACTO</a>
-          </nav>
-          <img class="cart_icon" src="../../../assets/person.svg" routerLink="" alt="User" width="30" (click)="navigateToLogin()">
-          <img class="cart_icon" src="../../../assets/shopping-cart-icon.svg" routerLink="/shoppingCart" alt="Carrito de compras" width="30">
-          <img src="../../../assets/search-icon.svg" alt="search" width="23" (click)="toggleSearchBar()">
+  <div class="header-background">
+    <div class="header-content">
+      <a id="logo-container" routerLink="">
+        <img src="../../../assets/logo.png" alt="Logo de la tienda" width="70" (click)="navigateToHome()" routerLink="">
+        <div id="text-logo">
+          <p>Mundo magico del <span>Nintendo</span></p>
         </div>
-      </div>
-      <div class="search-bar" *ngIf="isSearchBarVisible">
-        <input  [(ngModel)]="inputValue" type="text" placeholder="Buscar producto..." (keydown)="searchProduct($event)">
-        <img src="../../../assets/x.svg" alt="close" (click)="toggleSearchBar()">
+      </a>
+
+      <div id="searcher">
+        <nav>
+          <a class="videojuegosLetter" routerLink="/">INICIO</a>
+          <div class="dropdown">
+            <a routerLink="/categorias" class="categories-link">CATEGORIAS</a>
+            <div class="dropdown-content">
+              <a routerLink="/todos">TODOS</a>
+              <a routerLink="/videojuegos">VIDEOJUEGOS</a>
+              <a routerLink="/funkopop">FUNKO POPS</a>
+              <a routerLink="/consolas">CONSOLAS</a>
+              <a routerLink="/coleccionables">COLECCIONABLES</a>
+              <a routerLink="/accesorios">ACCESORIOS</a>
+            </div>
+          </div>
+          <a routerLink="/blog">BLOG</a>
+          <a routerLink="/contacto">CONTACTO</a>
+        </nav>
+        <img class="cart_icon" src="../../../assets/person.svg" routerLink="" alt="User" width="30"
+          *ngIf="isLoggedIn; else notLoggedIn" (click)="navigateToUserDetails()">
+        <ng-template #notLoggedIn>
+          <img class="cart_icon" src="../../../assets/person.svg" routerLink="" alt="User" width="30"
+            (click)="navigateToLogin()">
+        </ng-template>
+        <img class="cart_icon" src="../../../assets/shopping-cart-icon.svg" routerLink="/shoppingCart"
+          alt="Carrito de compras" width="30">
+        <img src="../../../assets/search-icon.svg" alt="search" width="23" (click)="toggleSearchBar()">
       </div>
     </div>
-  </header>
-  
+    <div class="search-bar" *ngIf="isSearchBarVisible">
+      <input  [(ngModel)]="inputValue" type="text" placeholder="Buscar producto..."  (keydown)="searchProduct($event)">
+      <img src="../../../assets/x.svg" alt="close" (click)="toggleSearchBar()">
+    </div>
+  </div>
+</header>

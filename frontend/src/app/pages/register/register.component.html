@@ -10,7 +10,7 @@
 <body>
     <div class="container active" id="container">
         <div class="form-container sign-up">
-            <form>
+            <form (ngSubmit)="onSubmit()">
                 <h1>Crea tu cuenta</h1>
                 <div class="social-icons">
                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -23,7 +23,7 @@
                 <input type="text" placeholder="Apellido" id="last_name" [(ngModel)]="last_name" name="last_name" required>
                 <input type="email" placeholder="Correo" id="email" [(ngModel)]="email" name="email" required>
                 <input type="password" placeholder="Contraseña" id="password" [(ngModel)]="password" name="password" required>
-                <button>Registrarse</button>
+                <button type="submit">Registrarse</button>
             </form>
         </div>
         <div class="toggle-container">

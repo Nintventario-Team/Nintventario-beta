@@ -1,0 +1,18 @@
+[flake8]
+max-line-length = 79
+exclude = 
+    .git,
+    __pycache__,
+    migrations,
+    settings.py,
+    env,
+    wsgi.py,
+    asgi.py,
+    __init__.py,
+    admin.py,
+    apps.py
+    manage.py
+per-file-ignores =
+    backend/custom_user/models.py: E501
+    backend/custom_user/urls.py: E501
+    

@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 export class RegisterComponent {
   email: string = '';
   password: string = '';
-  password2: string = '';
   first_name: string = '';
   last_name: string = '';
   errorMessage: string = '';
@@ -22,7 +21,7 @@ export class RegisterComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   onSubmit(): void {
-    this.authService.register(this.email, this.password, this.password2, this.first_name, this.last_name).subscribe(
+    this.authService.register(this.email, this.password, this.first_name, this.last_name).subscribe(
       response => {
         console.log('Registration successful', response);
         this.router.navigateByUrl('/');

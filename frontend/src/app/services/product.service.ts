@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product';
 
@@ -12,7 +12,7 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getAllProducts():Observable<Product[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/products/`);
+    return this.http.get<Product[]>(`${this.backendUrl}/products/`);
   }
 
   getFilteredProducts(priceMin?: number, priceMax?: number, productType?: string): Observable<Product[]> {
@@ -30,12 +30,12 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.backendUrl}/filteredProducts/`, { params });
   }
   
-  getNewestProducts(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/newest-products/`);
+  getNewestProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.backendUrl}/newest-products/`);
   }
 
-  getBestsellingProducts(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/bestselling-products/`);
+  getBestsellingProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.backendUrl}/bestselling-products/`);
   } 
 
 }

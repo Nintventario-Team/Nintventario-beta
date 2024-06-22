@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoginResponse } from '../../interfaces/user';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -19,8 +20,10 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.authService.login(this.email, this.password).subscribe(
-      response => {
+      (response: LoginResponse) => {
         console.log('Login successful', response);
+        const accessToken = response.access;
+        localStorage.setItem('accessToken', accessToken);
         this.router.navigateByUrl('/');
       },
       error => {
@@ -29,6 +32,7 @@ export class LoginComponent {
       }
     );
   }
+  
   
   navigateToRegister() {
     this.router.navigateByUrl('/register');

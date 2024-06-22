@@ -57,7 +57,7 @@ export class NavbarComponent {
   }
 
   searchProduct($event: KeyboardEvent) {
-    var codeValue = $event.code;
+    const codeValue = $event.code;
     if (codeValue === 'Enter') {
       const trimmedValue = this.inputValue.trim();
       if (trimmedValue) { 

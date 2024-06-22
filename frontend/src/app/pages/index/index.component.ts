@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { RouterLinkActive, RouterLink, Router } from '@angular/router';
+import { RouterLinkActive, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
-
-import { Product } from '../../interfaces/product';
-import { News } from '../../interfaces/news';
-import { NewsService } from '../../services/news.service';
 import { CartItem } from '../../interfaces/cartItem';
-
+import { Product } from '../../interfaces/product'
 
 @Component({
   selector: 'app-index',
@@ -27,10 +23,10 @@ import { CartItem } from '../../interfaces/cartItem';
 export class IndexComponent {
   //simula el id del usuario logeado
   public userID: number = 1;
-  public bestSellers: any[] = [];
-  public newProducts: any[] = [];
+  public bestSellers: Product[] = [];
+  public newProducts: Product[] = [];
   showDetails: boolean = false;
-  selectedProduct: any;
+  selectedProduct: Product | undefined;
  // public notice: News[] = this.newsService.updateNews().slice(0, 4);
 
   constructor(
@@ -67,7 +63,7 @@ export class IndexComponent {
     });
   }
 
-  openDetails(product: any) {
+  openDetails(product: Product) {
     this.showDetails = true;
     this.selectedProduct = product;
   }

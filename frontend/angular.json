@@ -10,6 +10,15 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
+        },
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
@@ -21,11 +30,10 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-                "src/favicon.ico",
-                "src/assets"
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-
               "src/styles.css"
             ],
             "scripts": []
@@ -80,7 +88,6 @@
             "assets": [
               "src/favicon.ico",
               {
-                
                 "glob": "**/*",
                 "input": "public"
               }

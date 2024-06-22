@@ -41,7 +41,7 @@ constructor(
 
 
   getSubtotal(productID: number): number {
-    var product = this.productshop?.find((item)=>item.id===productID);
+    const product = this.productshop?.find((item)=>item.id===productID);
     return product ? parseFloat((product.price * product.quantityToBuy).toFixed(2)) : 0;
   }
   getIVA(productID: number): number {
@@ -58,8 +58,8 @@ constructor(
   }
 
   updateQuantity($event: Event, id: number) {
-    var input = $event.target as HTMLInputElement;
-    var product = this.productshop?.find((product) => product.id === id);
+    const input = $event.target as HTMLInputElement;
+    const product = this.productshop?.find((product) => product.id === id);
 
     if (parseInt(input.value)<=product!.maxQuantity){
       product!.quantityToBuy = parseInt(input.value);

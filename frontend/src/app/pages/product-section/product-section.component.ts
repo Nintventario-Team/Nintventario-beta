@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   ActivatedRoute,
   RouterLinkActive,
-  RouterLink,
-  Router,
+  RouterLink
 } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -107,11 +106,12 @@ export class ProductSectionComponent implements OnInit {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   filterByGenre(genre: string): void {
     // Filtrar los videojuegos por género
   }
 
-  openDetails(producto: any): void {
+  openDetails(producto: Product): void {
     this.selectedProduct = producto;
     this.showDetails = true;
   }

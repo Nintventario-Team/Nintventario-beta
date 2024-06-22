@@ -1,8 +1,10 @@
-from django_use_email_as_username.models import BaseUser, BaseUserManager # type: ignore
+from django_use_email_as_username.models import BaseUser, BaseUserManager  # type: ignore
 from django.db import models
+
 
 class User(BaseUser):
     objects = BaseUserManager()
+
 
 class Client(models.Model):
     dni = models.CharField(max_length=20, unique=True)
@@ -14,12 +16,14 @@ class Client(models.Model):
     def __str__(self):
         return self.dni
 
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField()
 
     def __str__(self):
         return self.name
+
 
 LOCALS = (
     ('0', 'Ceibos'),
@@ -28,6 +32,7 @@ LOCALS = (
     ('3', 'Entregado'),
     ('4', 'Paseo_Shopping_Machala'),
 )
+
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
@@ -38,9 +43,11 @@ class Product(models.Model):
     date_added = models.DateField()
     local = models.CharField(max_length=20, default='Ceibos', choices=LOCALS)
     image = models.TextField(default='https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png')
+
     def __str__(self):
         return self.name
-    
+
+
 STATUS = (
     ('0', 'Pending'),
     ('1', 'Procesando'),
@@ -49,12 +56,14 @@ STATUS = (
     ('4', 'Cancelado'),
 )
 
+
 class Order(models.Model):
     client = models.ForeignKey(Client, related_name='orders', on_delete=models.CASCADE)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, default='Pending', choices=STATUS)
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)

@@ -2,7 +2,7 @@ from django_use_email_as_username.models import BaseUser, BaseUserManager  # typ
 from django.db import models
 
 
-class User(BaseUser):
+class User(BaseUser):  # noqa: DJ08
     objects = BaseUserManager()
 
 
@@ -64,8 +64,14 @@ class Order(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.total
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.order

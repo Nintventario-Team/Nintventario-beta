@@ -3,10 +3,10 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework_simplejwt.tokens import RefreshToken # type: ignore
+from rest_framework.decorators import api_view, permission_classes, authentication_classes  # noqa: E501
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication # type: ignore
 
 import json
 
@@ -55,8 +55,8 @@ def login_view(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         user = authenticate(request, email=email, password=password)
-        refresh = RefreshToken.for_user(user)
         if user is not None:
+            refresh = RefreshToken.for_user(user)
             login(request, user)
             return JsonResponse({
                 'message': 'Login successful',

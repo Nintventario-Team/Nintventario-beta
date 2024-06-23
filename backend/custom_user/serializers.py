@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Client, Category, Product, Order, OrderItem
+from custom_user.models import User, Client, Category, Product, Order, OrderItem
 
 
 class UserSerializer(serializers.ModelSerializer):

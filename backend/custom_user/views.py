@@ -55,9 +55,10 @@ def login_view(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         user = authenticate(request, email=email, password=password)
-        refresh = RefreshToken.for_user(user)
         if user is not None:
             login(request, user)
+            refresh = RefreshToken.for_user(user)
+
             return JsonResponse({
                 'message': 'Login successful',
                 'refresh': str(refresh),

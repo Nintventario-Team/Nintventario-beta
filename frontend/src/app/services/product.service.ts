@@ -4,18 +4,22 @@ import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private backendUrl = 'http://127.0.0.1:8000';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getAllProducts():Observable<Product[]> {
+  getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.backendUrl}/products/`);
   }
 
-  getFilteredProducts(priceMin?: number, priceMax?: number, productType?: string): Observable<Product[]> {
+  getFilteredProducts(
+    priceMin?: number,
+    priceMax?: number,
+    productType?: string
+  ): Observable<Product[]> {
     let params = new HttpParams();
     if (priceMin !== undefined) {
       params = params.set('price_min', priceMin.toString());
@@ -27,15 +31,16 @@ export class ProductService {
       params = params.set('product_type', productType);
     }
 
-    return this.http.get<Product[]>(`${this.backendUrl}/filteredProducts/`, { params });
+    return this.http.get<Product[]>(`${this.backendUrl}/filteredProducts/`, {
+      params,
+    });
   }
-  
+
   getNewestProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.backendUrl}/newest-products/`);
   }
 
   getBestsellingProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.backendUrl}/bestselling-products/`);
-  } 
-
+  }
 }

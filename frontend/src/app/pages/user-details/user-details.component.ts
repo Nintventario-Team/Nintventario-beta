@@ -8,12 +8,12 @@ import { User } from '../../interfaces/user';
   standalone: true,
   imports: [],
   templateUrl: './user-details.component.html',
-  styleUrl: './user-details.component.css'
+  styleUrl: './user-details.component.css',
 })
 export class UserDetailsComponent {
   userInfo: User | undefined;
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) {}
 
   logout() {
     this.authService.logout();
@@ -21,9 +21,7 @@ export class UserDetailsComponent {
   }
 
   ngOnInit(): void {
-
     if (this.authService.checkLoginStatus()) {
-
       this.authService.getUserInfo().subscribe(
         (data: User) => {
           this.userInfo = data;
@@ -36,6 +34,4 @@ export class UserDetailsComponent {
       console.error('User not authenticated');
     }
   }
-  
-
 }

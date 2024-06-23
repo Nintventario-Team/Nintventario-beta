@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  RouterLinkActive,
-  RouterLink
-} from '@angular/router';
+import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Product } from '../../interfaces/product';
@@ -79,14 +75,13 @@ export class ProductSectionComponent implements OnInit {
 
     const sectionToFilter = sectionMappings[this.section];
 
-    this.productService.getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter)
-    .subscribe(
-      (products) => {
+    this.productService
+      .getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter)
+      .subscribe((products) => {
         this.data = this.totalProducts = products;
-        this.sortProducts(this.sortOrder)
+        this.sortProducts(this.sortOrder);
         this.search();
-      }
-    );
+      });
   }
 
   updatePriceRange(min: number, max: number): void {

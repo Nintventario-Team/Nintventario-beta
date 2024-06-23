@@ -4,18 +4,18 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { LoginResponse, User } from '../interfaces/user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://127.0.0.1:8000/';
-  private registerUrl = this.baseUrl + 'register/';
-  private loginUrl = this.baseUrl + 'login/';
-  private logoutUrl = this.baseUrl + 'logout/';
-  private userInfoUrl = this.baseUrl + 'get-user-data/';
-  private isLoggedInSubject: BehaviorSubject<boolean>;
+  baseUrl = 'http://127.0.0.1:8000/';
+  registerUrl = this.baseUrl + 'register/';
+  loginUrl = this.baseUrl + 'login/';
+  logoutUrl = this.baseUrl + 'logout/';
+  userInfoUrl = this.baseUrl + 'get-user-data/';
+  isLoggedInSubject: BehaviorSubject<boolean>;
   public isLoggedIn$: Observable<boolean>;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     const currentUser = !!localStorage.getItem('accessToken');
     this.isLoggedInSubject = new BehaviorSubject<boolean>(currentUser);
     this.isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -26,11 +26,16 @@ export class AuthService {
       'Content-Type': 'application/json',
     });
     const body = { email, password };
-    this.isLoggedInSubject.next(true); 
+    this.isLoggedInSubject.next(true);
     return this.http.post<LoginResponse>(this.loginUrl, body, { headers });
   }
 
-  register(email: string, password: string, first_name: string, last_name: string): Observable<LoginResponse> {
+  register(
+    email: string,
+    password: string,
+    first_name: string,
+    last_name: string
+  ): Observable<LoginResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -51,7 +56,7 @@ export class AuthService {
 
   getUserInfo(): Observable<User> {
     const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+      Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
     });
     return this.http.get<User>(this.userInfoUrl, { headers });
   }

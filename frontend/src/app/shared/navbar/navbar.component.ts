@@ -8,13 +8,19 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterLink, RouterModule,FormsModule],
+  imports: [
+    CommonModule,
+    RouterLinkActive,
+    RouterLink,
+    RouterModule,
+    FormsModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
   isSearchBarVisible = false;
-  isLoggedIn: boolean | undefined; 
+  isLoggedIn: boolean | undefined;
   inputValue: string = '';
 
   @HostListener('window:scroll', [])
@@ -33,10 +39,10 @@ export class NavbarComponent {
       }
     }
   }
-  constructor(private router: Router, private authService: AuthService) { 
+  constructor(private router: Router, private authService: AuthService) {
     this.isLoggedIn = this.authService.checkLoginStatus();
     this.authService.isLoggedIn$.subscribe(
-      isLoggedIn => this.isLoggedIn = isLoggedIn
+      (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
     );
   }
 
@@ -60,7 +66,7 @@ export class NavbarComponent {
     const codeValue = $event.code;
     if (codeValue === 'Enter') {
       const trimmedValue = this.inputValue.trim();
-      if (trimmedValue) { 
+      if (trimmedValue) {
         this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } });
       }
     }

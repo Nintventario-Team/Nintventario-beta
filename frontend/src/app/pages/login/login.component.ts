@@ -9,14 +9,14 @@ import { LoginResponse } from '../../interfaces/user';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(): void {
     this.authService.login(this.email, this.password).subscribe(
@@ -26,17 +26,14 @@ export class LoginComponent {
         localStorage.setItem('accessToken', accessToken);
         this.router.navigateByUrl('/');
       },
-      error => {
+      (error) => {
         this.errorMessage = 'Invalid credentials';
         console.error('Login error', error);
       }
     );
   }
-  
-  
+
   navigateToRegister() {
     this.router.navigateByUrl('/register');
   }
-  
-  
 }

@@ -1,4 +1,3 @@
-# Importa las clases necesarias para los test cases
 from django.test import TestCase
 from custom_user.models import User, Client, Category, Product, Order, OrderItem
 from custom_user.serializers import UserSerializer, ClientSerializer, CategorySerializer, ProductSerializer, OrderSerializer, OrderItemSerializer
@@ -6,7 +5,7 @@ from .factories import UserFactory, ClientFactory, CategoryFactory, ProductFacto
 
 class UserSerializerTestCase(TestCase):
     def setUp(self):
-        self.user = UserFactory.build()  # Genera una instancia de usuario válida
+        self.user = UserFactory.build() 
 
     def test_user_serializer_valid(self):
         serializer = UserSerializer(data=self.user.__dict__)
@@ -44,7 +43,7 @@ class ClientSerializerTestCase(TestCase):
 
 class CategorySerializerTestCase(TestCase):
     def setUp(self):
-        self.category = CategoryFactory.build()  # Genera una instancia de categoría válida
+        self.category = CategoryFactory.build()  
 
     def test_category_serializer_valid(self):
         serializer = CategorySerializer(data=self.category.__dict__)
@@ -59,7 +58,7 @@ class CategorySerializerTestCase(TestCase):
 
 class ProductSerializerTestCase(TestCase):
     def setUp(self):
-        self.product = ProductFactory.build()  # Genera una instancia de producto válida
+        self.product = ProductFactory.build()  
 
     def test_product_serializer_valid(self):
         self.product.date_added = self.product.date_added.date()
@@ -97,7 +96,7 @@ class OrderSerializerTestCase(TestCase):
 
 class OrderItemSerializerTestCase(TestCase):
     def setUp(self):
-        self.order_item = OrderItemFactory.build()  # Genera una instancia de ítem de orden válida
+        self.order_item = OrderItemFactory.build()  
         self.order = OrderFactory.create()
     def test_order_item_serializer_valid(self):
 

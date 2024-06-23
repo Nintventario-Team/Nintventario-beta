@@ -46,3 +46,6 @@ Thumbs.db
 .firebaserc
 firebase.json
 /.firebase
+
+# Pycache
+/backend_nintventario/__pycache__

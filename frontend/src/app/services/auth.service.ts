@@ -1,58 +1,58 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { LoginResponse, User } from '../interfaces/user';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Observable, BehaviorSubject } from 'rxjs'
+import { LoginResponse, User } from '../interfaces/user'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://127.0.0.1:8000/';
-  private registerUrl = this.baseUrl + 'register/';
-  private loginUrl = this.baseUrl + 'login/';
-  private logoutUrl = this.baseUrl + 'logout/';
-  private userInfoUrl = this.baseUrl + 'get-user-data/';
-  private isLoggedInSubject: BehaviorSubject<boolean>;
-  public isLoggedIn$: Observable<boolean>;
+  private baseUrl = 'https://jorgemawyin.pythonanywhere.com/'
+  private registerUrl = this.baseUrl + 'register/'
+  private loginUrl = this.baseUrl + 'login/'
+  private logoutUrl = this.baseUrl + 'logout/'
+  private userInfoUrl = this.baseUrl + 'get-user-data/'
+  private isLoggedInSubject: BehaviorSubject<boolean>
+  public isLoggedIn$: Observable<boolean>
 
-  constructor(private http: HttpClient) { 
-    const currentUser = !!localStorage.getItem('accessToken');
-    this.isLoggedInSubject = new BehaviorSubject<boolean>(currentUser);
-    this.isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  constructor(private http: HttpClient) {
+    const currentUser = !!localStorage.getItem('accessToken')
+    this.isLoggedInSubject = new BehaviorSubject<boolean>(currentUser)
+    this.isLoggedIn$ = this.isLoggedInSubject.asObservable()
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-    });
-    const body = { email, password };
-    this.isLoggedInSubject.next(true); 
-    return this.http.post<LoginResponse>(this.loginUrl, body, { headers });
+    })
+    const body = { email, password }
+    this.isLoggedInSubject.next(true)
+    return this.http.post<LoginResponse>(this.loginUrl, body, { headers })
   }
 
   register(email: string, password: string, first_name: string, last_name: string): Observable<LoginResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-    });
-    const body = { email, password, first_name, last_name };
-    return this.http.post<LoginResponse>(this.registerUrl, body, { headers });
+    })
+    const body = { email, password, first_name, last_name }
+    return this.http.post<LoginResponse>(this.registerUrl, body, { headers })
   }
 
   logout(): Observable<unknown> {
-    localStorage.removeItem('accessToken');
-    this.isLoggedInSubject.next(false);
-    const headers = new HttpHeaders();
-    return this.http.post<unknown>(this.logoutUrl, {}, { headers });
+    localStorage.removeItem('accessToken')
+    this.isLoggedInSubject.next(false)
+    const headers = new HttpHeaders()
+    return this.http.post<unknown>(this.logoutUrl, {}, { headers })
   }
 
   checkLoginStatus(): boolean {
-    return !!localStorage.getItem('accessToken');
+    return !!localStorage.getItem('accessToken')
   }
 
   getUserInfo(): Observable<User> {
     const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-    });
-    return this.http.get<User>(this.userInfoUrl, { headers });
+      Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+    })
+    return this.http.get<User>(this.userInfoUrl, { headers })
   }
 }

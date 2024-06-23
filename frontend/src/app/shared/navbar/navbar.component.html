@@ -2,9 +2,18 @@
   <div class="header-background">
     <div class="header-content">
       <a id="logo-container" routerLink="">
-        <img src="../../../assets/logo.png" alt="Logo de la tienda" width="70" (click)="navigateToHome()" routerLink="">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flogo.png?alt=media&token=e35daf1c-fe3e-4615-971e-e4bedc79ad8a"
+          alt="Logo de la tienda"
+          width="70"
+          (click)="navigateToHome()"
+          routerLink=""
+        />
         <div id="text-logo">
-          <p>Mundo magico del <span>Nintendo</span></p>
+          <p>
+            Mundo magico del
+            <span>Nintendo</span>
+          </p>
         </div>
       </a>
 
@@ -25,20 +34,47 @@
           <a routerLink="/blog">BLOG</a>
           <a routerLink="/contacto">CONTACTO</a>
         </nav>
-        <img class="cart_icon" src="../../../assets/person.svg" routerLink="" alt="User" width="30"
-          *ngIf="isLoggedIn; else notLoggedIn" (click)="navigateToUserDetails()">
+        <img
+          class="cart_icon"
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+          routerLink=""
+          alt="User"
+          width="30"
+          *ngIf="isLoggedIn; else notLoggedIn"
+          (click)="navigateToUserDetails()"
+        />
         <ng-template #notLoggedIn>
-          <img class="cart_icon" src="../../../assets/person.svg" routerLink="" alt="User" width="30"
-            (click)="navigateToLogin()">
+          <img
+            class="cart_icon"
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+            routerLink=""
+            alt="User"
+            width="30"
+            (click)="navigateToLogin()"
+          />
         </ng-template>
-        <img class="cart_icon" src="../../../assets/shopping-cart-icon.svg" routerLink="/shoppingCart"
-          alt="Carrito de compras" width="30">
-        <img src="../../../assets/search-icon.svg" alt="search" width="23" (click)="toggleSearchBar()">
+        <img
+          class="cart_icon"
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
+          routerLink="/shoppingCart"
+          alt="Carrito de compras"
+          width="30"
+        />
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fsearch-icon.svg?alt=media&token=ba27c4e0-8220-426e-abc8-f65b359e2479"
+          alt="search"
+          width="23"
+          (click)="toggleSearchBar()"
+        />
       </div>
     </div>
     <div class="search-bar" *ngIf="isSearchBarVisible">
-      <input  [(ngModel)]="inputValue" type="text" placeholder="Buscar producto..."  (keydown)="searchProduct($event)">
-      <img src="../../../assets/x.svg" alt="close" (click)="toggleSearchBar()">
+      <input [(ngModel)]="inputValue" type="text" placeholder="Buscar producto..." (keydown)="searchProduct($event)" />
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fx.svg?alt=media&token=b742d8e9-ba3d-4722-8aea-be78bf8dd7d0"
+        alt="close"
+        (click)="toggleSearchBar()"
+      />
     </div>
   </div>
 </header>

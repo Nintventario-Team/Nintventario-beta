@@ -1,42 +1,46 @@
 <section id="best-sellers">
-    <div class="best-sellers-container">
-        <div class="header">LO MÁS VENDIDO</div>
-        <div class="view-more"><a routerLink="/vendidos">Ver más</a></div>
-        <div class="product-list">
-            <div *ngFor="let product of bestSellers" class="product-item" (click)="openDetails(product)">
-                <div class="product-bg"></div>
-                <div class="price">{{ product.price | currency: 'USD' }}</div>
-                <img [src]="product.image" [alt]="product.name" class="product-image" />
-                <div class="product-name">{{  product.name.split("_").slice(0, 3).join(" ") }}</div>
-            </div>
-        </div>
+  <div class="best-sellers-container">
+    <div class="header">LO MÁS VENDIDO</div>
+    <div class="view-more"><a routerLink="/vendidos">Ver más</a></div>
+    <div class="product-list">
+      <div *ngFor="let product of bestSellers" class="product-item" (click)="openDetails(product)">
+        <div class="product-bg"></div>
+        <div class="price">{{ product.price | currency: 'USD' }}</div>
+        <img [src]="product.image" [alt]="product.name" class="product-image" />
+        <div class="product-name">{{ product.name.split('_').slice(0, 3).join(' ') }}</div>
+      </div>
     </div>
+  </div>
 </section>
 
 <section id="new-products">
-    <div class="new-products-container">
-        <div class="header">NOVEDADES</div>
-        <div class="view-more"><a routerLink="/novedades">Ver más</a></div>
-        <div class="product-list">
-            <div *ngFor="let product of newProducts" class="product-item" (click)="openDetails(product)">
-                <div class="product-bg"></div>
-                <div class="price">{{ product.price | currency: 'USD' }}</div>
-                <img [src]="product.image" [alt]="product.name" class="product-image" />
-                <div class="product-name">{{  product.name.split("_").slice(0, 3).join(" ")  }}</div>
-            </div>
-        </div>
+  <div class="new-products-container">
+    <div class="header">NOVEDADES</div>
+    <div class="view-more"><a routerLink="/novedades">Ver más</a></div>
+    <div class="product-list">
+      <div *ngFor="let product of newProducts" class="product-item" (click)="openDetails(product)">
+        <div class="product-bg"></div>
+        <div class="price">{{ product.price | currency: 'USD' }}</div>
+        <img [src]="product.image" [alt]="product.name" class="product-image" />
+        <div class="product-name">{{ product.name.split('_').slice(0, 3).join(' ') }}</div>
+      </div>
     </div>
+  </div>
 </section>
 
 <div class="details" *ngIf="showDetails && selectedProduct !== undefined">
-    <div class="details-container">
-        <img id="img-detalles" src="{{selectedProduct.image}}">
-        <p id="nombre-text">{{selectedProduct.name.split("_").join(" ")}}</p>
-        <p id="desc-text">{{selectedProduct.description}}</p>
-        <p id="precio-text">Precio unitario: ${{selectedProduct.price}}</p>
-        <button id="addToCart-detalles" (click)="addCart()"  >
-            <img id="cart-icon-detalles" src="../../../assets/white-add-cart-icon.png">
-            AGREGAR AL CARRITO</button>
-        <button id="closeButton-detalles" (click)="closeDetails()">X</button>
-    </div>
+  <div class="details-container">
+    <img id="img-detalles" src="{{ selectedProduct.image }}" />
+    <p id="nombre-text">{{ selectedProduct.name.split('_').join(' ') }}</p>
+    <p id="desc-text">{{ selectedProduct.description }}</p>
+    <p id="precio-text">Precio unitario: ${{ selectedProduct.price }}</p>
+    <button id="addToCart-detalles" (click)="addCart()">
+      <img
+        id="cart-icon-detalles"
+        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fwhite-add-cart-icon.png?alt=media&token=979c21f2-7eb4-4a00-abe4-897c1802ec9f"
+      />
+      AGREGAR AL CARRITO
+    </button>
+    <button id="closeButton-detalles" (click)="closeDetails()">X</button>
+  </div>
 </div>

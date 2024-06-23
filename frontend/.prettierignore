@@ -1,0 +1,44 @@
+# Ignorar todos los archivos en el directorio node_modules
+node_modules/
+
+# Ignorar todos los archivos en el directorio build
+build/
+
+# Ignorar todos los archivos en el directorio vscode
+.vscode/
+
+# Ignorar todos los archivos en el directorio firebase
+.firebase/
+.firebaseerc
+firebase.json
+
+# Ignorar todos los archivos en el directorio angular
+.angular/
+
+# Ignorar archivo ESlint
+.eslintrc.json
+eslint.config.mjs
+
+
+# Ignorar archivos específicos
+src/somefile.js
+
+# Ignorar todos los archivos .min.js
+*.min.js
+
+# Ignorar todos los archivos en una carpeta específica
+public/
+
+# Ignorar archivos generados automáticamente
+*.generated.js
+
+# Ignorar archivos de log
+*.log
+
+.prettierrc
+tsconfig.app.json
+tsconfig.json
+tsconfig.spec.json
+angular.json
+package-lock.json
+package.json

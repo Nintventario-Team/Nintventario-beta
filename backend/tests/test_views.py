@@ -90,14 +90,14 @@ class AuthAPITestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['error'], 'Invalid credentials')
 
-        def test_logout_view(self):
-            user = User.objects.create_user(email='test@example.com', password='testpassword')
-            self.client.login(email='test@example.com', password='testpassword')
+    def test_logout_view(self):
+        user = User.objects.create_user(email='test@example.com', password='testpassword')
+        self.client.login(email='test@example.com', password='testpassword')
 
-            url = reverse('logout_view')
-            response = self.client.post(url)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json()['message'], 'Logout successful')
+        url = reverse('logout_view')
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['message'], 'Logout successful')
 
 
 class IndexAPITestCase(TestCase):

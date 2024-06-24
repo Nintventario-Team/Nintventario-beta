@@ -58,6 +58,8 @@ def login_view(request):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             login(request, user)
+            refresh = RefreshToken.for_user(user)
+
             return JsonResponse({
                 'message': 'Login successful',
                 'refresh': str(refresh),

@@ -27,7 +27,9 @@ export class ProductService {
       params = params.set('product_type', productType)
     }
 
-    return this.http.get<Product[]>(`${this.backendUrl}/filteredProducts/`, { params })
+    return this.http.get<Product[]>(`${this.backendUrl}/filteredProducts/`, {
+      params,
+    })
   }
 
   getNewestProducts(): Observable<Product[]> {

@@ -30,7 +30,7 @@ export class AppComponent {
   constructor(
     private http: HttpClient,
     private productService: ProductService,
-    private router: Router,
+    public router: Router,
   ) {
     this.isIndexPage = this.router.url === '/'
     this.router.events.subscribe(event => {

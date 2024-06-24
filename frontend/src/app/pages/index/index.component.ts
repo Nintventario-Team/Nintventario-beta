@@ -1,7 +1,5 @@
 import { Component } from '@angular/core'
-import { HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
-import { RouterLinkActive, RouterLink } from '@angular/router'
 import { ProductService } from '../../services/product.service'
 import { CartItem } from '../../interfaces/cartItem'
 import { Product } from '../../interfaces/product'
@@ -9,52 +7,41 @@ import { Product } from '../../interfaces/product'
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [
-    HttpClientModule,
-    CommonModule,
-    // NgxPaginationModule,
-    RouterLinkActive,
-    RouterLink,
-  ],
-  providers: [
-    /*DataProviderService*/
-  ],
+  imports: [CommonModule],
+  providers: [ProductService],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
 })
 export class IndexComponent {
-  //simula el id del usuario logeado
-  public userID: number = 1
   public bestSellers: Product[] = []
   public newProducts: Product[] = []
   showDetails: boolean = false
   selectedProduct: Product | undefined
-  // public notice: News[] = this.newsService.updateNews().slice(0, 4);
 
-  constructor(
-    // private dataProvider: DataProviderService,
-    //private router: Router,
-    //private newsService: NewsService,
-    private productService: ProductService,
-  ) {}
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.getNewestProducts()
-    this.getBestsellingProducts()
+    this.NewestProducts()
+    console.log('entre a INIT')
+    this.BestsellingProducts()
   }
 
-  getNewestProducts() {
+  NewestProducts() {
+    console.log('entre a NEWEST P')
+
     this.productService.getNewestProducts().subscribe({
       next: data => {
         this.newProducts = data
+        console.log('llame a PROsducTSER', data)
       },
       error: error => {
         console.error('Error fetching newest products:', error)
       },
     })
+    console.log('termine a NEWEST P', this.newProducts)
   }
 
-  getBestsellingProducts() {
+  BestsellingProducts() {
     this.productService.getBestsellingProducts().subscribe({
       next: data => {
         this.bestSellers = data

@@ -7,12 +7,12 @@ import { LoginResponse, User } from '../interfaces/user'
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'https://jorgemawyin.pythonanywhere.com/'
-  private registerUrl = this.baseUrl + 'register/'
-  private loginUrl = this.baseUrl + 'login/'
-  private logoutUrl = this.baseUrl + 'logout/'
-  private userInfoUrl = this.baseUrl + 'get-user-data/'
-  private isLoggedInSubject: BehaviorSubject<boolean>
+  baseUrl = 'https://jorgemawyin.pythonanywhere.com/'
+  registerUrl = this.baseUrl + 'register/'
+  loginUrl = this.baseUrl + 'login/'
+  logoutUrl = this.baseUrl + 'logout/'
+  userInfoUrl = this.baseUrl + 'get-user-data/'
+  isLoggedInSubject: BehaviorSubject<boolean>
   public isLoggedIn$: Observable<boolean>
 
   constructor(private http: HttpClient) {

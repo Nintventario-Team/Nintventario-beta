@@ -121,17 +121,17 @@ Clicking on the magnifying glass icon in the navigation bar will display a bar w
 
 - Then, check if you have the following packages by running the command (pip list)
 
-![Pip list](images%20for%20guides/pip%20list.jpg)
+![Pip list](images%20for%20guides/pip%20list.png)
 
 ### Configure the database:
 
 - Start XAMPP and make sure the MySQL and Apache servers are running.
 
-![Xampp configuration example](images%20for%20guides/xampp.jpg)
+![Xampp configuration example](images%20for%20guides/xampp.png)
 
 - Then, create a new database for your project from phpMyAdmin.
 
-![Cretion database example](images%20for%20guides/creation%20database.jpg)
+![Cretion database example](images%20for%20guides/creation%20database.png)
 
 ### Configure the Django backend:
 
@@ -139,7 +139,7 @@ Clicking on the magnifying glass icon in the navigation bar will display a bar w
 
 - Configure the connection to the MySQL database you just created with the credentials
 
-![Credentials database example](images%20for%20guides/creadentials%20database.jpg)
+![Credentials database example](images%20for%20guides/creadentials%20database.png)
 
 - Perform migrations by running (python manage.py makemigrations) followed by (python manage.py migrate) in CMD.
 
@@ -153,7 +153,7 @@ Clicking on the magnifying glass icon in the navigation bar will display a bar w
 
 - In another command line, navigate to the Angular frontend folder.
 
-![Frontend path](images%20for%20guides/frontend%20database.jpg)
+![Frontend path](images%20for%20guides/frontend%20database.png)
 
 - Install dependencies by running (npm install).
 

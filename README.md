@@ -70,3 +70,31 @@ Clicking on the magnifying glass icon in the navigation bar will display a bar w
 ![Search Bar](images%20for%20guides/barra%20de%20busqueda.png)
 
 ![Search Result Example](images%20for%20guides/resultados%20de%20busqueda.png)
+
+## Installation Guide for local deyploitment
+
+### Software Requirements:
+
+#### Python: Make sure you have Python installed on your system. You can verify it by using the following 
+
+#### Command: (python --version). If you don't have it, you can download it from the official Python website (https://www.python.org/downloads/).
+
+![Python Version](images%20for%20guides/python%20version.png)
+
+#### Angular CLI: If you don't have it yet, install Angular CLI globally by running (npm install -g @angular/cli) in your terminal.
+
+#### XAMPP: Download and install XAMPP from the official XAMPP website (https://www.apachefriends.org/index.html).
+
+### Hardware Requirements:
+
+#### CPU: A processor of at least 1 GHz is recommended.
+
+#### RAM: It is recommended to have at least 4 GB of RAM.
+
+#### Disk Space: Make sure you have at least 1 GB of free disk space for the project and dependencies.
+
+### Network Requirements:
+
+#### Internet Connection: An internet connection is required to install Python and Node.js dependencies, as well as to download Angular libraries and packages.
+
+## Installation Steps

@@ -1,3 +1,8 @@
+## Project Presentation
+You can access the project presentation video, which shows a demonstration (in English) of our software system showing the running software components and their compliance with functional and non-functional requirements, here.
+
+[![Project Presentation](https://img.youtube.com/vi/sleJBA5K3Nw/0.jpg)](https://youtu.be/sleJBA5K3Nw)
+
 ## User Guide for Navigating and Using the Website
 
 First, open your web browser and enter the URL of the web page displayed in Firebase which is the following:

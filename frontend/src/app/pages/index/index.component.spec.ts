@@ -1,16 +1,18 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing'
+import { TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing'
 import { IndexComponent } from './index.component'
 import { ProductService } from '../../services/product.service'
 import { Product } from '../../interfaces/product'
 import { ActivatedRoute } from '@angular/router'
 import { RouterTestingModule } from '@angular/router/testing'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { Router } from '@angular/router'
 
 describe('IndexComponent', () => {
   let component: IndexComponent
   let fixture: ComponentFixture<IndexComponent>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let productService: jasmine.SpyObj<ProductService>
+  let router: Router
 
   beforeEach(async () => {
     const productServiceSpy = jasmine.createSpyObj('ProductService', ['getNewestProducts', 'getBestsellingProducts'])
@@ -30,6 +32,7 @@ describe('IndexComponent', () => {
     productService = TestBed.inject(ProductService) as jasmine.SpyObj<ProductService>
     fixture = TestBed.createComponent(IndexComponent)
     component = fixture.componentInstance
+    router = TestBed.inject(Router)
   })
 
   afterEach(() => {
@@ -100,4 +103,20 @@ describe('IndexComponent', () => {
       ]),
     )
   })
+  it('should search product when Enter key is pressed', fakeAsync(() => {
+    const inputValue = 'test product'
+    const trimmedValue = inputValue.trim()
+    component.inputValue = inputValue
+
+    spyOn(router, 'navigate')
+
+    const event = new KeyboardEvent('keyup', { code: 'Enter' })
+    component.searchProduct(event)
+
+    tick()
+
+    expect(router.navigate).toHaveBeenCalledWith(['/todos'], {
+      queryParams: { q: trimmedValue },
+    })
+  }))
 })

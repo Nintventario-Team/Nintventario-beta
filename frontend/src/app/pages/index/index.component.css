@@ -1,270 +1,157 @@
-section {
-  margin-left: 4rem;
-  margin-bottom: 3rem;
-  margin-top: 2rem;
-}
-
-.best-sellers-container {
-  width: 1626px;
-  height: 521px;
+.carousel-container {
   position: relative;
-}
-
-.header {
-  left: 18px;
-  top: 0;
-  position: absolute;
-  color: #031926;
-  font-size: 24px;
-  font-family: 'Montserrat';
-  font-weight: 800;
-  word-wrap: break-word;
-}
-
-.view-more a {
-  width: 119px;
-  height: 29px;
-  left: 1507px;
-  top: 0;
-  position: absolute;
-  color: #031926;
-  font-size: 26px;
-  font-family: 'Montserrat';
-  font-weight: 800;
-  text-decoration: underline;
-  word-wrap: break-word;
-}
-
-.product-list {
-  width: 1626px;
-  height: 465px;
-  left: 0;
-  top: 56px;
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.product-item {
-  width: 381px;
-  height: 465px;
-  position: relative;
-  transition:
-    transform 0.3s,
-    opacity 0.3s;
-}
-
-.product-item:hover {
-  opacity: 0.8;
-}
-
-.product-bg {
-  width: 381px;
-  height: 465px;
-  position: absolute;
-  background: #fffcfc;
-  border-radius: 25px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-}
-
-.price {
-  left: 147px;
-  top: 413px;
-  position: absolute;
-  text-align: center;
-  color: black;
-  font-size: 20px;
-  font-family: 'Montserrat';
-  font-weight: 800;
-  word-wrap: break-word;
-  align-content: center;
-}
-
-.product-image {
-  width: 232px;
-  height: 300px;
-  left: 75px;
-  top: 20px;
-  position: absolute;
-  border-radius: 25px;
-  transition: transform 0.3s;
-}
-
-.product-item:hover .product-image {
-  transform: scale(1.2);
-}
-
-.product-name {
-  left: 36px;
-  top: 372px;
-  position: absolute;
-  text-align: center;
-  color: #2c3032;
-  font-size: 20px;
-  font-family: 'Montserrat';
-  font-weight: 800;
-  word-wrap: break-word;
-}
-
-.new-products-container {
-  width: 1626px;
-  height: 521px;
-  position: relative;
-}
-
-.card {
-  width: 375px;
-  background: white;
-  padding: 0.4em;
-  border-radius: 6px;
-}
-
-.card-image {
-  background-color: rgb(236, 236, 236);
   width: 100%;
-  height: 200px;
-  border-radius: 6px 6px 0 0;
+  max-width: 1000px;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
   overflow: hidden;
 }
 
-.card-image img {
+.carousel {
+  display: flex;
+  overflow: hidden;
+  position: relative;
   width: 100%;
-  height: 100%;
+}
+
+.carousel-item {
+  min-width: 100%;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
   object-fit: cover;
 }
 
-.card-image:hover {
-  transform: scale(0.98);
-}
-
-.category {
-  text-transform: uppercase;
-  font-size: 0.7em;
-  font-weight: 600;
-  color: rgb(63, 121, 230);
-  padding: 10px 7px 0;
-}
-
-.category:hover {
-  cursor: pointer;
-}
-
-.heading {
-  font-weight: 600;
-  color: rgb(88, 87, 87);
-  padding: 7px;
-}
-
-.heading:hover {
-  cursor: pointer;
-}
-
-.author {
-  color: gray;
-  font-weight: 400;
-  font-size: 11px;
-  padding-top: 20px;
-}
-
-.name {
-  font-weight: 600;
-}
-
-.name:hover {
-  cursor: pointer;
-}
-
-.news-container {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-}
-
-.details {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
-.details-container {
-  background: white;
-  padding: 60px;
-  border-radius: 8px;
-  position: relative;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-items: space-evenly;
-  align-items: center;
-}
-
-.details-container h2 {
-  margin-bottom: 10px;
-  font-size: 24px;
-  color: var(--acento-azul-oscuro);
-  font-weight: 600;
-  font-variant-caps: all-petite-caps;
-}
-
-#closeButton-detalles {
+.carousel-control {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
 }
 
-#img-detalles {
-  width: 200px;
+.carousel-control.prev {
+  left: 10px;
 }
 
-#nombre-text {
-  font-weight: 700;
-  font-size: 24px;
-  color: var(--acento-azul-oscuro);
-  font-variant-caps: all-petite-caps;
+.carousel-control.next {
+  right: 10px;
 }
 
-#desc-text {
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--acento-azul-oscuro);
+.carousel-control img {
+  width: 30px;
+  height: 30px;
 }
 
-#precio-text {
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--acento-azul-oscuro);
-}
 
-#detalles-text {
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--acento-azul-oscuro);
-}
-
-#addToCart-detalles {
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #468189;
-  font-weight: 400;
-  font-size: 16px;
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
   cursor: pointer;
-  color: #fff;
+  z-index: 1000;
 }
 
-#cart-icon-detalles {
-  width: 20px;
+.carousel-control.prev {
+  left: 10px;
+  filter: invert(100%);
 }
 
-.addToCart-icon {
-  width: 70%;
+.carousel-control.next {
+  right: 10px;
+  filter: invert(100%);
 }
+
+/* Style search bar*/
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f3b0;
+  padding: 20px;
+  max-width: 965px;
+  height: 140px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+.search-container p {
+  font-size: 30px;
+  margin-right: 20px;
+  color: #001D4A;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.search-box input[type="text"] {
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #001D4A;
+  border-radius: 25px;
+  width: 250px;
+  margin-right: 10px;
+}
+
+.mario-image {
+  width: 100px;
+  height: auto;
+}
+
+/* Style category section */
+.categories-container {
+  display: flex;
+  justify-content: center;
+}
+
+.category {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.best-sellers {
+  background-color: #001D4A;
+  color: white;
+  width: 445px;
+  cursor: pointer;
+}
+
+.new-arrivals {
+  background-color: #FFD26A;
+  color: #001D4A;
+  width: 445px;
+  cursor: pointer;
+}
+
+.category-image {
+  width: 150px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.category p {
+  font-size: 24px;
+}
+

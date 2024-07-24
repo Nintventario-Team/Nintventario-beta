@@ -1,80 +1,155 @@
 <header>
   <div class="header-background">
     <div class="header-content">
-      <a id="logo-container" routerLink="">
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flogo.png?alt=media&token=e35daf1c-fe3e-4615-971e-e4bedc79ad8a"
-          alt="Logo de la tienda"
-          width="70"
-          (click)="navigateToHome()"
-          routerLink=""
-        />
-        <div id="text-logo">
-          <p>
-            Mundo magico del
-            <span>Nintendo</span>
-          </p>
+      <div class="navbar-top">
+        <div class="navbar-left">
+          <div class="hamburger-icon" (click)="toggleMenu()">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flist.svg?alt=media&token=1b989fcc-798f-4aa9-83a4-1a37d88db6a3"
+              alt="Menu"
+              width="30"
+            />
+          </div>
+          <div class="navbar-logo">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flogo.png?alt=media&token=e35daf1c-fe3e-4615-971e-e4bedc79ad8a"
+              alt="Logo de la tienda"
+              (click)="navigateToHome()"
+              routerLink=""
+            />
+          </div>
+          <div class="navbar-title">
+            <h1>MÁGICO MUNDO</h1>
+            <h1>DEL NINTENDO</h1>
+          </div>
         </div>
-      </a>
-
-      <div id="searcher">
-        <nav>
-          <a class="videojuegosLetter" routerLink="/">INICIO</a>
+        <div class="navbar-icons">
+          <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+              routerLink=""
+              alt="User"
+              width="30"
+              *ngIf="isLoggedIn; else notLoggedIn"
+              (click)="navigateToUserDetails()"
+            />
+            <ng-template #notLoggedIn>
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+                routerLink=""
+                alt="User"
+                width="30"
+                (click)="navigateToLogin()"
+              />
+            </ng-template>
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
+            routerLink="/shoppingCart"
+            alt="Carrito de compras"
+            width="30"
+          />
+        </div>
+      </div>
+      <div class="navbar-divider"></div>
+      <div class="navbar-bottom">
+        <div class="navbar-links">
+          <a routerLink="/">INICIO</a>
           <div class="dropdown">
-            <a routerLink="/categorias" class="categories-link">CATEGORIAS</a>
+            <a routerLink="/categorias" class="categories-link">PRODUCTOS</a>
             <div class="dropdown-content">
-              <a routerLink="/todos">TODOS</a>
-              <a routerLink="/videojuegos">VIDEOJUEGOS</a>
-              <a routerLink="/funkopop">FUNKO POPS</a>
-              <a routerLink="/consolas">CONSOLAS</a>
-              <a routerLink="/coleccionables">COLECCIONABLES</a>
-              <a routerLink="/accesorios">ACCESORIOS</a>
+              <div class="dropdown-column">
+                <h3>Videojuegos</h3>
+                <a routerLink="/">Videojuegos para nintendo 3DS</a>
+                <a routerLink="/">Videojuegos para nintendo Wii</a>
+                <a routerLink="/">Videojuegos para nintendo Switch</a>
+                <a routerLink="/">Videojuegos para PS1</a>
+                <a routerLink="/">Videojuegos para PS2</a>
+                <a routerLink="/">Videojuegos para PS3</a>
+                <a routerLink="/">Videojuegos para PS4</a>
+                <a routerLink="/">Videojuegos para PS5</a>
+                <a routerLink="/">Videojuegos para Xbox</a>
+                <a routerLink="/">Videojuegos para Xbox One</a>
+                <a routerLink="/">Videojuegos para Xbox 360</a>
+              </div>
+              <div class="dropdown-column">
+                <h3>Funko-Pops</h3>
+                <a routerLink="/">Funkos de mario bros</a>
+                <a routerLink="/">Funkos de marvel</a>
+                <a routerLink="/">Funkos de DC</a>
+                <h3>Consolas</h3>
+                <a routerLink="/">Consolas PS4</a>
+                <a routerLink="/">Consolas PS5</a>
+                <a routerLink="/">Consolas Nintendo Switch</a>
+              </div>
+              <div class="dropdown-column">
+                <h3>Artículos</h3>
+                <a routerLink="/">Artículos para computadores</a>
+                <a routerLink="/">Artículos para nintendo 3DS</a>
+                <a routerLink="/">Artículos para nintendo Wii</a>
+                <a routerLink="/">Artículos para nintendo switch</a>
+                <a routerLink="/">Artículos para PS1</a>
+                <a routerLink="/">Artículos para PS2</a>
+                <a routerLink="/">Artículos para PS3</a>
+                <a routerLink="/">Artículos para PS4</a>
+                <a routerLink="/">Artículos para PS5</a>
+                <a routerLink="/">Artículos para televisores</a>
+                <a routerLink="/">Tazas</a>
+                <h3>Otros</h3>
+                <a routerLink="/">Otros...</a>
+              </div>
             </div>
           </div>
-          <a routerLink="/blog">BLOG</a>
+          <a routerLink="/locales">LOCALES</a>
           <a routerLink="/contacto">CONTACTO</a>
-        </nav>
-        <img
-          class="cart_icon"
-          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
-          routerLink=""
-          alt="User"
-          width="30"
-          *ngIf="isLoggedIn; else notLoggedIn"
-          (click)="navigateToUserDetails()"
-        />
-        <ng-template #notLoggedIn>
-          <img
-            class="cart_icon"
-            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
-            routerLink=""
-            alt="User"
-            width="30"
-            (click)="navigateToLogin()"
-          />
-        </ng-template>
-        <img
-          class="cart_icon"
-          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
-          routerLink="/shoppingCart"
-          alt="Carrito de compras"
-          width="30"
-        />
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fsearch-icon.svg?alt=media&token=ba27c4e0-8220-426e-abc8-f65b359e2479"
-          alt="search"
-          width="23"
-          (click)="toggleSearchBar()"
-        />
+        </div>
       </div>
     </div>
-    <div class="search-bar" *ngIf="isSearchBarVisible">
-      <input [(ngModel)]="inputValue" type="text" placeholder="Buscar producto..." (keydown)="searchProduct($event)" />
-      <img
-        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fx.svg?alt=media&token=b742d8e9-ba3d-4722-8aea-be78bf8dd7d0"
-        alt="close"
-        (click)="toggleSearchBar()"
-      />
+  </div>
+  <!-- Menu mobile -->
+  <div class="mobile-menu" [class.open]="menuVisible">
+    <div class="mobile-menu-content">
+      <div class="mobile-menu-categories" *ngIf="!submenu">
+        <div class="close-btn" (click)="toggleMenu()">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fx-lg.svg?alt=media&token=19d8f58e-6409-474c-8f62-73c1238af612"
+            alt="Cerrar"
+            width="20"
+          />
+        </div>
+        <div *ngFor="let category of categories" class="category-item">
+          <button (click)="openSubMenu(category)">
+            {{ category.title }}
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
+              alt="Right Arrow"
+              width="20"
+            />
+          </button>
+          <div class="navbar-divider"></div>
+        </div>
+      </div>
+      <div class="mobile-submenu" *ngIf="submenu">
+        <button class="back-btn" (click)="closeSubMenu()">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-left.svg?alt=media&token=9224af5b-da27-46de-86d6-f5e5be09a53d"
+            alt="Left Arrow"
+            width="20"
+          />
+          Regresar
+        </button>
+        <div class="submenu-items">
+          <div *ngFor="let item of selectedCategory?.items">
+            <a routerLink="/">
+              {{ item }}
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
+                alt="Right Arrow"
+                width="20"
+              />
+            </a>
+            <div class="navbar-divider"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>

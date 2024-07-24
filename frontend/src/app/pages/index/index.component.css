@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box; /* Incluye padding y border en el width y height total */
+}
 .carousel-container {
   position: relative;
   width: 100%;
@@ -42,6 +45,7 @@
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 500;
 }
 
 .carousel-control.prev {
@@ -57,25 +61,34 @@
   height: 30px;
 }
 
+/* Media query para pantallas menores a 768px */
+@media (max-width: 768px) {
+  .carousel-container {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
 
-.carousel-control {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 1000;
+  .carousel-control img {
+    width: 25px;
+    height: 25px;
+  }
 }
 
-.carousel-control.prev {
-  left: 10px;
-  filter: invert(100%);
-}
+/* Media query para pantallas menores a 480px */
+@media (max-width: 480px) {
+  .carousel-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
-.carousel-control.next {
-  right: 10px;
-  filter: invert(100%);
+  .carousel-control img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .carousel-item {
+    min-width: 100%;
+  }
 }
 
 /* Style search bar*/
@@ -86,8 +99,8 @@
   justify-content: center;
   background-color: #f3f3b0;
   padding: 20px;
-  max-width: 965px;
-  height: 140px;
+  max-width: 1000px;
+  height: auto; /* Cambia la altura para que se ajuste al contenido */
   margin: auto;
   margin-bottom: 30px;
 }
@@ -117,34 +130,81 @@
   height: auto;
 }
 
+/* Media query para pantallas menores a 768px */
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column; /* Cambia la dirección del flex para apilar los elementos verticalmente */
+    align-items: flex-start; /* Alinea los elementos al inicio */
+    padding: 10px; /* Reduce el padding */
+  }
+
+  .search-container p {
+    font-size: 24px; /* Ajusta el tamaño de la fuente */
+    margin-bottom: 10px; /* Añade un margen inferior para separar del campo de búsqueda */
+  }
+
+  .search-box {
+    width: 100%; /* Hace que la caja de búsqueda ocupe el ancho completo */
+    justify-content: space-between; /* Alinea los elementos de manera espaciada */
+  }
+
+  .search-box input[type="text"] {
+    width: 70%; /* Ajusta el ancho del campo de búsqueda */
+    margin-right: 0; /* Elimina el margen derecho */
+  }
+
+  .mario-image {
+    width: 80px; /* Ajusta el tamaño de la imagen */
+  }
+}
+
+/* Media query para pantallas menores a 375px */
+@media (max-width: 375px) {
+  .search-container p {
+    font-size: 20px; /* Ajusta aún más el tamaño de la fuente */
+  }
+
+  .search-box input[type="text"] {
+    width: 100%; /* Asegura que el campo de búsqueda ocupe el ancho completo */
+    font-size: 0.9em; /* Ajusta el tamaño de la fuente del campo de búsqueda */
+  }
+
+  .mario-image {
+    width: 60px; /* Ajusta el tamaño de la imagen para pantallas muy pequeñas */
+  }
+}
+
 /* Style category section */
 .categories-container {
   display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias filas si es necesario */
   justify-content: center;
 }
 
+/* Estilo específico para cada categoría */
 .category {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 30px;
   margin-bottom: 30px;
+  width: 100%; /* Asegura que las categorías ocupen el ancho completo de su contenedor en pantallas pequeñas */
 }
 
-.best-sellers {
+/* Estilo para categorías individuales */
+.best-sellers, .new-arrivals {
   background-color: #001D4A;
   color: white;
-  width: 445px;
+  width: 500px;
   cursor: pointer;
 }
 
 .new-arrivals {
   background-color: #FFD26A;
   color: #001D4A;
-  width: 445px;
-  cursor: pointer;
 }
 
+/* Ajustes para imágenes de categoría */
 .category-image {
   width: 150px;
   height: auto;
@@ -153,5 +213,18 @@
 
 .category p {
   font-size: 24px;
+}
+
+/* Media query para pantallas menores a 768px */
+@media (max-width: 768px) {
+  .categories-container {
+    flex-direction: column; /* Cambia la dirección del flex para apilar las categorías verticalmente */
+    align-items: center; /* Alinea las categorías al centro */
+  }
+
+  .category {
+    width: 90%; /* Ajusta el ancho de cada categoría para que ocupe el 90% del ancho del contenedor */
+    max-width: 445px; /* Mantiene el ancho máximo para evitar que las categorías sean demasiado grandes */
+  }
 }
 

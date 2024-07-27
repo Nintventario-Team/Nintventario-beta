@@ -1,0 +1,291 @@
+/* shopping-cart.component.css */
+
+.cart-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  max-width: 1200px;
+  height: 75%;
+  max-height: 90vh;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  border-radius: 12px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  color: #001d4a;
+  font-size: 28px;
+}
+
+.cart-header img {
+  width: 25px;
+  height: auto;
+  cursor: pointer;
+  filter: invert(50%);
+}
+
+#show-message {
+  padding-bottom: 8px;
+  color: #828282;
+}
+
+#show-message-all {
+  padding-bottom: 8px;
+  color: #828282;
+  cursor: pointer;
+}
+
+#show-message-all:hover {
+  padding-bottom: 8px;
+  color: #001d4a;
+}
+
+.cart-content {
+  margin-top: 20px;
+}
+
+.cart-messages {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cart-messages p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.cart-messages .show-all {
+  text-align: right;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cart-item img {
+  width: 80px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.item-details {
+  flex: 1;
+  color: #001d4a;
+}
+
+.item-details h3 {
+  margin: 0;
+}
+
+.item-details p {
+  margin: 0;
+}
+
+.item-price {
+  text-align: right;
+  color: #001d4a;
+}
+
+.cart-summary {
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.summary-item p,
+.summary-item h3 {
+  margin: 0;
+}
+
+.summary-price {
+  text-align: right;
+  color: #001d4a;
+}
+
+.summary-price-total {
+  text-align: right;
+  color: #001d4a;
+  font-size: 25px;
+  padding-top: 20px;
+}
+
+.cart-actions {
+  display: block;
+  margin-top: 20px;
+}
+
+.cart-actions button {
+  display: block;
+  width: 100%;
+  padding: 13px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px; /* Espacio entre los botones */
+}
+
+.cart-actions button:first-child {
+  background-color: #001514;
+  color: #fff;
+}
+
+.cart-actions button:first-child:hover {
+  background-color: #eca400;
+  color: #001d4a;
+}
+
+.cart-actions button:last-child {
+  background-color: #001d4a;
+  color: #fff;
+}
+
+.cart-actions button:last-child:hover {
+  background-color: #eca400;
+  color: #001d4a;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.empty-cart-message {
+  text-align: center;
+  font-size: 1.2em;
+  color: #888;
+}
+
+.navbar-divider {
+  height: 1px;
+  background-color: #828282;
+  margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+  .cart-modal {
+    width: 80%;
+    max-width: 600px;
+    height: 85%;
+    max-height: 85vh;
+    padding: 20px;
+  }
+
+  .cart-header {
+    font-size: 24px;
+    padding-bottom: 15px;
+  }
+
+  .cart-header img {
+    width: 20px;
+  }
+
+  #show-message,
+  #show-message-all {
+    font-size: 14px;
+  }
+
+  #show-message-all {
+    display: block;
+    text-align: right;
+    cursor: pointer;
+  }
+
+  .cart-content {
+    margin-top: 10px;
+  }
+
+  .cart-messages {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+
+  .cart-item img {
+    width: 100px;
+    margin-bottom: 10px;
+  }
+
+  .item-details {
+    text-align: left;
+  }
+
+  .item-price {
+    text-align: left;
+  }
+
+  .cart-summary {
+    margin-top: 15px;
+  }
+
+  .summary-item p,
+  .summary-item h3 {
+    font-size: 14px;
+  }
+
+  .summary-price,
+  .summary-price-total {
+    font-size: 20px;
+  }
+
+  .cart-actions {
+    margin-top: 15px;
+  }
+
+  .cart-actions button {
+    font-size: 0.9em;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+  }
+
+  .cart-actions button:first-child {
+    background-color: #001514;
+  }
+
+  .cart-actions button:first-child:hover {
+    background-color: #eca400;
+  }
+
+  .cart-actions button:last-child {
+    background-color: #001d4a;
+  }
+
+  .cart-actions button:last-child:hover {
+    background-color: #eca400;
+  }
+
+  .empty-cart-message {
+    font-size: 1em;
+  }
+
+  .navbar-divider {
+    margin: 5px 0;
+  }
+}

@@ -25,6 +25,7 @@ export class ProductSectionComponent implements OnInit {
   maxPrice?: number = 1000
   sortOrder: 'asc' | 'desc' = 'asc'
   searching: string = ''
+  inputValue: string = ''
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +46,10 @@ export class ProductSectionComponent implements OnInit {
         this.getFilteredData()
       })
     })
+  }
+
+  replaceUnderscores(name: string): string {
+    return name.replace(/_/g, ' ')
   }
 
   search(): void {
@@ -106,20 +111,23 @@ export class ProductSectionComponent implements OnInit {
     this.selectedProduct = undefined
   }
 
-  addCart(): void {
-    if (!this.selectedProduct) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addCart(event: Event, selectedProduct: any): void {
+    event.stopPropagation() // Evita que el clic se propague al contenedor del producto
+
+    if (!selectedProduct) {
       console.error('No product selected.')
       return
     }
 
     const cartItem: CartItem = {
-      id: this.selectedProduct.id,
-      name: this.selectedProduct.name,
-      price: this.selectedProduct.price,
-      maxQuantity: this.selectedProduct.quantity,
+      id: selectedProduct.id,
+      name: selectedProduct.name,
+      price: selectedProduct.price,
+      maxQuantity: selectedProduct.quantity,
       quantityToBuy: 1,
-      details: this.selectedProduct.details,
-      image: this.selectedProduct.image,
+      details: selectedProduct.details,
+      image: selectedProduct.image,
     }
 
     let cart: CartItem[] = []

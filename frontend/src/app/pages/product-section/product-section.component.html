@@ -1,8 +1,11 @@
-<section id="name-page">
+<section id="banner-first">
   <p>{{ section | uppercase }}</p>
 </section>
 <main>
   <section id="filters">
+    <div class="filter">
+      <input type="text" placeholder="Buscar" />
+    </div>
     <div class="filter">
       <h3>PRECIO</h3>
       <div class="filter-options">
@@ -95,11 +98,7 @@
 
   <section id="products-container">
     <div id="products-paginator">
-      <pagination-controls
-        (pageChange)="page = $event"
-        previousLabel="Anterior"
-        nextLabel="Siguiente"
-      ></pagination-controls>
+      <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <div id="products">
       <div class="product-message" *ngIf="data.length === 0">
@@ -111,16 +110,16 @@
         (click)="openDetails(producto)"
       >
         <img class="img-product" src="{{ producto.image }}" />
-        <p class="price-product">${{ producto.price }}</p>
         <div class="product-info">
-          <p class="product-name">{{ producto.name }}</p>
-        </div>
-        <div class="cart-icon">
-          <img
-            class="addToCart-icon"
-            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fadd-cart-icon.png?alt=media&token=0b21ed8f-0ab4-4391-8406-b2dce125047e"
-            alt="+"
-          />
+          <p class="product-name">{{ replaceUnderscores(producto.name) }}</p>
+          <div class="price-container">
+            <p class="price-product">${{ producto.price }}</p>
+            <img
+              class="cart-icon"
+              (click)="addCart($event, producto)"
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fcart-plus-fill.svg?alt=media&token=5f945936-14bf-4dec-b83e-c6105db787c3"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -136,7 +135,7 @@
     <div *ngFor="let detalle of selectedProduct.details.split(',') || []">
       <p id="detalles-text">{{ detalle.trim() }}</p>
     </div>
-    <button id="addToCart-detalles" (click)="addCart()">
+    <button id="addToCart-detalles">
       <img
         id="cart-icon-detalles"
         src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fwhite-add-cart-icon.png?alt=media&token=979c21f2-7eb4-4a00-abe4-897c1802ec9f"

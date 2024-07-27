@@ -1,0 +1,56 @@
+<div class="cart-modal">
+  <div class="cart-header">
+    <h3>Mi carrito</h3>
+    <img
+      src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fx-lg.svg?alt=media&token=19d8f58e-6409-474c-8f62-73c1238af612"
+      alt="Cerrar"
+      (click)="closeModal()"
+    />
+  </div>
+
+  <div *ngIf="isCartEmpty; else cartDetails" class="empty-cart-message">
+    <div class="navbar-divider"></div>
+    <p>No hay productos en su carrito de compras*</p>
+    <div class="navbar-divider"></div>
+  </div>
+
+  <ng-template #cartDetails>
+    <div class="cart-content">
+      <div class="cart-messages">
+        <p id="show-message">Mostrando {{ displayedProducts?.length }} de {{ totalProducts }} artículos</p>
+        <a id="show-message-all" class="show-all" (click)="goToCheckout()">Mostrar todo</a>
+      </div>
+      <div *ngFor="let product of displayedProducts" class="cart-item">
+        <img [src]="product.image" alt="{{ product.name }}" />
+        <div class="item-details">
+          <h3>{{ replaceUnderscores(product.name) }}</h3>
+          <p>Cantidad: {{ product.quantityToBuy }}</p>
+          <p class="item-price">${{ product.price }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="navbar-divider"></div>
+
+    <div class="cart-summary">
+      <div class="summary-item">
+        <p id="show-message">Subtotal:</p>
+        <p class="summary-price">${{ getCartSubtotal() }}</p>
+      </div>
+      <div class="summary-item">
+        <p id="show-message">IVA:</p>
+        <p class="summary-price">${{ getCartIVA() }}</p>
+      </div>
+      <div class="summary-item">
+        <h3 class="summary-price-total">Total:</h3>
+        <h3 class="summary-price-total">${{ getCartTotal() }}</h3>
+      </div>
+    </div>
+
+    <div class="navbar-divider"></div>
+  </ng-template>
+
+  <div class="cart-actions">
+    <button (click)="goToCheckout()">FINALIZAR COMPRA</button>
+    <button (click)="keepBuying()">CONTINUAR COMPRANDO</button>
+  </div>
+</div>

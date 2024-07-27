@@ -6,7 +6,7 @@
 .carousel-container {
   position: relative;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: auto;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -52,10 +52,12 @@
 
 .carousel-control.prev {
   left: 10px;
+  filter: invert(100%);
 }
 
 .carousel-control.next {
   right: 10px;
+  filter: invert(100%); 
 }
 
 .carousel-control img {
@@ -79,7 +81,7 @@
 /* Media query 480px */
 @media (max-width: 480px) {
   .carousel-container {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 10px;
   }
 
@@ -100,7 +102,7 @@
   justify-content: center;
   background-color: #f3f3b0;
   padding: 20px;
-  max-width: 1000px;
+  max-width: 1100px;
   height: auto;
   margin: auto;
   margin-bottom: 30px;
@@ -194,7 +196,7 @@
 .best-sellers, .new-arrivals {
   background-color: #001D4A;
   color: white;
-  width: 500px;
+  width: 550px;
   cursor: pointer;
 }
 

@@ -4,6 +4,8 @@ import { RouterLinkActive, RouterLink, Router } from '@angular/router'
 import { RouterModule } from '@angular/router'
 import { AuthService } from '../../services/auth.service'
 import { FormsModule } from '@angular/forms'
+import { MatDialog } from '@angular/material/dialog'
+import { ShoppingCartModalComponent } from '../../pages/shopping-cart-modal/shopping-cart-modal.component'
 
 @Component({
   selector: 'app-navbar',
@@ -24,34 +26,35 @@ export class NavbarComponent {
     {
       title: 'Videojuegos',
       items: [
-        'Videojuegos para nintendo 3DS',
-        'Videojuegos para nintendo Wii',
-        'Videojuegos para nintendo Switch',
-        'Videojuegos para PS1',
-        'Videojuegos para PS2',
-        'Videojuegos para PS3',
-        'Videojuegos para PS4',
-        'Videojuegos para PS5',
-        'Videojuegos para Xbox',
-        'Videojuegos para Xbox One',
-        'Videojuegos para Xbox 360',
+        'Todos',
+        'Nintendo 3DS',
+        'Nintendo Wii',
+        'Nintendo Switch',
+        'PS1',
+        'PS2',
+        'PS3',
+        'PS4',
+        'PS5',
+        'Xbox',
+        'Xbox One',
+        'Xbox 360',
       ],
     },
-    { title: 'Funko-Pops', items: ['Funkos de mario bros', 'Funkos de marvel', 'Funkos de DC'] },
-    { title: 'Consolas', items: ['Consolas PS4', 'Consolas PS5', 'Consolas Nintendo Switch'] },
+    { title: 'Funko-Pops', items: ['Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies'] },
+    { title: 'Consolas', items: ['PS5', 'Nintendo Switch'] },
     {
       title: 'Artículos',
       items: [
-        'Artículos para computadores',
-        'Artículos para nintendo 3DS',
-        'Artículos para nintendo Wii',
-        'Artículos para nintendo switch',
-        'Artículos para PS1',
-        'Artículos para PS2',
-        'Artículos para PS3',
-        'Artículos para PS4',
-        'Artículos para PS5',
-        'Artículos para televisores',
+        'Computadores',
+        'Nintendo 3DS',
+        'Nintendo Wii',
+        'Nintendo switch',
+        'PS1',
+        'PS2',
+        'PS3',
+        'PS4',
+        'PS5',
+        'Televisores',
         'Tazas',
       ],
     },
@@ -89,9 +92,20 @@ export class NavbarComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
+    public dialog: MatDialog,
   ) {
     this.isLoggedIn = this.authService.checkLoginStatus()
     this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
+  }
+
+  // Method to open the shopping cart modal
+  openCartModal() {
+    const cartItem = localStorage.getItem('cart')
+    const productshop = cartItem ? JSON.parse(cartItem) : []
+    this.dialog.open(ShoppingCartModalComponent, {
+      width: '80%',
+      data: { productshop },
+    })
   }
 
   navigateToLogin() {

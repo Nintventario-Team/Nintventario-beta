@@ -1,0 +1,133 @@
+<section id="banner-first">
+  <p>Inicio / Locales</p>
+</section>
+
+<!-- Carrusel section -->
+<div class="carousel-container">
+  <div class="carousel">
+    <div *ngFor="let image of images; let i = index" [class.active]="i === currentSlide" class="carousel-item">
+      <img [src]="image.url" alt="carousel image" class="carousel-image" />
+      <div class="carousel-caption" *ngIf="i === currentSlide">
+        {{ image.name }}
+      </div>
+    </div>
+    <button class="carousel-control prev" (click)="prevSlide()">
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fhome%20page%2Fchevron-compact-left.svg?alt=media&token=6cdceb3f-ed77-48da-9095-70f31f8edfd8"
+        alt="Previous"
+      />
+    </button>
+    <button class="carousel-control next" (click)="nextSlide()">
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fhome%20page%2Fchevron-compact-right.svg?alt=media&token=c57f6e02-bd53-453c-ae9d-6fad25f07ec7"
+        alt="Next"
+      />
+    </button>
+  </div>
+</div>
+
+<!-- Locals section -->
+<div class="stores-container">
+  <div class="stores">
+    <h2 class="stores-title">LOCALES MUNDO MÁGICO DEL NINTENDO - GUAYAQUIL</h2>
+    <div class="store">
+      <h3>RIOCENTRO CEIBOS</h3>
+      <div class="location">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fgeo-alt-fill.svg?alt=media&token=f80b580c-8002-435c-abe7-0ac789cac21b"
+          alt="Location Icon"
+        />
+        <span>AV. DEL BOMBERO, KM. 7, VÍA A LA COSTA</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>LUNES A SÁBADO 10:00 A 19H00</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>DOMINGO 11:00 A 19H00</span>
+      </div>
+    </div>
+    <div class="store">
+      <h3>RIOCENTRO ENTRE RÍOS</h3>
+      <div class="location">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fgeo-alt-fill.svg?alt=media&token=f80b580c-8002-435c-abe7-0ac789cac21b"
+          alt="Location Icon"
+        />
+        <span>AV. SAMBORONDÓN, SAMBORONDÓN</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>LUNES A DOMINGO DE 8H00 A 21H00</span>
+      </div>
+    </div>
+    <div class="store">
+      <h3>C.C.T TERMINAL TERRESTRE</h3>
+      <div class="location">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fgeo-alt-fill.svg?alt=media&token=f80b580c-8002-435c-abe7-0ac789cac21b"
+          alt="Location Icon"
+        />
+        <span>AV. BENJAMÍN ROSALES, TERMINAL TERRESTRE DE GUAYAQUIL</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>LUNES A SÁBADO 10:00 A 20:00</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>DOMINGO 10:00 A 18:00</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar-divider"></div>
+
+<div class="stores-container">
+  <div class="stores">
+    <h2 class="stores-title">LOCALES MUNDO MÁGICO DEL NINTENDO - MACHALA</h2>
+    <div class="store">
+      <h3>PASEO SHOPPING MACHALA</h3>
+      <div class="location">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fgeo-alt-fill.svg?alt=media&token=f80b580c-8002-435c-abe7-0ac789cac21b"
+          alt="Location Icon"
+        />
+        <span>AV. 25 de JUNIO, PASEO SHOPPING MACHALA</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>LUNES A SÁBADO 10:00 A 19H00</span>
+      </div>
+      <div class="hours">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Flocals%2Fcalendar-check.svg?alt=media&token=bc1a83a6-a0a6-49bd-9fcb-89ca8caf13b9"
+          alt="Calendar Icon"
+        />
+        <span>DOMINGO 11:00 A 19H00</span>
+      </div>
+    </div>
+    <div class="store"></div>
+    <div class="store"></div>
+  </div>
+</div>

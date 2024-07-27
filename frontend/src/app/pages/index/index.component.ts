@@ -49,6 +49,7 @@ export class IndexComponent {
   nextSlide() {
     this.currentSlide = this.currentSlide < this.images.length - 1 ? this.currentSlide + 1 : 0
   }
+  
   constructor(
     private productService: ProductService,
     private router: Router,

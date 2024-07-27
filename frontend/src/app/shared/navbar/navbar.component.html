@@ -43,9 +43,9 @@
             </ng-template>
           <img
             src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
-            routerLink="/shoppingCart"
             alt="Carrito de compras"
             width="30"
+            (click)="openCartModal()"
           />
         </div>
       </div>
@@ -54,44 +54,47 @@
         <div class="navbar-links">
           <a routerLink="/">INICIO</a>
           <div class="dropdown">
-            <a routerLink="/categorias" class="categories-link">PRODUCTOS</a>
+            <a routerLink="/todos" class="categories-link">PRODUCTOS</a>
             <div class="dropdown-content">
               <div class="dropdown-column">
-                <h3>Videojuegos</h3>
-                <a routerLink="/">Videojuegos para nintendo 3DS</a>
-                <a routerLink="/">Videojuegos para nintendo Wii</a>
-                <a routerLink="/">Videojuegos para nintendo Switch</a>
-                <a routerLink="/">Videojuegos para PS1</a>
-                <a routerLink="/">Videojuegos para PS2</a>
-                <a routerLink="/">Videojuegos para PS3</a>
-                <a routerLink="/">Videojuegos para PS4</a>
-                <a routerLink="/">Videojuegos para PS5</a>
-                <a routerLink="/">Videojuegos para Xbox</a>
-                <a routerLink="/">Videojuegos para Xbox One</a>
-                <a routerLink="/">Videojuegos para Xbox 360</a>
+                <h3 routerLink="/videojuegos">Videojuegos</h3>
+                <a routerLink="/">Nintendo 3DS</a>
+                <a routerLink="/">Nintendo Wii</a>
+                <a routerLink="/">Nintendo Switch</a>
+                <a routerLink="/">PS1</a>
+                <a routerLink="/">PS2</a>
+                <a routerLink="/">PS3</a>
+                <a routerLink="/">PS4</a>
+                <a routerLink="/">PS5</a>
+                <a routerLink="/">Xbox</a>
+                <a routerLink="/">Xbox One</a>
+                <a routerLink="/">Xbox 360</a>
               </div>
               <div class="dropdown-column">
                 <h3>Funko-Pops</h3>
-                <a routerLink="/">Funkos de mario bros</a>
-                <a routerLink="/">Funkos de marvel</a>
-                <a routerLink="/">Funkos de DC</a>
+                <a routerLink="/">Heroes</a>
+                <a routerLink="/">Marvel</a>
+                <a routerLink="/">Comics</a>
+                <a routerLink="/">Animation</a>
+                <a routerLink="/">Disney</a>
+                <a routerLink="/">Television</a>
+                <a routerLink="/">Movies</a>
                 <h3>Consolas</h3>
-                <a routerLink="/">Consolas PS4</a>
-                <a routerLink="/">Consolas PS5</a>
-                <a routerLink="/">Consolas Nintendo Switch</a>
+                <a routerLink="/">PS5</a>
+                <a routerLink="/">Nintendo Switch</a>
               </div>
               <div class="dropdown-column">
                 <h3>Artículos</h3>
-                <a routerLink="/">Artículos para computadores</a>
-                <a routerLink="/">Artículos para nintendo 3DS</a>
-                <a routerLink="/">Artículos para nintendo Wii</a>
-                <a routerLink="/">Artículos para nintendo switch</a>
-                <a routerLink="/">Artículos para PS1</a>
-                <a routerLink="/">Artículos para PS2</a>
-                <a routerLink="/">Artículos para PS3</a>
-                <a routerLink="/">Artículos para PS4</a>
-                <a routerLink="/">Artículos para PS5</a>
-                <a routerLink="/">Artículos para televisores</a>
+                <a routerLink="/">Computadores</a>
+                <a routerLink="/">Nintendo 3DS</a>
+                <a routerLink="/">Nintendo Wii</a>
+                <a routerLink="/">Nintendo switch</a>
+                <a routerLink="/">PS1</a>
+                <a routerLink="/">PS2</a>
+                <a routerLink="/">PS3</a>
+                <a routerLink="/">PS4</a>
+                <a routerLink="/">PS5</a>
+                <a routerLink="/">televisores</a>
                 <a routerLink="/">Tazas</a>
                 <h3>Otros</h3>
                 <a routerLink="/">Otros...</a>
@@ -138,7 +141,7 @@
         </button>
         <div class="submenu-items">
           <div *ngFor="let item of selectedCategory?.items">
-            <a routerLink="/">
+            <a routerLink="/{{ item | lowercase }}">
               {{ item }}
               <img
                 src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"

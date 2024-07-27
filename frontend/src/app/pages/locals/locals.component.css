@@ -1,0 +1,227 @@
+#banner-first {
+  background-color: #eca400;
+  display: flex;
+  font-family: 'Montserrat', sans-serif;
+  height: 30px;
+  margin-top: 10px;
+}
+
+#banner-first p {
+  padding: 0.3em 0 0 15em;
+  color: #00274d;
+}
+
+
+.navbar-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 10px auto;
+  width: 60%;
+}
+
+@media (max-width: 768px) {
+  #banner-first p {
+  padding: 0.3em 0 0 5em;
+  color: #00274d;
+}
+  .navbar-divider {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 10px auto;
+    width: 90%;
+  }
+}
+
+
+/* Contenedor de la sección de locales */
+.stores-container {
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+}
+
+.stores {
+  display: flex; /* Alinea los locales horizontalmente */
+  flex-wrap: wrap; /* Permite que los locales se envuelvan en varias líneas si no caben en una sola fila */
+  justify-content: space-around; /* Distribuye el espacio entre los locales */
+  padding: 0 20px; /* Ajusta el padding según sea necesario */
+  text-align: center;
+  color: #828282;
+  width: 1100px; /* Ancho fijo del contenedor */
+  margin: 20px 0; /* Espacio entre el contenedor y el resto del contenido */
+}
+
+.stores-title {
+  font-size: 16px; /* Tamaño del título */
+  font-weight: bold;
+  margin-bottom: 20px; /* Espacio entre el título y los locales */
+  text-align: left; /* Centra el título */
+  width: 100%; /* Asegura que el título ocupe todo el ancho del contenedor */
+}
+
+.store {
+  flex: 1 1 calc(33.333% - 20px); /* Ajusta el tamaño de cada local para que quepan 3 por fila con espacio entre ellos */
+  margin: 10px; /* Espacio entre los locales */
+  box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total */
+}
+
+.store h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.store span {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.location,
+.hours {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.location img,
+.hours img {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.location span,
+.hours span {
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+/* Media query para pantallas medianas */
+@media (max-width: 768px) {
+  .store {
+    flex: 1 1 calc(50% - 20px); /* Dos por fila en pantallas medianas */
+  }
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 480px) {
+  .store {
+    flex: 1 1 calc(100% - 20px); /* Uno por fila en pantallas pequeñas */
+  }
+
+  .navbar-divider{
+    width: 95%;
+  }
+}
+
+/* Carousel section */
+
+.carousel-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+  width: calc(100% - 20px);
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.carousel {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.carousel-item {
+  min-width: 100%;
+  transition:
+    opacity 0.5s ease-in-out,
+    transform 0.5s ease-in-out;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 500;
+}
+
+.carousel-control.prev {
+  left: 10px;
+  filter: invert(100%);
+}
+
+.carousel-control.next {
+  right: 10px;
+  filter: invert(100%);
+}
+
+.carousel-control img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Media query 768px */
+@media (max-width: 768px) {
+  .carousel-container {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .carousel-control img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .store {
+    flex: 1 1 calc(50% - 20px); /* Ajusta el tamaño para pantallas medianas */
+  }
+}
+
+/* Media query 480px */
+@media (max-width: 480px) {
+  .carousel-container {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .carousel-control img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .store {
+    flex: 1 1 calc(100% - 20px); /* Ajusta el tamaño para pantallas pequeñas */
+  }
+}

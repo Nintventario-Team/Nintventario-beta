@@ -8,6 +8,9 @@ import { FooterComponent } from './shared/footer/footer.component'
 import { BannerComponent } from './shared/banner/banner.component'
 import { MidBannerComponent } from './shared/mid-banner/mid-banner.component'
 import { HttpClientModule } from '@angular/common/http'
+import { MatDialogModule } from '@angular/material/dialog'
+import { ShoppingCartModalComponent } from './pages/shopping-cart-modal/shopping-cart-modal.component'
+
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>
@@ -25,6 +28,8 @@ describe('AppComponent', () => {
         FooterComponent,
         BannerComponent,
         MidBannerComponent,
+        ShoppingCartModalComponent,
+        MatDialogModule,
       ],
       providers: [],
     }).compileComponents()

@@ -2,6 +2,7 @@ main {
   display: flex;
   margin: 0 auto;
   width: 1100px; /* Ajustar el ancho a 1100px */
+  margin-bottom: 40px;
 }
 
 /* Header de la página */
@@ -10,6 +11,7 @@ main {
   display: flex;
   font-family: 'Montserrat', sans-serif;
   height: 30px;
+  margin-top: 10px;
 }
 
 #banner-first p {
@@ -66,9 +68,9 @@ main {
 
 .filter-option {
   font-weight: 300;
-  font-size: 15px; 
+  font-size: 15px;
   color: #001D4A;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 input[type='radio'] {
@@ -184,6 +186,31 @@ input[type='radio'] {
   cursor: pointer;
   filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
 }
+
+/* Filtro de género con scroll */
+.genre-filter {
+  max-height: 120px; /* Ajusta este valor según tu diseño */
+  overflow-y: auto;
+  scrollbar-color: #001D4A transparent;
+   scrollbar-width: thin;
+}
+
+.genre-filter > .filter-option {
+  display: block;
+}
+
+.platform-filter {
+  max-height: 210px; /* Ajusta este valor según tu diseño */
+  overflow-y: auto;
+  scrollbar-color: #001D4A transparent;
+   scrollbar-width: thin;
+}
+
+.platform-filter > .filter-option {
+  display: block;
+}
+
+
 
 /* Product detail */
 .details {

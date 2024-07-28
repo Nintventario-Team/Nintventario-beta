@@ -6,6 +6,35 @@
     <div class="filter">
       <input type="text" placeholder="Buscar" />
     </div>
+
+    <div class="filter" *ngIf="section === 'videojuegos'">
+      <h3>GÉNERO</h3>
+      <div class="filter-options genre-filter">
+        <div class="filter-option">
+          <input type="radio" name="genre" value="todos" (click)="getFilteredData()" />
+          Todos
+        </div>
+        <div class="filter-option" *ngFor="let genre of genres">
+          <input type="radio" name="genre" (click)="filterByGenre(genre)" />
+          <label>{{ genre }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter" *ngIf="section === 'videojuegos'">
+      <h3>PLATAFORMA</h3>
+      <div class="filter-options platform-filter">
+        <div class="filter-option">
+          <input type="radio" name="platform" value="todos" (click)="getFilteredData()" />
+          Todos
+        </div>
+        <div class="filter-option" *ngFor="let platform of platforms">
+          <input type="radio" name="platform" (click)="filterByGenre(platform)" />
+          <label>{{ platform }}</label>
+        </div>
+      </div>
+    </div>
+
     <div class="filter">
       <h3>PRECIO</h3>
       <div class="filter-options">
@@ -32,16 +61,16 @@
             Todos
           </div>
           <div class="filter-option">
-            <input type="radio" name="price" (click)="updatePriceRange(0, 50)" />
-            $0 - $50
+            <input type="radio" name="price" (click)="updatePriceRange(0, 19.99)" />
+            $0 - $19.99
           </div>
           <div class="filter-option">
-            <input type="radio" name="price" (click)="updatePriceRange(51, 100)" />
-            $51 - $100
+            <input type="radio" name="price" (click)="updatePriceRange(20, 49.99)" />
+            $20 - $49.99
           </div>
           <div class="filter-option">
-            <input type="radio" name="price" (click)="updatePriceRange(101, 150)" />
-            $101 - $150
+            <input type="radio" name="price" (click)="updatePriceRange(50, 79.99)" />
+            $50 - $79.99
           </div>
         }
       </div>
@@ -57,40 +86,6 @@
         <div class="filter-option">
           <input type="radio" name="orderBy" (click)="sortProducts('desc')" />
           Más caros primero
-        </div>
-      </div>
-    </div>
-
-    <div class="filter" *ngIf="section === 'videojuegos'">
-      <h3>GÉNERO</h3>
-      <div class="filter-options">
-        <div class="filter-option">
-          <input type="radio" name="genre" value="todos" (click)="getFilteredData()" />
-          Todos
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="genre" value="aventura" (click)="filterByGenre('Aventura')" />
-          Aventura
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="genre" value="accion" (click)="filterByGenre('Acción')" />
-          Acción
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="genre" value="deporte" (click)="filterByGenre('Deporte')" />
-          Deporte
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="genre" value="simulacion" (click)="filterByGenre('Simulación')" />
-          Simulación
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="genre" value="lucha" (click)="filterByGenre('Lucha')" />
-          Lucha
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="genre" value="estrategia" (click)="filterByGenre('Estrategia')" />
-          Estrategia
         </div>
       </div>
     </div>

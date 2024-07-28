@@ -16,6 +16,22 @@ import { ProductService } from '../../services/product.service'
 })
 export class ProductSectionComponent implements OnInit {
   section!: 'todos' | 'videojuegos' | 'funkopop' | 'consolas' | 'coleccionables' | 'accesorios'
+  genres: string[] = ['Acción', 'Aventura', 'Deportes', 'Estrategia', 'Simulación', 'RPG', 'Puzzle']
+  consoles: string[] = ['PS5', 'Nintendo Switch', 'Xbox 360']
+  funkos: string[] = ['Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies']
+  platforms: string[] = [
+    'PS5',
+    'PS2',
+    'PS3',
+    'PS4',
+    'PS5',
+    'Wii',
+    'Nintendo 3DS',
+    'PSP Vita',
+    'Xbox One',
+    'Xbox 360',
+    'Nintendo Switch',
+  ]
   data: Product[] = []
   public totalProducts: Product[] = []
   page = 1
@@ -99,6 +115,11 @@ export class ProductSectionComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   filterByGenre(genre: string): void {
     // Filtrar los videojuegos por género
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  filterByPlatform(platform: string): void {
+    // Filtrar los videojuegos por plataforma
   }
 
   openDetails(producto: Product): void {

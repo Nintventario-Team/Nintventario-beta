@@ -8,6 +8,7 @@ import { UserDetailsComponent } from './pages/user-details/user-details.componen
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component'
 import { LocalsComponent } from './pages/locals/locals.component'
 import { ContactComponent } from './pages/contact/contact.component'
+import {PaymentGatewayComponent} from './pages/payment-gateway/payment-gateway.component'
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -24,5 +25,6 @@ export const routes: Routes = [
   { path: 'locales', component: LocalsComponent, data: { section: 'locals' } },
   { path: 'shoppingCart', component: ShoppingCartComponent },
   { path: 'contacto', component: ContactComponent, data: { section: 'contacto' } },
+  {path: 'payment', component: PaymentGatewayComponent},
   { path: '**', redirectTo: '' },
 ]

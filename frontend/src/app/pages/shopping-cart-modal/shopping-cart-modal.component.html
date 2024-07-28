@@ -34,11 +34,11 @@
     <div class="cart-summary">
       <div class="summary-item">
         <p id="show-message">Subtotal:</p>
-        <p class="summary-price">${{ getCartSubtotal() }}</p>
+        <p class="summary-price">${{ getCartSubtotal().toFixed(2) }}</p>
       </div>
       <div class="summary-item">
         <p id="show-message">IVA:</p>
-        <p class="summary-price">${{ getCartIVA() }}</p>
+        <p class="summary-price">${{ getCartIVA().toFixed(2) }}</p>
       </div>
       <div class="summary-item">
         <h3 class="summary-price-total">Total:</h3>

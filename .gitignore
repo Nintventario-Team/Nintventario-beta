@@ -47,3 +47,9 @@ Thumbs.db
 # Firebase
 .firebaserc
 firebase.json
+
+# Ignore __pycache__ directories
+__pycache__/
+
+# Ignore all .env files
+*.env

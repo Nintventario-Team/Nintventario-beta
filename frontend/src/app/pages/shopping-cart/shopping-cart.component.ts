@@ -57,7 +57,9 @@ export class ShoppingCartComponent {
 
   goToCheckout() {
     localStorage.setItem('cart', JSON.stringify(this.productshop))
-    this.router.navigate(['/caja'])
+    this.location.back()
+
+    this.router.navigate(['/payment']);
   }
   keepBuying() {
     localStorage.setItem('cart', JSON.stringify(this.productshop))

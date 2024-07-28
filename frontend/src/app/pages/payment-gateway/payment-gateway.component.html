@@ -1,1 +1,45 @@
-<div id="paypal-button-container"></div>
+<main class="main_container">
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p>Cargando...</p>
+    </div>
+  }
+  <section id="payment-button">
+    <div id="paypal-button-container"></div>
+  </section>
+  <section class="cart-modal">
+    <div class="cart-content">
+      @for (product of productshop; track $index) {
+        <div class="cart-item">
+          <img [src]="product.image" alt="{{ product.name }}" />
+          <div class="item-details">
+            <h3>{{ replaceUnderscores(product.name) }}</h3>
+            <p>Cantidad: {{ product.quantityToBuy }}</p>
+            <p class="item-price">${{ product.price }}</p>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="cart-details">
+      <div class="navbar-divider"></div>
+
+      <div class="cart-summary">
+        <div class="summary-item">
+          <p id="show-message">Subtotal:</p>
+          <p class="summary-price">${{ getCartSubtotal().toFixed(2) }}</p>
+        </div>
+        <div class="summary-item">
+          <p id="show-message">IVA:</p>
+          <p class="summary-price">${{ getCartIVA().toFixed(2) }}</p>
+        </div>
+        <div class="summary-item">
+          <h3 class="summary-price-total">Total:</h3>
+          <h3 class="summary-price-total">${{ getCartTotal() }}</h3>
+        </div>
+      </div>
+
+      <div class="navbar-divider"></div>
+    </div>
+  </section>
+</main>

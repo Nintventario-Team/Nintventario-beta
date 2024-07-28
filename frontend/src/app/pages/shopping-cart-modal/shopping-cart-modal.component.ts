@@ -16,7 +16,7 @@ export class ShoppingCartModalComponent {
   public productshop?: CartItem[]
   public displayedProducts?: CartItem[]
   public totalProducts: number = 0
-
+  public IVA = 0.12
   isCartEmpty: boolean = true
 
   constructor(
@@ -51,25 +51,25 @@ export class ShoppingCartModalComponent {
 
   getSubtotal(productID: number): number {
     const product = this.productshop?.find(item => item.id === productID)
-    return product ? parseFloat((product.price * product.quantityToBuy).toFixed(2)) : 0
+    return product ? parseFloat((product.price * product.quantityToBuy).toFixed(5)) : 0
   }
 
   getIVA(productID: number): number {
-    return parseFloat((this.getSubtotal(productID) * 0.12).toFixed(2))
+    return parseFloat((this.getSubtotal(productID) * this.IVA).toFixed(5))
   }
 
   getTotal(productID: number): number {
-    return parseFloat((this.getSubtotal(productID) + this.getIVA(productID)).toFixed(2))
+    return parseFloat((this.getSubtotal(productID) + this.getIVA(productID)).toFixed(5))
   }
 
   getCartSubtotal(): number {
     return parseFloat(
-      this.productshop?.reduce((acc, product) => acc + this.getSubtotal(product.id), 0).toFixed(2) || '0',
+      this.productshop?.reduce((acc, product) => acc + this.getSubtotal(product.id), 0).toFixed(5) || '0',
     )
   }
 
   getCartIVA(): number {
-    return parseFloat((this.productshop?.reduce((acc, product) => acc + this.getIVA(product.id), 0) || 0).toFixed(2))
+    return parseFloat((this.productshop?.reduce((acc, product) => acc + this.getIVA(product.id), 0) || 0).toFixed(5))
   }
 
   getCartTotal(): number {

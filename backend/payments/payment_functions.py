@@ -8,6 +8,7 @@ load_dotenv()
 PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = os.getenv('PAYPAL_CLIENT_SECRET')
 PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com"
+IVA = 0.12
 
 def generate_access_token():
     if not PAYPAL_CLIENT_ID or not PAYPAL_CLIENT_SECRET:
@@ -33,7 +34,17 @@ def handle_response(response):
         return str(err), response.status_code
 
 def create_order(cart):
+    print("Creando Orden")
     print(cart)
+    # Calcular el subtotal del carrito
+    cart_subtotal = sum(float(p['price']) * p['quantityToBuy'] for p in cart)
+
+    # Calcular el IVA del carrito 
+    cart_iva = cart_subtotal * IVA
+
+    # Calcular el total del carrito
+    cart_total = round(cart_subtotal + cart_iva, 2)
+
     access_token = generate_access_token()
     headers = {
         "Content-Type": "application/json",
@@ -45,12 +56,13 @@ def create_order(cart):
             {
                 "amount": {
                     "currency_code": "USD",
-                    "value": "100"  # Usar detalles del carrito
+                    "value": f"{cart_total}"  # Usar detalles del carrito
                 }
             }
         ]
     }
     response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders", headers=headers, json=payload)
+    print("Orden creada")
     return handle_response(response)
 
 def capture_order(order_id):

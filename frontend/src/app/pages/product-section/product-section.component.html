@@ -132,14 +132,15 @@
     <p id="desc-text">{{ selectedProduct.description }}</p>
     <p id="precio-text">Precio unitario: ${{ selectedProduct.price }}</p>
     <h2>Detalles</h2>
-    <div *ngFor="let detalle of selectedProduct.details.split(',') || []">
+    <div *ngFor="let detalle of selectedProduct.details?.split(',') || []">
       <p id="detalles-text">{{ detalle.trim() }}</p>
     </div>
-    <button id="addToCart-detalles">
+    <button id="addToCart-detalles" (click)="addCart($event, selectedProduct)">
       <img
         id="cart-icon-detalles"
         src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fwhite-add-cart-icon.png?alt=media&token=979c21f2-7eb4-4a00-abe4-897c1802ec9f"
       />
+      
       AGREGAR AL CARRITO
     </button>
     <button id="closeButton-detalles" (click)="closeDetails()">X</button>

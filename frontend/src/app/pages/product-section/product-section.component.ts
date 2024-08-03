@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router'
 import { CommonModule } from '@angular/common'
@@ -42,6 +43,11 @@ export class ProductSectionComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc'
   searching: string = ''
   inputValue: string = ''
+  showAlert = false
+  alertMessage = ''
+  alertTimeout: any
+  progressWidth = 100
+  progressInterval: any
 
   constructor(
     private route: ActivatedRoute,
@@ -172,5 +178,37 @@ export class ProductSectionComponent implements OnInit {
     }
 
     localStorage.setItem('cart', JSON.stringify(cart))
+    this.showAlertMessage('Producto añadido al carrito')
+  }
+
+  showAlertMessage(message: string): void {
+    this.alertMessage = message
+    this.showAlert = true
+    this.progressWidth = 100
+
+    clearInterval(this.progressInterval)
+    clearTimeout(this.alertTimeout)
+
+    const totalDuration = 7000
+    const intervalDuration = 100
+    const decrementAmount = (intervalDuration / totalDuration) * 100
+
+    this.progressInterval = setInterval(() => {
+      this.progressWidth -= decrementAmount
+      if (this.progressWidth <= 0) {
+        this.closeAlert()
+      }
+    }, intervalDuration)
+
+    this.alertTimeout = setTimeout(() => {
+      this.showAlert = false
+      clearInterval(this.progressInterval)
+    }, totalDuration)
+  }
+
+  closeAlert(): void {
+    this.showAlert = false
+    clearTimeout(this.alertTimeout)
+    clearInterval(this.progressInterval)
   }
 }

@@ -412,3 +412,49 @@ input[type='radio'] {
     width: 150px;
   }
 }
+
+/*Alert css*/
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4CAF50; /* Color de fondo de la alerta */
+  color: white; /* Color del texto */
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000; /* Para asegurarse de que esté sobre otros elementos */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 300px;
+  flex-direction: column; /* Para que la barra de progreso esté debajo del mensaje */
+}
+
+.alert span {
+  flex-grow: 1; /* Ocupa el espacio disponible */
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #ccc; /* Color de fondo de la barra de progreso */
+  height: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #76c7c0; /* Color de la barra de progreso */
+  width: 100%;
+  transition: width 0.2s linear;
+}

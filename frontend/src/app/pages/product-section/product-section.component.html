@@ -120,6 +120,14 @@
     </div>
   </section>
 </main>
+
+<div class="alert" *ngIf="showAlert">
+  <span>{{ alertMessage }}<button class="close-alert" (click)="closeAlert()">X</button></span>
+  <div class="progress-bar">
+    <div class="progress" [ngStyle]="{ width: progressWidth + '%' }"></div>
+  </div>
+</div>
+
 <div class="details" *ngIf="showDetails && selectedProduct !== undefined">
   <div class="details-container">
     <img id="img-detalles" src="{{ selectedProduct.image }}" />

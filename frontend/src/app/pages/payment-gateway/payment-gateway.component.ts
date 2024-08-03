@@ -15,7 +15,6 @@ import { Item } from '../../interfaces/order'
   styleUrl: './payment-gateway.component.css',
 })
 export class PaymentGatewayComponent {
-
   public productshop?: CartItem[]
   public IVA = 0.12
   isLoading: boolean = false
@@ -177,12 +176,10 @@ export class PaymentGatewayComponent {
   }
 
   deleteCartItem(productID: number) {
-    const confirmation = confirm("¿Estás seguro de que deseas eliminar este artículo del carrito?");
+    const confirmation = confirm('¿Estás seguro de que deseas eliminar este artículo del carrito?')
     if (confirmation) {
-        this.productshop = this.productshop?.filter(item => item.id !== productID);
-        localStorage.setItem('cart', JSON.stringify(this.productshop));
+      this.productshop = this.productshop?.filter(item => item.id !== productID)
+      localStorage.setItem('cart', JSON.stringify(this.productshop))
     }
-}
-
-  
+  }
 }

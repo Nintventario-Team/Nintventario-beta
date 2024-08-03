@@ -12,7 +12,7 @@ import json
 
 
 from .models import Product, User
-from .serializers import ProductSerializer
+from .serializers import OrderSerializer, ProductSerializer
 
 # PRODUCT METHODS
 
@@ -157,3 +157,18 @@ def get_user_data(request):
         'last_name': request.user.last_name,
     }
     return JsonResponse(user_data)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def create_order(request):
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    serializer = OrderSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, status=201)
+    return JsonResponse(serializer.errors, status=400)

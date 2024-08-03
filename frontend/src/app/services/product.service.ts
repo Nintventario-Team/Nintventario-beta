@@ -8,6 +8,8 @@ import { Product } from '../interfaces/product'
 })
 export class ProductService {
   private backendUrl = 'https://jorgemawyin.pythonanywhere.com'
+  //private backendUrl = 'http://127.0.0.1:8000'
+
 
   constructor(private http: HttpClient) {}
 

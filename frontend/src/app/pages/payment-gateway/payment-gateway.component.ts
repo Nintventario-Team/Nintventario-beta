@@ -4,6 +4,8 @@ import { PaymentService } from '../../services/payment.service'
 import { CartItem } from '../../interfaces/cartItem'
 import { Capture } from '../../interfaces/paypal-types'
 import { Router } from '@angular/router'
+import { OrderService } from '../../services/order.service'
+import { Item } from '../../interfaces/order'
 
 @Component({
   selector: 'app-payment-gateway',
@@ -13,6 +15,7 @@ import { Router } from '@angular/router'
   styleUrl: './payment-gateway.component.css',
 })
 export class PaymentGatewayComponent {
+
   public productshop?: CartItem[]
   public IVA = 0.12
   isLoading: boolean = false
@@ -20,6 +23,7 @@ export class PaymentGatewayComponent {
   constructor(
     private router: Router,
     private paymentService: PaymentService,
+    private orderService: OrderService,
   ) {}
 
   ngOnInit(): void {
@@ -106,9 +110,29 @@ export class PaymentGatewayComponent {
   }
 
   completeTransaction(transaction: Capture) {
+    this.saveOrder()
+
     alert(`Transaction ${transaction.status}: ${transaction.id}`)
     localStorage.setItem('cart', JSON.stringify([]))
     this.router.navigate([''])
+  }
+
+  saveOrder() {
+    const itemsToBuy: Item[] = this.productshop!.map(cartItem => ({
+      product: cartItem.id,
+      quantity: cartItem.quantityToBuy,
+    }))
+
+    const orderData = {
+      client: 1,
+      total: this.getCartTotal(),
+      status: '4',
+      items: itemsToBuy,
+    }
+
+    this.orderService.createOrder(orderData).subscribe(response => {
+      console.log('Order created:', response)
+    })
   }
 
   replaceUnderscores(name: string): string {
@@ -151,4 +175,14 @@ export class PaymentGatewayComponent {
       this.isLoading = false
     }, 1500)
   }
+
+  deleteCartItem(productID: number) {
+    const confirmation = confirm("¿Estás seguro de que deseas eliminar este artículo del carrito?");
+    if (confirmation) {
+        this.productshop = this.productshop?.filter(item => item.id !== productID);
+        localStorage.setItem('cart', JSON.stringify(this.productshop));
+    }
+}
+
+  
 }

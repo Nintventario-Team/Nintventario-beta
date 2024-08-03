@@ -86,6 +86,7 @@ export class ShoppingCartModalComponent {
   }
 
   goToCheckout() {
+    
     localStorage.setItem('cart', JSON.stringify(this.productshop))
     this.dialogRef.close()
     this.router.navigate(['/payment'])

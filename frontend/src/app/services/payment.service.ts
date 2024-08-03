@@ -11,7 +11,7 @@ import {PayPalOrder,PayPalCaptureResponse} from '../interfaces/paypal-types'
 export class PaymentService {
  // private backendUrl = 'https://jorgemawyin.pythonanywhere.com'
 
- private backendUrl = ' http://127.0.0.1:8000'
+ private backendUrl = 'http://127.0.0.1:8000'
 
   constructor(private http: HttpClient) { }
 

@@ -1,7 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ProductService } from '../../services/product.service'
-import { CartItem } from '../../interfaces/cartItem'
 import { Router, RouterLink, RouterLinkActive, RouterModule } from '@angular/router'
 import { Product } from '../../interfaces/product'
 import { FormsModule } from '@angular/forms'
@@ -88,60 +87,8 @@ export class IndexComponent {
     })
   }
 
-  openDetails(product: Product) {
-    this.showDetails = true
-    this.selectedProduct = product
-  }
 
-  closeDetails() {
-    this.showDetails = false
-    this.selectedProduct = undefined
-  }
 
-  addCart(): void {
-    if (!this.selectedProduct) {
-      console.error('No product selected.')
-      return
-    }
-
-    console.log(this.selectedProduct.id)
-
-    const cartItem: CartItem = {
-      id: this.selectedProduct.id,
-      name: this.selectedProduct.name,
-      price: this.selectedProduct.price,
-      maxQuantity: this.selectedProduct.quantity,
-      quantityToBuy: 1,
-      details: this.selectedProduct.details,
-      image: this.selectedProduct.image,
-    }
-
-    let cart: CartItem[] = []
-
-    const cartJson = localStorage.getItem('cart')
-    if (cartJson) {
-      try {
-        cart = JSON.parse(cartJson)
-      } catch (e) {
-        console.error('Error parsing cart data:', e)
-        cart = []
-      }
-    }
-
-    console.log(cart)
-
-    const itemIndex = cart.findIndex(item => item.id === cartItem.id)
-
-    console.log(itemIndex)
-
-    if (itemIndex < 0) {
-      cart.push(cartItem)
-    } else {
-      cart[itemIndex].quantityToBuy++
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart))
-  }
 
   searchProduct($event: KeyboardEvent) {
     const codeValue = $event.code

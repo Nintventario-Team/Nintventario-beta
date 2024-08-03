@@ -113,7 +113,7 @@ export class ProductSectionComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addCart(event: Event, selectedProduct: any): void {
-    event.stopPropagation() // Evita que el clic se propague al contenedor del producto
+    event.stopPropagation()
 
     if (!selectedProduct) {
       console.error('No product selected.')
@@ -146,8 +146,12 @@ export class ProductSectionComponent implements OnInit {
 
     if (itemIndex < 0) {
       cart.push(cartItem)
-    } else {
+      alert(`Producto ${cartItem.name} añadido correctamente`)
+    } else if (cartItem.maxQuantity < cart[itemIndex].quantityToBuy) {
       cart[itemIndex].quantityToBuy++
+      alert(`Producto ${cartItem.name} añadido correctamente`)
+    } else {
+      alert(`Producto ${cartItem.name} sin stock`)
     }
 
     localStorage.setItem('cart', JSON.stringify(cart))

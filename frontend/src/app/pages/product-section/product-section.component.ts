@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router'
 import { CommonModule } from '@angular/common'
@@ -16,6 +17,22 @@ import { ProductService } from '../../services/product.service'
 })
 export class ProductSectionComponent implements OnInit {
   section!: 'todos' | 'videojuegos' | 'funkopop' | 'consolas' | 'coleccionables' | 'accesorios'
+  genres: string[] = ['Acción', 'Aventura', 'Deportes', 'Estrategia', 'Simulación', 'RPG', 'Puzzle']
+  consoles: string[] = ['PS5', 'Nintendo Switch', 'Xbox 360']
+  funkos: string[] = ['Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies']
+  platforms: string[] = [
+    'PS5',
+    'PS2',
+    'PS3',
+    'PS4',
+    'PS5',
+    'Wii',
+    'Nintendo 3DS',
+    'PSP Vita',
+    'Xbox One',
+    'Xbox 360',
+    'Nintendo Switch',
+  ]
   data: Product[] = []
   public totalProducts: Product[] = []
   page = 1
@@ -26,6 +43,11 @@ export class ProductSectionComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc'
   searching: string = ''
   inputValue: string = ''
+  showAlert = false
+  alertMessage = ''
+  alertTimeout: any
+  progressWidth = 100
+  progressInterval: any
 
   constructor(
     private route: ActivatedRoute,
@@ -101,6 +123,11 @@ export class ProductSectionComponent implements OnInit {
     // Filtrar los videojuegos por género
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  filterByPlatform(platform: string): void {
+    // Filtrar los videojuegos por plataforma
+  }
+
   openDetails(producto: Product): void {
     this.selectedProduct = producto
     this.showDetails = true
@@ -155,5 +182,37 @@ export class ProductSectionComponent implements OnInit {
     }
 
     localStorage.setItem('cart', JSON.stringify(cart))
+    this.showAlertMessage('Producto añadido al carrito')
+  }
+
+  showAlertMessage(message: string): void {
+    this.alertMessage = message
+    this.showAlert = true
+    this.progressWidth = 100
+
+    clearInterval(this.progressInterval)
+    clearTimeout(this.alertTimeout)
+
+    const totalDuration = 7000
+    const intervalDuration = 100
+    const decrementAmount = (intervalDuration / totalDuration) * 100
+
+    this.progressInterval = setInterval(() => {
+      this.progressWidth -= decrementAmount
+      if (this.progressWidth <= 0) {
+        this.closeAlert()
+      }
+    }, intervalDuration)
+
+    this.alertTimeout = setTimeout(() => {
+      this.showAlert = false
+      clearInterval(this.progressInterval)
+    }, totalDuration)
+  }
+
+  closeAlert(): void {
+    this.showAlert = false
+    clearTimeout(this.alertTimeout)
+    clearInterval(this.progressInterval)
   }
 }

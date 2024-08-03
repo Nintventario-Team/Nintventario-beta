@@ -73,7 +73,8 @@ body {
 .nav-icon:hover{
     cursor: pointer;
     filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
-  }
+    -webkit-filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
+}
 
 .navbar-divider {
   height: 1px;

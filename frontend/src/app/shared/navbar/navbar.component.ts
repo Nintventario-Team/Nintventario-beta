@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterLinkActive, RouterLink, Router } from '@angular/router'
+import { RouterLinkActive, RouterLink, Router, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router'
 import { RouterModule } from '@angular/router'
 import { AuthService } from '../../services/auth.service'
 import { FormsModule } from '@angular/forms'
@@ -100,8 +100,20 @@ export class NavbarComponent {
     this.isLoggedIn = this.authService.checkLoginStatus()
     this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
   }
-
-  openWishlistModal(): void {
+  ngOnInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        console.log('Navigation started:', event);
+      } else if (event instanceof NavigationEnd) {
+        console.log('Navigation ended:', event);
+      } else if (event instanceof NavigationError) {
+        console.error('Navigation error:', event.error);
+      } else if (event instanceof NavigationCancel) {
+        console.log('Navigation canceled:', event);
+      }
+    });
+  }
+  openWishlistModal() {
     if (this.isLoggedIn) {
       this.wishlistService.getWishlist().subscribe(
         wishlistItems => {

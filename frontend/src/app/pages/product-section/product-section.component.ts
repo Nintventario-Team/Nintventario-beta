@@ -173,16 +173,15 @@ export class ProductSectionComponent implements OnInit {
 
     if (itemIndex < 0) {
       cart.push(cartItem)
-      alert(`Producto ${cartItem.name} añadido correctamente`)
+      this.showAlertMessage('Producto añadido al carrito')
     } else if (cartItem.maxQuantity < cart[itemIndex].quantityToBuy) {
       cart[itemIndex].quantityToBuy++
-      alert(`Producto ${cartItem.name} añadido correctamente`)
+      this.showAlertMessage('Producto añadido al carrito')
     } else {
       alert(`Producto ${cartItem.name} sin stock`)
     }
 
     localStorage.setItem('cart', JSON.stringify(cart))
-    this.showAlertMessage('Producto añadido al carrito')
   }
 
   showAlertMessage(message: string): void {

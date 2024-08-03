@@ -11,7 +11,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication # type: ig
 import json
 
 
-from .models import Product, User, WishlistItem
+from .models import Order, Product, User, WishlistItem
 from .serializers import OrderSerializer, ProductSerializer
 from custom_user import serializers
 
@@ -234,3 +234,13 @@ def remove_from_wishlist(request):
         return JsonResponse({'error': 'Product does not exist'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_purchase_history(request):
+    user = request.user
+    orders = Order.objects.filter(client=user).order_by('-date_created')
+    serializer = OrderSerializer(orders, many=True)
+    return JsonResponse(serializer.data, safe=False)

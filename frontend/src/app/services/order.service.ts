@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Order, OrderResponse } from '../interfaces/order';
@@ -15,6 +15,14 @@ export class OrderService {
 
   createOrder(orderData: Order): Observable<OrderResponse> {
     return this.http.post<OrderResponse>(`${this.backendUrl}/create-order/`, orderData);
+
+  }
+
+  getPurchaseHistory(): Observable<OrderResponse[]> {
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('accessToken')
+    });
+    return this.http.get<OrderResponse[]>(`${this.backendUrl}/purchase-history/`, { headers });
 
   }
 }

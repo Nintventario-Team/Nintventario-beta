@@ -25,25 +25,37 @@
         </div>
         <div class="navbar-icons">
           <img
+            src="https://cdn-icons-png.flaticon.com/512/2550/2550224.png"
+            routerLink=""
+            alt="User"
+            width="30"
+            class="nav-icon"
+            *ngIf="isLoggedIn; else notLoggedIn"
+            (click)="openWishlistModal()"
+          />
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+            routerLink=""
+            class="nav-icon"
+            alt="User"
+            width="30"
+            *ngIf="isLoggedIn; else notLoggedIn"
+            (click)="navigateToUserDetails()"
+          />
+          <ng-template #notLoggedIn>
+            <img
               src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
               routerLink=""
+              class="nav-icon"
               alt="User"
               width="30"
-              *ngIf="isLoggedIn; else notLoggedIn"
-              (click)="navigateToUserDetails()"
+              (click)="navigateToLogin()"
             />
-            <ng-template #notLoggedIn>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
-                routerLink=""
-                alt="User"
-                width="30"
-                (click)="navigateToLogin()"
-              />
-            </ng-template>
+          </ng-template>
           <img
             src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
             alt="Carrito de compras"
+            class="nav-icon"
             width="30"
             (click)="openCartModal()"
           />

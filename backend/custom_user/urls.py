@@ -1,14 +1,17 @@
 from django.urls import path
 from .views import (
+    add_to_wishlist,
     create_order,
     get_all_products,
     get_filtered_products,
+    get_wishlist,
     login_view,
     register_view,
     newest_products,
     bestselling_products,
     get_user_data,
     logout_view,
+    remove_from_wishlist,
 )
 
 urlpatterns = [
@@ -21,4 +24,7 @@ urlpatterns = [
     path('get-user-data/', get_user_data, name='get-user-data'),
     path('create-order/', create_order, name='create_order'),
     path('logout/', logout_view, name='logout_view'),
+    path('wishlist/add/', add_to_wishlist, name='add_to_wishlist'),
+    path('wishlist/', get_wishlist, name='get_wishlist'),
+    path('wishlist/remove/', remove_from_wishlist, name='remove_from_wishlist'),
 ]

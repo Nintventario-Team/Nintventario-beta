@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from custom_user.models import User, Client, Category, Product, Order, OrderItem
+from custom_user.models import User, Client, Category, Product, Order, OrderItem,WishlistItem
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,6 +52,12 @@ class OrderSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(f'Insufficient quantity for product {product.name}')
         
         return order
+
+
+class WishlistItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WishlistItem
+        fields = '__all__'
 
 
 

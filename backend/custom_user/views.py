@@ -11,7 +11,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication # type: ig
 import json
 
 
-from .models import Product, User
+from .models import Product, User, WishlistItem
 from .serializers import OrderSerializer, ProductSerializer
 from custom_user import serializers
 
@@ -179,3 +179,58 @@ def create_order(request):
             return JsonResponse({'error': str(e)}, status=400)
     else:
         return JsonResponse(serializer.errors, status=400)
+    
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def add_to_wishlist(request):
+    user = request.user
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        product_id = data.get('product_id')
+        product = Product.objects.get(id=product_id)
+        wishlist_item, created = WishlistItem.objects.get_or_create(user=user, product=product)
+        if created:
+            return JsonResponse({'message': 'Product added to wishlist'}, status=201)
+        else:
+            return JsonResponse({'message': 'Product already in wishlist'}, status=200)
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product does not exist'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_wishlist(request):
+    user = request.user
+    wishlist_items = WishlistItem.objects.filter(user=user).select_related('product')
+    serialized_wishlist = [
+        {
+            'id': item.product.id,
+            'name': item.product.name,
+            'description': item.product.description,
+            'price': item.product.price,
+            'image': item.product.image,
+            'added_at': item.added_at,
+        }
+        for item in wishlist_items
+    ]
+    return JsonResponse(serialized_wishlist, safe=False)
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def remove_from_wishlist(request):
+    user = request.user
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        product_id = data.get('product_id')
+        product = Product.objects.get(id=product_id)
+        WishlistItem.objects.filter(user=user, product=product).delete()
+        return JsonResponse({'message': 'Product removed from wishlist'}, status=200)
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product does not exist'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

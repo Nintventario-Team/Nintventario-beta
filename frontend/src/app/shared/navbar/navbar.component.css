@@ -70,9 +70,10 @@ body {
   gap: 5px;
 }
 
-.navbar-icon:hover {
-  color: #007acc;
-}
+.nav-icon:hover{
+    cursor: pointer;
+    filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
+  }
 
 .navbar-divider {
   height: 1px;
@@ -300,4 +301,13 @@ body {
     color: rgb(255, 255, 255);
     padding: 10px;
   }
+
+
+  
 }
+::ng-deep .cdk-overlay-backdrop.blur-backdrop {
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+}
+

@@ -186,10 +186,18 @@ input[type='radio'] {
   cursor: pointer;
   filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
 }
+.icon-container {
+  display: flex;
+  gap: 10px;
+  margin-right: 10px;
+}
+.in-wishlist{
+  filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
+}
 
 /* Filtro de género con scroll */
 .genre-filter {
-  max-height: 120px; /* Ajusta este valor según tu diseño */
+  max-height: 120px;
   overflow-y: auto;
   scrollbar-color: #001D4A transparent;
    scrollbar-width: thin;
@@ -349,6 +357,10 @@ input[type='radio'] {
     width: 25px;
   }
 
+  .wishlist-icon{
+    width: 25px;
+  }
+
   .details-container {
     max-width: 90%;
   }
@@ -400,6 +412,9 @@ input[type='radio'] {
   }
 
   .cart-icon {
+    width: 15px;
+  }
+  .wishlist-icon {
     width: 15px;
   }
 

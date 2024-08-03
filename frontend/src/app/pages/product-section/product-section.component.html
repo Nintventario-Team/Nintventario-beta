@@ -109,11 +109,21 @@
           <p class="product-name">{{ replaceUnderscores(producto.name) }}</p>
           <div class="price-container">
             <p class="price-product">${{ producto.price }}</p>
+            <div class="icon-container">
+              <img
+              class="cart-icon wishlist-icon"     [ngClass]="{'in-wishlist': isProductInWishlist(producto)}"
+
+              (click)="validateWishlist($event, producto)"
+              src="	https://cdn-icons-png.flaticon.com/512/2550/2550290.png"
+            />
             <img
               class="cart-icon"
               (click)="addCart($event, producto)"
               src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fcart-plus-fill.svg?alt=media&token=5f945936-14bf-4dec-b83e-c6105db787c3"
             />
+            </div>
+            
+            
           </div>
         </div>
       </div>
@@ -122,7 +132,10 @@
 </main>
 
 <div class="alert" *ngIf="showAlert">
-  <span>{{ alertMessage }}<button class="close-alert" (click)="closeAlert()">X</button></span>
+  <span>
+    {{ alertMessage }}
+    <button class="close-alert" (click)="closeAlert()">X</button>
+  </span>
   <div class="progress-bar">
     <div class="progress" [ngStyle]="{ width: progressWidth + '%' }"></div>
   </div>

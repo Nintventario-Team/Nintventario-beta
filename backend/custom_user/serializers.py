@@ -42,8 +42,15 @@ class OrderSerializer(serializers.ModelSerializer):
         order = Order.objects.create(**validated_data)
 
         for item_data in items_data:
-            OrderItem.objects.create(order=order, **item_data)
-
+            product_id = item_data['product'].id
+            product = Product.objects.get(id=product_id)
+            if product.quantity >= item_data['quantity']:
+                product.quantity -= item_data['quantity']
+                product.save()
+                OrderItem.objects.create(order=order, **item_data)
+            else:
+                raise serializers.ValidationError(f'Insufficient quantity for product {product.name}')
+        
         return order
 
 

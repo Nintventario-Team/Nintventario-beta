@@ -171,10 +171,11 @@ export class ProductSectionComponent implements OnInit {
 
     const itemIndex = cart.findIndex(item => item.id === cartItem.id)
 
-    if (itemIndex < 0) {
+    if (itemIndex < 0 && cartItem.maxQuantity > 0) {
       cart.push(cartItem)
       this.showAlertMessage('Producto añadido al carrito')
-    } else if (cartItem.maxQuantity < cart[itemIndex].quantityToBuy) {
+      
+    } else if(cart[itemIndex] && cartItem.maxQuantity > cart[itemIndex].quantityToBuy) {
       cart[itemIndex].quantityToBuy++
       this.showAlertMessage('Producto añadido al carrito')
     } else {

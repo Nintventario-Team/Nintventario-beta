@@ -6,6 +6,8 @@ import { Capture } from '../../interfaces/paypal-types'
 import { Router } from '@angular/router'
 import { OrderService } from '../../services/order.service'
 import { Item } from '../../interfaces/order'
+import { AuthService } from '../../services/auth.service'
+import { User } from '../../interfaces/user'
 
 @Component({
   selector: 'app-payment-gateway',
@@ -15,15 +17,17 @@ import { Item } from '../../interfaces/order'
   styleUrl: './payment-gateway.component.css',
 })
 export class PaymentGatewayComponent {
-
   public productshop?: CartItem[]
   public IVA = 0.12
   isLoading: boolean = false
+  user: User | null = null
+  isLoggedIn: boolean = false
 
   constructor(
     private router: Router,
     private paymentService: PaymentService,
     private orderService: OrderService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +41,24 @@ export class PaymentGatewayComponent {
     } else {
       this.productshop = []
     }
+
     this.loadPayPalScript()
+
+    this.isLoggedIn = this.authService.checkLoginStatus()
+    if (this.authService.checkLoginStatus()) {
+      this.authService.getUserInfo().subscribe(
+        (data: User) => {
+          this.user = data
+          console.log(this.user)
+        },
+        (error: unknown) => {
+          console.error('Error fetching user info:', error)
+        },
+      )
+    } else {
+      console.error('User not authenticated')
+    }
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
   }
   loadPayPalScript() {
     loadScript({ clientId: 'test', locale: 'es_EC', buyerCountry: 'EC' })
@@ -124,7 +145,7 @@ export class PaymentGatewayComponent {
     }))
 
     const orderData = {
-      client: 1,
+      client: this.user!.id,
       total: this.getCartTotal(),
       status: '4',
       items: itemsToBuy,
@@ -177,12 +198,10 @@ export class PaymentGatewayComponent {
   }
 
   deleteCartItem(productID: number) {
-    const confirmation = confirm("¿Estás seguro de que deseas eliminar este artículo del carrito?");
+    const confirmation = confirm('¿Estás seguro de que deseas eliminar este artículo del carrito?')
     if (confirmation) {
-        this.productshop = this.productshop?.filter(item => item.id !== productID);
-        localStorage.setItem('cart', JSON.stringify(this.productshop));
+      this.productshop = this.productshop?.filter(item => item.id !== productID)
+      localStorage.setItem('cart', JSON.stringify(this.productshop))
     }
-}
-
-  
+  }
 }

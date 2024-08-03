@@ -13,6 +13,7 @@ import json
 
 from .models import Product, User
 from .serializers import OrderSerializer, ProductSerializer
+from custom_user import serializers
 
 # PRODUCT METHODS
 
@@ -152,10 +153,12 @@ def bestselling_products(request):
 @permission_classes([IsAuthenticated])
 def get_user_data(request):
     user_data = {
+        'id': request.user.id,
         'email': request.user.email,
         'first_name': request.user.first_name,
         'last_name': request.user.last_name,
     }
+    print(user_data)
     return JsonResponse(user_data)
 
 
@@ -169,6 +172,10 @@ def create_order(request):
 
     serializer = OrderSerializer(data=data)
     if serializer.is_valid():
-        serializer.save()
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse(serializer.errors, status=400)
+        try:
+            order = serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        except serializers.ValidationError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse(serializer.errors, status=400)

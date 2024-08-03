@@ -6,6 +6,10 @@ import { NgxPaginationModule } from 'ngx-pagination'
 import { Product } from '../../interfaces/product'
 import { CartItem } from '../../interfaces/cartItem'
 import { ProductService } from '../../services/product.service'
+import { AuthService } from '../../services/auth.service'
+import { User } from '../../interfaces/user'
+import { WishlistService } from '../../services/wishlist.service'
+import { WishlistResponse } from '../../interfaces/wishlist'
 
 @Component({
   selector: 'app-product-section',
@@ -48,10 +52,15 @@ export class ProductSectionComponent implements OnInit {
   alertTimeout: any
   progressWidth = 100
   progressInterval: any
+  isLoggedIn: boolean = false
+  user: User | null = null
+  wishlist: WishlistResponse[] = []
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
+    private authService: AuthService,
+    private wishlistService: WishlistService,
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +77,25 @@ export class ProductSectionComponent implements OnInit {
         this.getFilteredData()
       })
     })
+
+    this.isLoggedIn = this.authService.checkLoginStatus()
+    if (this.isLoggedIn) {
+      this.authService.getUserInfo().subscribe(
+        (data: User) => {
+          this.user = data
+          console.log(this.user)
+        },
+        (error: unknown) => {
+          console.error('Error fetching user info:', error)
+        },
+      )
+    } else {
+      console.error('User not authenticated')
+    }
+    if (this.isLoggedIn) {
+      this.loadWishlist()
+    }
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
   }
 
   replaceUnderscores(name: string): string {
@@ -171,10 +199,10 @@ export class ProductSectionComponent implements OnInit {
 
     const itemIndex = cart.findIndex(item => item.id === cartItem.id)
 
-    if (itemIndex < 0) {
+    if (itemIndex < 0 && cartItem.maxQuantity > 0) {
       cart.push(cartItem)
       this.showAlertMessage('Producto añadido al carrito')
-    } else if (cartItem.maxQuantity < cart[itemIndex].quantityToBuy) {
+    } else if (cart[itemIndex] && cartItem.maxQuantity > cart[itemIndex].quantityToBuy) {
       cart[itemIndex].quantityToBuy++
       this.showAlertMessage('Producto añadido al carrito')
     } else {
@@ -213,5 +241,61 @@ export class ProductSectionComponent implements OnInit {
     this.showAlert = false
     clearTimeout(this.alertTimeout)
     clearInterval(this.progressInterval)
+  }
+
+  addWishlist(product: Product) {
+    this.wishlistService.addToWishlist(product.id).subscribe(
+      response => {
+        this.loadWishlist()
+        console.log('Producto añadido a la wishlist', response)
+        alert('Producto añadido a la wishlist')
+      },
+      error => {
+        console.error('Error añadiendo producto a la wishlist', error)
+        alert('Error añadiendo producto a la wishlist')
+      },
+    )
+  }
+
+  removeWishlist(product: Product) {
+    this.wishlistService.removeFromWishlist(product.id).subscribe(
+      response => {
+        console.log('Producto eliminado de la wishlist', response)
+        this.wishlist = this.wishlist.filter(p => p.id !== product.id)
+        alert('Producto eliminado de la wishlist')
+      },
+      error => {
+        console.error('Error eliminando producto de la wishlist', error)
+        alert('Error eliminando producto de la wishlist')
+      },
+    )
+  }
+  loadWishlist() {
+    this.wishlistService.getWishlist().subscribe(
+      (products: WishlistResponse[]) => {
+        this.wishlist = products
+        console.log('Wishlist loaded', this.wishlist)
+      },
+      error => {
+        console.error('Error loading wishlist', error)
+      },
+    )
+  }
+  isProductInWishlist(productSelected: Product): boolean {
+    return this.wishlist.some(product => product.id === productSelected.id)
+  }
+
+  validateWishlist(event: MouseEvent, product: Product) {
+    event.stopPropagation()
+
+    if (this.isLoggedIn) {
+      if (this.isProductInWishlist(product)) {
+        this.removeWishlist(product)
+      } else {
+        this.addWishlist(product)
+      }
+    } else {
+      alert('Necesitas estar loggeado para eliminar un producto de la wishlist')
+    }
   }
 }

@@ -59,7 +59,10 @@ def create_order(cart):
                     "value": f"{cart_total}"  # Usar detalles del carrito
                 }
             }
-        ]
+        ],
+        "application_context": {
+            "shipping_preference": "NO_SHIPPING"
+        }
     }
     response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders", headers=headers, json=payload)
     print("Orden creada")

@@ -6,6 +6,8 @@ import { AuthService } from '../../services/auth.service'
 import { FormsModule } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
 import { ShoppingCartModalComponent } from '../../pages/shopping-cart-modal/shopping-cart-modal.component'
+import { WishlistService } from '../../services/wishlist.service'
+import { WishlistModalComponent } from '../../pages/wishlist-modal/wishlist-modal.component'
 
 @Component({
   selector: 'app-navbar',
@@ -93,9 +95,30 @@ export class NavbarComponent {
     private router: Router,
     private authService: AuthService,
     public dialog: MatDialog,
+    private wishlistService: WishlistService,
   ) {
     this.isLoggedIn = this.authService.checkLoginStatus()
     this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
+  }
+
+  openWishlistModal(): void {
+    if (this.isLoggedIn) {
+      this.wishlistService.getWishlist().subscribe(
+        wishlistItems => {
+          this.dialog.open(WishlistModalComponent, {
+            data: { products: wishlistItems },
+            width: '80%',
+            backdropClass: 'blur-backdrop',
+
+          })
+        },
+        error => {
+          console.error('Error loading wishlist', error)
+        },
+      )
+    } else {
+      alert('Necesitas estar loggeado para eliminar un producto de la wishlist')
+    }
   }
 
   // Method to open the shopping cart modal
@@ -105,6 +128,7 @@ export class NavbarComponent {
     this.dialog.open(ShoppingCartModalComponent, {
       width: '80%',
       data: { productshop },
+      backdropClass: 'blur-backdrop',
     })
   }
 

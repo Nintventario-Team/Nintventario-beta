@@ -4,6 +4,7 @@ import { Location } from '@angular/common'
 import { RouterLinkActive, RouterLink, Router } from '@angular/router'
 import { CartItem } from '../../interfaces/cartItem'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'app-shopping-cart-modal',
@@ -18,11 +19,14 @@ export class ShoppingCartModalComponent {
   public totalProducts: number = 0
   public IVA = 0.12
   isCartEmpty: boolean = true
+  isLoggedIn: boolean = false
 
   constructor(
     private router: Router,
     private location: Location,
     public dialogRef: MatDialogRef<ShoppingCartModalComponent>,
+    private authService: AuthService,
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
@@ -42,6 +46,10 @@ export class ShoppingCartModalComponent {
       this.productshop = []
       this.isCartEmpty = true
     }
+
+    this.isLoggedIn = this.authService.checkLoginStatus()
+   
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
     // TO-DO actualizar maxQuantity
   }
 
@@ -86,10 +94,17 @@ export class ShoppingCartModalComponent {
   }
 
   goToCheckout() {
-    
+
     localStorage.setItem('cart', JSON.stringify(this.productshop))
-    this.dialogRef.close()
-    this.router.navigate(['/payment'])
+    if (this.isLoggedIn){
+      this.dialogRef.close()
+      this.router.navigate(['/payment'])
+    }else{
+      alert("Necesitas estar loggeado para finalizar la compra")
+      this.dialogRef.close()
+      this.router.navigate(['/login'])
+    }
+   
   }
 
   keepBuying() {

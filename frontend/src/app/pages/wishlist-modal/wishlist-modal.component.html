@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Wishlist</h1>
+<div mat-dialog-content>
+  <div *ngIf="data.products.length > 0; else noProducts">
+    <ul>
+      <li *ngFor="let product of data.products">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Price: {{ product.price  }}</p>
+        <img [src]="product.image" alt="{{ product.name }}" width="100">
+      </li>
+    </ul>
+  </div>
+  <ng-template #noProducts>
+    <p>No products in wishlist.</p>
+  </ng-template>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+</div>

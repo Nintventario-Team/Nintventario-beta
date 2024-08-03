@@ -50,7 +50,7 @@
   </ng-template>
 
   <div class="cart-actions">
-    <button (click)="goToCheckout()">FINALIZAR COMPRA</button>
+    <button (click)="goToCheckout()" (disabled)="isCartEmpty">FINALIZAR COMPRA</button>
     <button (click)="keepBuying()">CONTINUAR COMPRANDO</button>
   </div>
 </div>

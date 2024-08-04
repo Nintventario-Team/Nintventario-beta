@@ -129,7 +129,7 @@ export class NavbarComponent {
         },
       )
     } else {
-      alert('Necesitas estar loggeado para eliminar un producto de la wishlist')
+      alert('Necesitas estar loggeado para tener acceso a la wishtlist')
     }
   }
 

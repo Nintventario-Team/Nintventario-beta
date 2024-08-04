@@ -9,6 +9,9 @@ import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.compo
 import { LocalsComponent } from './pages/locals/locals.component'
 import { ContactComponent } from './pages/contact/contact.component'
 import {PaymentGatewayComponent} from './pages/payment-gateway/payment-gateway.component'
+import { TerminosCondicionesComponent } from './pages/terminos-condiciones/terminos-condiciones.component'
+import { MetodosPagoComponent } from './pages/metodos-pago/metodos-pago.component'
+import { SobreNosotrosComponent } from './pages/sobre-nosotros/sobre-nosotros.component'
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -25,6 +28,9 @@ export const routes: Routes = [
   { path: 'locales', component: LocalsComponent, data: { section: 'locals' } },
   { path: 'shoppingCart', component: ShoppingCartComponent },
   { path: 'contacto', component: ContactComponent, data: { section: 'contacto' } },
-  {path: 'payment', component: PaymentGatewayComponent},
+  { path: 'payment', component: PaymentGatewayComponent },
+  { path: 'terminos-condiciones', component: TerminosCondicionesComponent },
+  { path: 'metodos-pago', component: MetodosPagoComponent },
+  { path: 'sobre-nosotros', component: SobreNosotrosComponent },
   { path: '**', redirectTo: '' },
 ]

@@ -1,5 +1,5 @@
 <section id="banner-first">
-  <p>{{ section | uppercase }}</p>
+  <p>Inicio / {{ section.charAt(0).toUpperCase() + section.slice(1).toLowerCase() }}</p>
 </section>
 <main>
   <section id="filters">
@@ -111,19 +111,17 @@
             <p class="price-product">${{ producto.price }}</p>
             <div class="icon-container">
               <img
-              class="cart-icon wishlist-icon"     [ngClass]="{'in-wishlist': isProductInWishlist(producto)}"
-
-              (click)="validateWishlist($event, producto)"
-              src="	https://cdn-icons-png.flaticon.com/512/2550/2550290.png"
-            />
-            <img
-              class="cart-icon"
-              (click)="addCart($event, producto)"
-              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fcart-plus-fill.svg?alt=media&token=5f945936-14bf-4dec-b83e-c6105db787c3"
-            />
+                class="icon-products"
+                [ngClass]="{ 'in-wishlist': isProductInWishlist(producto) }"
+                (click)="validateWishlist($event, producto)"
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Ffavoritefill.png?alt=media&token=c241acf9-6766-4971-8885-dacc9481e16c"
+              />
+              <img
+                class="icon-products"
+                (click)="addCart($event, producto)"
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fcart-plus-fill.svg?alt=media&token=5f945936-14bf-4dec-b83e-c6105db787c3"
+              />
             </div>
-            
-            
           </div>
         </div>
       </div>

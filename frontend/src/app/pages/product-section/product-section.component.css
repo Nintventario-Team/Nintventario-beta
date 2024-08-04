@@ -176,13 +176,13 @@ input[type='radio'] {
   border-top: 1px solid #ccc;
 }
 
-.cart-icon {
+.icon-products {
   width: 20px;
   height: auto;
   filter: invert(10%) sepia(100%) saturate(999%) hue-rotate(190deg);
 }
 
-.cart-icon:hover {
+.icon-products:hover {
   cursor: pointer;
   filter: invert(59%) sepia(98%) saturate(714%) hue-rotate(1deg);
 }
@@ -353,7 +353,7 @@ input[type='radio'] {
     height: auto;
   }
 
-  .cart-icon {
+  .icon-products {
     width: 25px;
   }
 
@@ -411,7 +411,7 @@ input[type='radio'] {
     height: auto;
   }
 
-  .cart-icon {
+  .icon-products {
     width: 15px;
   }
   .wishlist-icon {

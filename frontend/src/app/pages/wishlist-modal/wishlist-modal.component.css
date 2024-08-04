@@ -138,12 +138,13 @@
   color: #888;
 }
 
+
 @media (max-width: 768px) {
   .wishlist-modal {
     width: 80%;
     max-width: 600px;
-    height: 85%;
-    max-height: 85vh;
+    height: 100%;
+    max-height: 100vh;
     padding: 20px;
   }
 

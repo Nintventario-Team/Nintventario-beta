@@ -8,7 +8,9 @@ import { UserDetailsComponent } from './pages/user-details/user-details.componen
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component'
 import { LocalsComponent } from './pages/locals/locals.component'
 import { ContactComponent } from './pages/contact/contact.component'
-import {PaymentGatewayComponent} from './pages/payment-gateway/payment-gateway.component'
+import { PaymentGatewayComponent } from './pages/payment-gateway/payment-gateway.component'
+import { UserAccountComponent } from './pages/user-details/user-account/user-account.component'
+import { UserPurchaseHistoryComponent } from './pages/user-details/user-purchase-history/user-purchase-history.component'
 import { TerminosCondicionesComponent } from './pages/terminos-condiciones/terminos-condiciones.component'
 import { MetodosPagoComponent } from './pages/metodos-pago/metodos-pago.component'
 import { SobreNosotrosComponent } from './pages/sobre-nosotros/sobre-nosotros.component'
@@ -19,7 +21,15 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'todos', component: ProductSectionComponent, data: { section: 'todos' } },
-  { path: 'userDetails', component: UserDetailsComponent },
+  {
+    path: 'userDetails',
+    component: UserDetailsComponent,
+    children: [
+      { path: '', component: UserAccountComponent },
+      { path: 'userAccount', component: UserAccountComponent },
+      { path: 'userPurchaseHistory', component: UserPurchaseHistoryComponent },
+    ],
+  },
   { path: 'videojuegos', component: ProductSectionComponent, data: { section: 'videojuegos' } },
   { path: 'funkopop', component: ProductSectionComponent, data: { section: 'funkopop' } },
   { path: 'consolas', component: ProductSectionComponent, data: { section: 'consolas' } },

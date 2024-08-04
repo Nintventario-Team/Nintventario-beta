@@ -1,20 +1,17 @@
 import { Component } from '@angular/core'
-import { AuthService } from '../../services/auth.service'
-import { User } from '../../interfaces/user'
-import { RouterLinkActive, RouterLink } from '@angular/router';
-import {
-  Router,
-  RouterOutlet,
-} from '@angular/router';
+import { Router } from '@angular/router'
+import { AuthService } from '../../../services/auth.service'
+import { User } from '../../../interfaces/user'
 
 @Component({
-  selector: 'app-user-details',
+  selector: 'app-user-account',
   standalone: true,
-  imports: [RouterLinkActive, RouterLink, RouterOutlet],
-  templateUrl: './user-details.component.html',
-  styleUrl: './user-details.component.css',
+  imports: [],
+  templateUrl: './user-account.component.html',
+  styleUrl: './user-account.component.css'
 })
-export class UserDetailsComponent {
+
+export class UserAccountComponent {
   userInfo: User | undefined
 
   constructor(

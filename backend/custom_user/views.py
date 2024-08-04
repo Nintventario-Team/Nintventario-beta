@@ -11,7 +11,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication # type: ig
 import json
 
 
-from .models import Product, User, WishlistItem
+from .models import Order, Product, User, WishlistItem,Client
 from .serializers import OrderSerializer, ProductSerializer
 from custom_user import serializers
 
@@ -94,6 +94,10 @@ def register_view(request):
                 last_name=last_name
             )
             user.save()
+            # Create a Client instance with optional data
+            Client.objects.create(
+                user=user,
+            )
             refresh = RefreshToken.for_user(user)
             return JsonResponse({
                 'message': 'Registration successful',
@@ -164,22 +168,29 @@ def get_user_data(request):
 
 @csrf_exempt
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def create_order(request):
     try:
         data = json.loads(request.body.decode('utf-8'))
+        
+        try:
+            client = Client.objects.get(user=request.user)
+            data['client'] = client.id  
+        except Client.DoesNotExist:
+            return JsonResponse({'error': 'Client not found'}, status=404)
+        
+        serializer = OrderSerializer(data=data)
+        if serializer.is_valid():
+            try:
+                order = serializer.save()
+                return JsonResponse(serializer.data, status=201)
+            except serializers.ValidationError as e:
+                return JsonResponse({'error': str(e)}, status=400)
+        else:
+            return JsonResponse(serializer.errors, status=400)
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
-    serializer = OrderSerializer(data=data)
-    if serializer.is_valid():
-        try:
-            order = serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        except serializers.ValidationError as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    else:
-        return JsonResponse(serializer.errors, status=400)
-    
 
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
@@ -234,3 +245,31 @@ def remove_from_wishlist(request):
         return JsonResponse({'error': 'Product does not exist'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_purchase_history(request):
+    # Assuming `request.user` is an instance of the User model
+    # Get the Client instance associated with the user
+    try:
+        client = Client.objects.get(user=request.user)
+    except Client.DoesNotExist:
+        return JsonResponse({'error': 'Client not found'}, status=404)
+    
+    # Fetch orders for the found client
+    orders = Order.objects.filter(client=client).order_by('-date_created')
+    serializer = OrderSerializer(orders, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def get_product_by_id(request, product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        serializer = ProductSerializer(product)
+        return JsonResponse(serializer.data, safe=False)
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

@@ -1,6 +1,14 @@
 import { Component, HostListener } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterLinkActive, RouterLink, Router, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router'
+import {
+  RouterLinkActive,
+  RouterLink,
+  Router,
+  NavigationStart,
+  NavigationEnd,
+  NavigationError,
+  NavigationCancel,
+} from '@angular/router'
 import { RouterModule } from '@angular/router'
 import { AuthService } from '../../services/auth.service'
 import { FormsModule } from '@angular/forms'
@@ -8,6 +16,8 @@ import { MatDialog } from '@angular/material/dialog'
 import { ShoppingCartModalComponent } from '../../pages/shopping-cart-modal/shopping-cart-modal.component'
 import { WishlistService } from '../../services/wishlist.service'
 import { WishlistModalComponent } from '../../pages/wishlist-modal/wishlist-modal.component'
+import { User } from '../../interfaces/user'
+import { CartItem } from '../../interfaces/cartItem'
 
 @Component({
   selector: 'app-navbar',
@@ -19,9 +29,15 @@ import { WishlistModalComponent } from '../../pages/wishlist-modal/wishlist-moda
 export class NavbarComponent {
   isSearchBarVisible = false
   isLoggedIn: boolean | undefined
+  username: string | undefined
   inputValue: string = ''
   menuVisible = false
-  submenu = false
+  submenuVisible = false
+  subsubmenuVisible = false
+  userInfo: User | undefined
+  isCartEmpty: boolean = true
+  public productshop?: CartItem[]
+  public totalProducts: number = 0
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectedCategory: any
   categories = [
@@ -62,17 +78,41 @@ export class NavbarComponent {
     },
     { title: 'Otros', items: ['Otros...'] },
   ]
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    public dialog: MatDialog,
+    private wishlistService: WishlistService,
+  ) {
+    this.isLoggedIn = this.authService.checkLoginStatus()
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
+    this.username = 'sds' //this.authService.getUsername() // Assuming you have a method to get the username
+  }
+
   toggleMenu() {
     this.menuVisible = !this.menuVisible
   }
+
+  openMenu() {
+    this.submenuVisible = !this.submenuVisible
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   openSubMenu(category: any) {
     this.selectedCategory = category
-    this.submenu = true
+    this.submenuVisible = false
+    this.subsubmenuVisible = true
   }
 
   closeSubMenu() {
-    this.submenu = false
+    this.submenuVisible = false
+    this.subsubmenuVisible = false
+  }
+
+  closeSubSubMenu() {
+    this.subsubmenuVisible = false
+    this.submenuVisible = true
   }
 
   @HostListener('window:scroll', [])
@@ -91,28 +131,54 @@ export class NavbarComponent {
       }
     }
   }
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    public dialog: MatDialog,
-    private wishlistService: WishlistService,
-  ) {
-    this.isLoggedIn = this.authService.checkLoginStatus()
-    this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
-  }
+
   ngOnInit() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        console.log('Navigation started:', event);
+        console.log('Navigation started:', event)
       } else if (event instanceof NavigationEnd) {
-        console.log('Navigation ended:', event);
+        console.log('Navigation ended:', event)
       } else if (event instanceof NavigationError) {
-        console.error('Navigation error:', event.error);
+        console.error('Navigation error:', event.error)
       } else if (event instanceof NavigationCancel) {
-        console.log('Navigation canceled:', event);
+        console.log('Navigation canceled:', event)
       }
-    });
+    })
+
+    if (this.authService.checkLoginStatus()) {
+      this.authService.getUserInfo().subscribe(
+        (data: User) => {
+          this.userInfo = data
+        },
+        (error: unknown) => {
+          console.error('Error fetching user info:', error)
+        },
+      )
+    } else {
+      console.error('User not authenticated')
+    }
+
+    const cartItem = localStorage.getItem('cart')
+    if (cartItem !== null) {
+      try {
+        this.productshop = JSON.parse(cartItem)
+        this.totalProducts = this.productshop ? this.productshop.length : 0
+        this.isCartEmpty = this.totalProducts === 0
+      } catch (e) {
+        console.error('Error parsing cart data:', e)
+      }
+    } else {
+      this.productshop = []
+      this.isCartEmpty = true
+    }
   }
+
+  logout() {
+    this.authService.logout()
+    this.router.navigateByUrl('/')
+    this.toggleMenu()
+  }
+
   openWishlistModal() {
     if (this.isLoggedIn) {
       this.wishlistService.getWishlist().subscribe(
@@ -121,7 +187,6 @@ export class NavbarComponent {
             data: { products: wishlistItems },
             width: '80%',
             backdropClass: 'blur-backdrop',
-
           })
         },
         error => {
@@ -133,7 +198,6 @@ export class NavbarComponent {
     }
   }
 
-  // Method to open the shopping cart modal
   openCartModal() {
     const cartItem = localStorage.getItem('cart')
     const productshop = cartItem ? JSON.parse(cartItem) : []
@@ -146,14 +210,31 @@ export class NavbarComponent {
 
   navigateToLogin() {
     this.router.navigateByUrl('/login')
+    this.toggleMenu()
   }
 
   navigateToUserDetails() {
     this.router.navigateByUrl('/userDetails')
+    this.toggleMenu()
   }
 
   navigateToHome() {
-    this.router.navigateByUrl('')
+    this.router.navigateByUrl('/')
+  }
+
+  navigateToHomeFromMobile() {
+    this.router.navigateByUrl('/')
+    this.toggleMenu()
+  }
+
+  navigateToLocales() {
+    this.router.navigateByUrl('/locales')
+    this.toggleMenu()
+  }
+
+  navigateToContacto() {
+    this.router.navigateByUrl('/contacto')
+    this.toggleMenu()
   }
 
   toggleSearchBar() {
@@ -165,8 +246,17 @@ export class NavbarComponent {
     if (codeValue === 'Enter') {
       const trimmedValue = this.inputValue.trim()
       if (trimmedValue) {
-        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } })
+        this.router.navigate(['/search'], { queryParams: { query: trimmedValue } })
+        this.inputValue = ''
       }
     }
+  }
+
+  hideSearchBar() {
+    this.isSearchBarVisible = false
+  }
+
+  closeModal() {
+    this.dialog.closeAll()
   }
 }

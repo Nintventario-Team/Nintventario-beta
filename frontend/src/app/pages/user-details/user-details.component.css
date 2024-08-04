@@ -28,3 +28,17 @@
   justify-content: left;
   gap: 40px;
 }
+
+@media (max-width: 768px) {
+  #banner-first p {
+    padding: 0.3em 0 0 5em;
+    color: #001D4A;
+  }
+
+  .navbar-bottom {
+  display: flex;
+  margin: 15px 4vh;
+  justify-content: left;
+  gap: 40px;
+}
+}

@@ -34,7 +34,7 @@
           <img
             src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
             routerLink=""
-            class="nav-icon"
+            class="nav-icon user-icon"
             alt="User"
             width="30"
             *ngIf="isLoggedIn; else notLoggedIn"
@@ -44,19 +44,22 @@
             <img
               src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
               routerLink=""
-              class="nav-icon"
+              class="nav-icon user-icon"
               alt="User"
               width="30"
               (click)="navigateToLogin()"
             />
           </ng-template>
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
-            alt="Carrito de compras"
-            class="nav-icon"
-            width="30"
-            (click)="openCartModal()"
-          />
+          <div class="cart-icon-container">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fshopping-cart-icon.svg?alt=media&token=b1107332-c216-46a1-96f5-6e1311b33f39"
+              alt="Carrito de compras"
+              class="nav-icon"
+              width="30"
+              (click)="openCartModal()"
+            />
+            <span class="cart-count">{{ totalProducts }}</span>
+          </div>
         </div>
       </div>
       <div class="navbar-divider"></div>
@@ -117,10 +120,29 @@
       </div>
     </div>
   </div>
+
   <!-- Menu mobile -->
   <div class="mobile-menu" [class.open]="menuVisible">
     <div class="mobile-menu-content">
-      <div class="mobile-menu-categories" *ngIf="!submenu">
+      <div class="mobile-menu-user">
+        <div *ngIf="isLoggedIn; else notLoggedIn" class="user-info" (click)="navigateToUserDetails()">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+            alt="User"
+            width="30"
+          />
+          <span>{{ userInfo?.first_name }}</span>
+        </div>
+        <ng-template #notLoggedIn>
+          <div class="user-info" (click)="navigateToHomeFromMobile()">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fperson.svg?alt=media&token=3b534201-e933-422e-947b-12a93f6ee803"
+              alt="User"
+              width="30"
+            />
+            <span></span>
+          </div>
+        </ng-template>
         <div class="close-btn" (click)="toggleMenu()">
           <img
             src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fx-lg.svg?alt=media&token=19d8f58e-6409-474c-8f62-73c1238af612"
@@ -128,6 +150,76 @@
             width="20"
           />
         </div>
+      </div>
+      <div class="mobile-menu-categories" *ngIf="!submenuVisible && !subsubmenuVisible">
+        <div class="menu-items">
+          <div class="category-item">
+            <button (click)="navigateToHomeFromMobile()">
+              Inicio
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
+                alt="Right Arrow"
+                width="20"
+              />
+            </button>
+            <div class="navbar-divider"></div>
+          </div>
+          <div class="category-item">
+            <button (click)="openMenu()">
+              Productos
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
+                alt="Right Arrow"
+                width="20"
+              />
+            </button>
+            <div class="navbar-divider"></div>
+          </div>
+          <div class="category-item">
+            <button (click)="navigateToLocales()">
+              Locales
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
+                alt="Right Arrow"
+                width="20"
+              />
+            </button>
+            <div class="navbar-divider"></div>
+          </div>
+          <div class="category-item">
+            <button (click)="navigateToContacto()">
+              Contacto
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
+                alt="Right Arrow"
+                width="20"
+              />
+            </button>
+            <div class="navbar-divider"></div>
+          </div>
+        </div>
+        <div class="logout-item category-item">
+          <button (click)="logout()">
+            Cerrar sesión
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-left.svg?alt=media&token=9224af5b-da27-46de-86d6-f5e5be09a53d"
+              alt="Right Arrow"
+              width="20"
+            />
+          </button>
+          <div class="navbar-divider"></div>
+        </div>
+      </div>
+
+      <div class="mobile-submenu" *ngIf="submenuVisible && !subsubmenuVisible">
+        <button class="back-btn" (click)="closeSubMenu()">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-left.svg?alt=media&token=9224af5b-da27-46de-86d6-f5e5be09a53d"
+            alt="Left Arrow"
+            width="20"
+          />
+          Regresar
+        </button>
         <div *ngFor="let category of categories" class="category-item">
           <button (click)="openSubMenu(category)">
             {{ category.title }}
@@ -140,8 +232,8 @@
           <div class="navbar-divider"></div>
         </div>
       </div>
-      <div class="mobile-submenu" *ngIf="submenu">
-        <button class="back-btn" (click)="closeSubMenu()">
+      <div class="submenu-items mobile-submenu" *ngIf="subsubmenuVisible">
+        <button class="back-btn" (click)="closeSubSubMenu()">
           <img
             src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-left.svg?alt=media&token=9224af5b-da27-46de-86d6-f5e5be09a53d"
             alt="Left Arrow"
@@ -149,18 +241,9 @@
           />
           Regresar
         </button>
-        <div class="submenu-items">
-          <div *ngFor="let item of selectedCategory?.items">
-            <a routerLink="/{{ item | lowercase }}">
-              {{ item }}
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fchevron-right.svg?alt=media&token=1c41f5b9-a6b0-4cc7-ab7e-80fc7024cbd8"
-                alt="Right Arrow"
-                width="20"
-              />
-            </a>
-            <div class="navbar-divider"></div>
-          </div>
+        <div *ngFor="let item of selectedCategory.items">
+          <a routerLink="/{{ item | lowercase }}">{{ item }}</a>
+          <div class="navbar-divider"></div>
         </div>
       </div>
     </div>

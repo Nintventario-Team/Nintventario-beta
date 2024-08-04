@@ -1,0 +1,70 @@
+<main class="container">
+  <cdk-accordion class="order-accordion">
+    @for (item of orders; track item; let index = $index) {
+      <cdk-accordion-item
+        #accordionItem="cdkAccordionItem"
+        class="order-accordion-item"
+        role="button"
+        tabindex="0"
+        [attr.id]="'accordion-header-' + index"
+        [attr.aria-expanded]="accordionItem.expanded"
+        [attr.aria-controls]="'accordion-body-' + index"
+      >
+        <div class="order-accordion-item-header" (click)="accordionItem.toggle()">
+          <img src="https://cdn-icons-png.flaticon.com/512/12115/12115767.png" alt="" class="orderImage" />
+          <div class="order-data">
+            <h3>Orden Numero {{ index + 1 }}</h3>
+            <p>
+              <strong>Fecha de Creacion:</strong>
+              {{ item.date_created }}
+            </p>
+            <p>
+              <strong>Total de Compra:</strong>
+              ${{ item.total }}
+            </p>
+          </div>
+          <span class="order-accordion-item-description">Click to {{ accordionItem.expanded ? 'close' : 'open' }}</span>
+        </div>
+        <div
+          class="order-accordion-item-body"
+          role="region"
+          [style.display]="accordionItem.expanded ? '' : 'none'"
+          [attr.id]="'accordion-body-' + index"
+          [attr.aria-labelledby]="'accordion-header-' + index"
+        >
+          @for (pro of item.items; track $index) {
+            @for (p of products; track $index) {
+              @if (p.id === pro.product) {
+                <div class="product_section">
+                  <img class="product_img" src="{{ p.image }}" alt="" />
+
+                  <div class="order_data">
+                    <p>
+                      <strong>Description:</strong>
+                      {{ p.description }}
+                    </p>
+                    <p>
+                      <strong>Detalles:</strong>
+                      {{ p.details }}
+                    </p>
+  
+                    <p>
+                      <strong>Local de compra:</strong>
+                      {{ p.local }}
+                    </p>
+                  </div>
+                  <div class="order_price">
+                    <p>
+                      {{ p.price }}
+                    </p>
+                  </div>
+                </div>
+                
+              }
+            }
+          }
+        </div>
+      </cdk-accordion-item>
+    }
+  </cdk-accordion>
+</main>

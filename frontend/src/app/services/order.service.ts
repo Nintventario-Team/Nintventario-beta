@@ -14,7 +14,10 @@ export class OrderService {
   constructor(private http: HttpClient) {}
 
   createOrder(orderData: Order): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${this.backendUrl}/create-order/`, orderData);
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('accessToken')
+    });
+    return this.http.post<OrderResponse>(`${this.backendUrl}/create-order/`, orderData, { headers });
 
   }
 

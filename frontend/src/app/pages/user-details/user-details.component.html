@@ -1,63 +1,14 @@
-<div class="container" id="containerId">
-  <div class="account-box">
-    <div class="principal-div">
-      <a class="principal-title">Mi cuenta</a>
+<section id="banner-first">
+  <p>Usuario / Cuenta</p>
+</section>
+<main class="container">
+  <div class="navbar-bottom">
+    <div class="navbar-links">
+      <a routerLink="/userDetails/userAccount">Detalles</a>
+      <a routerLink="/userDetails/userPurchaseHistory">Historial de Compras</a>
     </div>
-    <form>
-      <div class="section">
-        <div class="second-div">
-          <a class="second-title">Información</a>
-        </div>
-        <div class="two-column">
-          <div class="form-group">
-            <a for="first-name">Nombres</a>
-            <input type="text" id="first-name" name="first-name" value="{{ userInfo?.first_name }}" />
-          </div>
-          <div class="form-group">
-            <a for="last-name">Apellidos</a>
-            <input type="text" id="last-name" name="last-name" value="{{ userInfo?.last_name }}" />
-          </div>
-        </div>
-        <div class="two-column">
-          <div class="form-group">
-            <a for="email">Correo electrónico</a>
-            <input type="email" id="email" name="email" value="{{ userInfo?.email }}" />
-          </div>
-          <div class="form-group">
-            <a for="last-name">Contraseña</a>
-            <input type="text" id="password" name="password" value="**********" />
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="second-div">
-          <a class="second-title">Información de envio</a>
-        </div>
-        <div class="two-column">
-          <div class="form-group">
-            <a for="address">Dirección</a>
-            <input type="text" id="address" name="address" value="" />
-          </div>
-          <div class="form-group">
-            <a for="city">Ciudad</a>
-            <input type="text" id="city" name="city" value="" />
-          </div>
-        </div>
-        <div class="two-column">
-          <div class="form-group">
-            <a for="country">País</a>
-            <input type="text" id="country" name="country" value="Ecuador" readonly />
-          </div>
-          <div class="form-group">
-            <a for="postal-code">Código postal</a>
-            <input type="text" id="postal-code" name="postal-code" />
-          </div>
-        </div>
-      </div>
-      <div class="button-container">
-        <button type="button" (click)="logout()">Cerrar sesión</button>
-      </div>
-    </form>
   </div>
-</div>
+  <section class="data">
+    <router-outlet></router-outlet>
+  </section>
+</main>

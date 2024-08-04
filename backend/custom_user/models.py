@@ -7,11 +7,11 @@ class User(BaseUser):  # noqa: DJ08
 
 
 class Client(models.Model):
-    dni = models.CharField(max_length=20, unique=True)
+    dni = models.CharField(max_length=20, unique=True, blank=True, null=True)
     user = models.ForeignKey(User, related_name='clients', on_delete=models.CASCADE)
-    direction = models.CharField(max_length=255)
-    cellphone = models.CharField(max_length=15)
-    city = models.CharField(max_length=50)
+    direction = models.CharField(max_length=255, blank=True, null=True)
+    cellphone = models.CharField(max_length=15, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.dni

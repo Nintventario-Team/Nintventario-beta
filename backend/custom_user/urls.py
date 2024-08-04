@@ -4,6 +4,7 @@ from .views import (
     create_order,
     get_all_products,
     get_filtered_products,
+    get_product_by_id,
     get_purchase_history,
     get_wishlist,
     login_view,
@@ -29,5 +30,6 @@ urlpatterns = [
     path('wishlist/', get_wishlist, name='get_wishlist'),
     path('wishlist/remove/', remove_from_wishlist, name='remove_from_wishlist'),
     path('purchase-history/', get_purchase_history, name='purchase-history'),
+    path('get-product-id/<int:product_id>/', get_product_by_id, name='get_product_by_id'),
 
 ]

@@ -1,121 +1,30 @@
-.container {
-  max-width: 1000px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
-.principal-div {
+#banner-first {
+  background-color: #eca400;
   display: flex;
-  justify-content: center;
-}
-
-#containerId {
-  font-weight: normal;
   font-family: 'Montserrat', sans-serif;
-}
-
-.account-box {
-  width: 100%;
-}
-
-.principal-title {
-  font-size: 24px;
-  justify-content: center;
-}
-
-.section {
-  margin-bottom: 30px;
-}
-
-.second-div {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.second-title {
-  font-size: 18px;
-  border-bottom: 1px solid #e9ecef;
-  padding-bottom: 5px;
-  flex: 1;
-}
-
-.form-group {
-  margin-bottom: 15px;
-  padding-top: 15px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-button {
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.settings-btn {
-  float: right;
-  margin-top: -50px;
-  margin-right: 10px;
-}
-
-.two-column {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.two-column .form-group {
-  flex: 1;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
+  height: 30px;
   margin-top: 10px;
 }
 
-@media (max-width: 600px) {
-  .container {
-    padding: 10px;
-  }
+#banner-first p {
+  padding: 0.3em 0 0 15em;
+  color: #00274d;
+}
+.navbar-links a {
+  text-decoration: none;
+  color: #00274d;
+  font-size: 14px;
+  transition: color 0.3s;
+  padding: 0 20px;
+}
 
-  .settings-btn {
-    float: none;
-    display: block;
-    margin: 0 auto 20px;
-  }
-
-  .two-column {
-    flex-direction: column;
-  }
+.navbar-links a:hover {
+  color: #007acc;
+}
+.navbar-bottom {
+  display: flex;
+  margin: 15px 20vh;
+  justify-content: left;
+  gap: 40px;
 }

@@ -28,10 +28,6 @@ main {
   width: 200px;
 }
 
-#filters {
-  width: 20%;
-  padding: 20px 0px;
-}
 
 #filters > div:first-child {
   padding-top: 40px;
@@ -83,7 +79,7 @@ input[type='radio'] {
   flex-direction: column;
   width: 70%;
   align-items: center;
-  padding: 40px 0 0 100px;
+  padding: 40px 0 0px 50px;
 }
 
 #products {
@@ -91,6 +87,7 @@ input[type='radio'] {
   grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
   gap: 20px;
   width: 100%;
+  height: auto;
 }
 
 .product-message {
@@ -107,6 +104,7 @@ input[type='radio'] {
 #products-paginator {
   display: flex;
   align-items: center;
+  margin-right: 20px;
 }
 
 #products-paginator ::ng-deep * {
@@ -269,14 +267,14 @@ input[type='radio'] {
 #nombre-text {
   font-weight: 700;
   font-size: 24px;
-  color: var(--acento-azul-oscuro);
+  color: #001D4A;
   font-variant-caps: all-petite-caps;
 }
 
 #desc-text {
   font-weight: 400;
   font-size: 16px;
-  color: var(--acento-azul-oscuro);
+  color: #001D4A;
 }
 
 #precio-text {
@@ -294,11 +292,15 @@ input[type='radio'] {
 #addToCart-detalles {
   margin-top: 30px;
   padding: 20px;
-  background-color: var(--acento-turqueza);
+  background-color:  #001D4A;
   font-weight: 400;
   font-size: 16px;
   cursor: pointer;
   color: #fff;
+}
+
+#addToCart-detalles:hover {
+  background-color: #ECA400;
 }
 
 #cart-icon-detalles {
@@ -309,10 +311,27 @@ input[type='radio'] {
   width: 70%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1150px) {
   main {
     flex-direction: column;
     width: 100%;
+  }
+
+  .filter h3{
+    margin-left: 40px;
+  }
+
+  .filter-option{
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+
+  .genre-filter{
+    margin-right: 50%;
+  }
+
+  .platform-filter{
+    margin-right: 50%;
   }
 
   #banner-first {
@@ -324,24 +343,35 @@ input[type='radio'] {
   color: #00274d;
 }
 
-  #filters {
-    width: 100%;
-    padding: 20px;
-  }
+#Buscar-input{
+  margin-left: 40px;
+}
+
+.filter h3::after {
+  content: '';
+  display: block;
+  height: 3px;
+  background-color: #ECA400;
+  width: 40%;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
 
   #products-container {
     width: 100%;
-    padding: 30px;
-    align-items: stretch;
+    padding: 40px 0 0px 0px;
+    /*padding: 30px;
+    align-items: stretch;*/
   }
 
   #products {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 
   .product-item {
     width: 100%;
-    max-width: 200px;
+    max-width: 250px;
   }
 
   .product-info {
@@ -363,6 +393,72 @@ input[type='radio'] {
 
   .details-container {
     max-width: 90%;
+  }
+}
+
+@media (max-width: 540px){
+    #products-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espacio entre el select y la paginación */
+  }
+
+  #order-by {
+    margin-bottom: 10px; /* Espacio entre el select y la paginación */
+  }
+
+  #products-paginator {
+    margin-top: 10px; /* Espacio entre el select y la paginación */
+  }
+
+}
+
+@media (max-width: 400px) {
+  .genre-filter{
+    margin-right: 45%;
+  }
+
+  .platform-filter{
+    margin-right: 45%;
+  }
+   #products {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  /*Details component*/
+  .details-container {
+    padding: 30px;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  #img-detalles {
+    width: 150px;
+  }
+
+  #nombre-text {
+    font-size: 18px;
+  }
+
+  #desc-text,
+  #precio-text,
+  #detalles-text {
+    font-size: 14px;
+  }
+
+  #addToCart-detalles {
+    padding: 15px;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  #cart-icon-detalles {
+    width: 18px;
+  }
+
+  #closeButton-detalles {
+    top: 5px;
+    right: 5px;
   }
 }
 
@@ -472,4 +568,24 @@ input[type='radio'] {
   background-color: #76c7c0; /* Color de la barra de progreso */
   width: 100%;
   transition: width 0.2s linear;
+}
+
+#products-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#order-by {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+#orderBySelect {
+  padding: 5px;
+  font-size: 14px;
+  margin-left: 10px;
 }

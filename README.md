@@ -33,8 +33,8 @@ Being on this category we will find a Dropdown of Categories where we will have:
 - **"VIDEO JUEGOS"**: Link that shows products that are video games.
 - **"FUNKO POPS"**: Page dedicated to products from the Funko Pops category.
 - **"CONSOLAS"**: Video game console products, including latest generation consoles and previous models.
-- **"COLECCIONABLES"**: Section that contains collectible products such as figures, limited editions, or items of interest to collectors.
-- **"ACCESORIOS"**: Products related to accessories for video games or other electronic products are shown here.
+- **"OTROS"**: Section that contains the rest of the products of the page.
+- **"ARTICULOS"**: Products related to accessories for video games or other electronic products are shown here.
 
 ![Dropdown of Categories](images%20for%20guides/categorias%20.png)
 

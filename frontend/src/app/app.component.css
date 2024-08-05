@@ -1,0 +1,9 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ocupa al menos el 100% de la altura de la ventana */
+}
+
+.content {
+    flex: 1; /* Este elemento crecerá para llenar el espacio disponible */
+}

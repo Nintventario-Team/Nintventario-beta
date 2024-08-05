@@ -58,11 +58,15 @@ export class NavbarComponent {
         'Xbox 360',
       ],
     },
-    { title: 'Funko-Pops', items: ['Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies'] },
-    { title: 'Consolas', items: ['PS5', 'Nintendo Switch'] },
+    {
+      title: 'Funko-Pops',
+      items: ['Todos', 'Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies'],
+    },
+    { title: 'Consolas', items: ['Todos', 'PS5', 'Nintendo Switch'] },
     {
       title: 'Artículos',
       items: [
+        'Todos',
         'Computadores',
         'Nintendo 3DS',
         'Nintendo Wii',

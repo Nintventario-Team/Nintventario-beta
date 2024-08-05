@@ -87,9 +87,6 @@ export class IndexComponent {
     })
   }
 
-
-
-
   searchProduct($event: KeyboardEvent) {
     const codeValue = $event.code
     if (codeValue === 'Enter') {

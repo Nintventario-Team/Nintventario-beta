@@ -4,7 +4,13 @@
 <main>
   <section id="filters">
     <div class="filter">
-      <input type="text" placeholder="Buscar" />
+      <input
+        [(ngModel)]="inputValue"
+        id="Buscar-input"
+        type="text"
+        placeholder="Buscar"
+        (keydown)="searchProduct($event)"
+      />
     </div>
 
     <div class="filter" *ngIf="section === 'videojuegos'">
@@ -17,6 +23,48 @@
         <div class="filter-option" *ngFor="let genre of genres">
           <input type="radio" name="genre" (click)="filterByGenre(genre)" />
           <label>{{ genre }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter" *ngIf="section === 'consolas'">
+      <h3>PLATAFORMA</h3>
+      <div class="filter-options genre-filter">
+        <div class="filter-option">
+          <input type="radio" name="consol" value="todos" (click)="getFilteredData()" />
+          Todos
+        </div>
+        <div class="filter-option" *ngFor="let consol of consols">
+          <input type="radio" name="consol" (click)="filterByGenre(consol)" />
+          <label>{{ consol }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter" *ngIf="section === 'articulos'">
+      <h3>CATEGORÍAS</h3>
+      <div class="filter-options genre-filter">
+        <div class="filter-option">
+          <input type="radio" name="articulo" value="todos" (click)="getFilteredData()" />
+          Todos
+        </div>
+        <div class="filter-option" *ngFor="let articulo of articulos">
+          <input type="radio" name="articulo" (click)="filterByGenre(articulo)" />
+          <label>{{ articulo }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter" *ngIf="section === 'funkopop'">
+      <h3>CATEGORÍAS</h3>
+      <div class="filter-options genre-filter">
+        <div class="filter-option">
+          <input type="radio" name="funko" value="todos" (click)="getFilteredData()" />
+          Todos
+        </div>
+        <div class="filter-option" *ngFor="let funko of funkos">
+          <input type="radio" name="funko" (click)="filterByGenre(funko)" />
+          <label>{{ funko }}</label>
         </div>
       </div>
     </div>
@@ -34,7 +82,35 @@
         </div>
       </div>
     </div>
-
+    <div class="filter">
+      <h3>PRODUCTOS</h3>
+      <div class="filter-options">
+        <div class="filter-option">
+          <input type="radio" name="price" routerLink="/todos" [checked]="allIsSelected"/>
+          Todos
+        </div>
+        <div class="filter-option">
+          <input type="radio" name="price" routerLink="/videojuegos" [checked]="videogameIsSelected"/>
+          Videojuegos
+        </div>
+        <div class="filter-option">
+          <input type="radio" name="price" routerLink="/funkopop" [checked]="funkoIsSelected"/>
+          Funko-Pops
+        </div>
+        <div class="filter-option">
+          <input type="radio" name="price" routerLink="/consolas" [checked]="consolIsSelected"/>
+          Consolas
+        </div>
+        <div class="filter-option">
+          <input type="radio" name="price" routerLink="/articulos" [checked]="artIsSelected" />
+          Artículos
+        </div>
+        <div class="filter-option">
+          <input type="radio" name="price" routerLink="/otros" [checked]="otroIsSelected"/>
+          Otros
+        </div>
+      </div>
+    </div>
     <div class="filter">
       <h3>PRECIO</h3>
       <div class="filter-options">
@@ -75,26 +151,22 @@
         }
       </div>
     </div>
-
-    <div class="filter">
-      <h3>ORDENAR POR</h3>
-      <div class="filter-options">
-        <div class="filter-option">
-          <input type="radio" name="orderBy" (click)="sortProducts('asc')" />
-          Más baratos primero
-        </div>
-        <div class="filter-option">
-          <input type="radio" name="orderBy" (click)="sortProducts('desc')" />
-          Más caros primero
-        </div>
-      </div>
-    </div>
   </section>
 
   <section id="products-container">
-    <div id="products-paginator">
-      <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    <div id="products-header">
+      <div id="order-by">
+        <label for="orderBySelect">Ordenar por:</label>
+        <select id="orderBySelect" (change)="sortProducts($event)">
+          <option value="asc">Más baratos primero</option>
+          <option value="desc">Más caros primero</option>
+        </select>
+      </div>
+      <div id="products-paginator">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+      </div>
     </div>
+
     <div id="products">
       <div class="product-message" *ngIf="data.length === 0">
         <p id="no-products-message">No hay productos con estas características</p>
@@ -129,6 +201,7 @@
   </section>
 </main>
 
+<!-- Alerta -->
 <div class="alert" *ngIf="showAlert">
   <span>
     {{ alertMessage }}
@@ -139,16 +212,18 @@
   </div>
 </div>
 
+<!-- Detalles del producto -->
 <div class="details" *ngIf="showDetails && selectedProduct !== undefined">
   <div class="details-container">
     <img id="img-detalles" src="{{ selectedProduct.image }}" />
-    <p id="nombre-text">{{ selectedProduct.name }}</p>
-    <p id="desc-text">{{ selectedProduct.description }}</p>
+    <p id="nombre-text">{{ replaceUnderscores(selectedProduct.name) }}</p>
+    
     <p id="precio-text">Precio unitario: ${{ selectedProduct.price }}</p>
-    <h2>Detalles</h2>
+    <p id="nombre-text">Detalles</p>
     <div *ngFor="let detalle of selectedProduct.details?.split(',') || []">
       <p id="detalles-text">{{ detalle.trim() }}</p>
     </div>
+    <p id="desc-text">{{ selectedProduct.description }}</p>
     <button id="addToCart-detalles" (click)="addCart($event, selectedProduct)">
       <img
         id="cart-icon-detalles"

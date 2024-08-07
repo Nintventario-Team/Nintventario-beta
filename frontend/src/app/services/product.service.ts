@@ -7,8 +7,8 @@ import { Product } from '../interfaces/product'
   providedIn: 'root',
 })
 export class ProductService {
-  //private backendUrl = 'https://jorgemawyin.pythonanywhere.com'
-  private backendUrl = 'http://127.0.0.1:8000'
+  private backendUrl = 'https://nintventario.pythonanywhere.com/'
+  //private backendUrl = 'http://127.0.0.1:8000'
 
   constructor(private http: HttpClient) {}
 
@@ -41,6 +41,6 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.backendUrl}/bestselling-products/`)
   }
   getProductById(productId: number): Observable<Product> {
-    return this.http.get<Product>(`${this.backendUrl}/get-product-id/${productId}`);
+    return this.http.get<Product>(`${this.backendUrl}/get-product-id/${productId}`)
   }
 }

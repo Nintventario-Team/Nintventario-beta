@@ -7,8 +7,8 @@ import { LoginResponse, User } from '../interfaces/user'
   providedIn: 'root',
 })
 export class AuthService {
-  //baseUrl = 'https://jorgemawyin.pythonanywhere.com/'
-   baseUrl = 'http://127.0.0.1:8000/';
+  baseUrl = 'https://nintventario.pythonanywhere.com/'
+  //baseUrl = 'http://127.0.0.1:8000/'
 
   registerUrl = this.baseUrl + 'register/'
   loginUrl = this.baseUrl + 'login/'

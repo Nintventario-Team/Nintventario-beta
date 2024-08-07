@@ -48,7 +48,7 @@ export class ShoppingCartModalComponent {
     }
 
     this.isLoggedIn = this.authService.checkLoginStatus()
-   
+
     this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
     // TO-DO actualizar maxQuantity
   }
@@ -93,18 +93,42 @@ export class ShoppingCartModalComponent {
     }
   }
 
-  goToCheckout() {
+  increaseQuantity(product: CartItem) {
+    if (product.quantityToBuy < product.maxQuantity) {
+      product.quantityToBuy++
+      this.updateCart()
+    }
+  }
 
+  decreaseQuantity(product: CartItem) {
+    if (product.quantityToBuy > 1) {
+      product.quantityToBuy--
+      this.updateCart()
+    }
+  }
+
+  updateCart() {
     localStorage.setItem('cart', JSON.stringify(this.productshop))
-    if (this.isLoggedIn){
+  }
+
+  deleteCartItem(productID: number) {
+    const confirmation = confirm('¿Estás seguro de que deseas eliminar este artículo del carrito?')
+    if (confirmation) {
+      this.productshop = this.productshop?.filter(item => item.id !== productID)
+      localStorage.setItem('cart', JSON.stringify(this.productshop))
+    }
+  }
+
+  goToCheckout() {
+    localStorage.setItem('cart', JSON.stringify(this.productshop))
+    if (this.isLoggedIn) {
       this.dialogRef.close()
       this.router.navigate(['/payment'])
-    }else{
-      alert("Necesitas estar loggeado para finalizar la compra")
+    } else {
+      alert('Necesitas estar loggeado para finalizar la compra')
       this.dialogRef.close()
       this.router.navigate(['/login'])
     }
-   
   }
 
   keepBuying() {

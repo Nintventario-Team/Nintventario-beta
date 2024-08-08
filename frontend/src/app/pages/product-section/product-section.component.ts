@@ -21,7 +21,15 @@ import { FormsModule } from '@angular/forms'
   styleUrl: './product-section.component.css',
 })
 export class ProductSectionComponent implements OnInit {
-  section!: 'todos' | 'videojuegos' | 'funkopop' | 'consolas' | 'otros' | 'articulos'
+  section!:
+    | 'todos'
+    | 'videojuegos'
+    | 'funkopop'
+    | 'consolas'
+    | 'otros'
+    | 'articulos'
+    | 'nuevos-productos'
+    | 'mas-vendidos'
   genres: string[] = ['Acción', 'Aventura', 'Deportes', 'Estrategia', 'Simulación', 'RPG', 'Puzzle']
   consoles: string[] = ['PS5', 'Nintendo Switch', 'Xbox 360']
   funkos: string[] = ['Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies']
@@ -88,7 +96,15 @@ export class ProductSectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
-      this.section = data['section'] as 'todos' | 'videojuegos' | 'funkopop' | 'consolas' | 'otros' | 'articulos'
+      this.section = data['section'] as
+        | 'todos'
+        | 'videojuegos'
+        | 'funkopop'
+        | 'consolas'
+        | 'otros'
+        | 'articulos'
+        | 'nuevos-productos'
+        | 'mas-vendidos'
       this.route.queryParams.subscribe(params => {
         this.searching = (params['q'] || '').toLowerCase()
         this.getFilteredData()
@@ -148,22 +164,36 @@ export class ProductSectionComponent implements OnInit {
   }
 
   getFilteredData(): void {
-    const sectionMappings = {
-      todos: '',
-      consolas: 'consola',
-      videojuegos: 'jue',
-      funkopop: 'pop',
-      otros: 'muñecos',
-      articulos: 'acc',
+    if (this.section === 'nuevos-productos') {
+      this.productService.getNewestProducts().subscribe(products => {
+        this.data = this.totalProducts = products
+        this.sortProductsFilter(this.sortOrder)
+        this.search()
+      })
+    } else if (this.section === 'mas-vendidos') {
+      this.productService.getBestsellingProducts().subscribe(products => {
+        this.data = this.totalProducts = products
+        this.sortProductsFilter(this.sortOrder)
+        this.search()
+      })
+    } else {
+      const sectionMappings = {
+        todos: '',
+        consolas: 'consola',
+        videojuegos: 'jue',
+        funkopop: 'pop',
+        otros: 'muñecos',
+        articulos: 'acc',
+      }
+
+      const sectionToFilter = sectionMappings[this.section]
+
+      this.productService.getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter).subscribe(products => {
+        this.data = this.totalProducts = products
+        this.sortProductsFilter(this.sortOrder)
+        this.search()
+      })
     }
-
-    const sectionToFilter = sectionMappings[this.section]
-
-    this.productService.getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter).subscribe(products => {
-      this.data = this.totalProducts = products
-      this.sortProductsFilter(this.sortOrder)
-      this.search()
-    })
   }
 
   updatePriceRange(min: number, max: number): void {

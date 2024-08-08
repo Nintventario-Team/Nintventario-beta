@@ -100,4 +100,12 @@ export class IndexComponent {
   navigateToAll() {
     this.router.navigateByUrl('/todos')
   }
+
+  navigateToBestSellingProducts() {
+    this.router.navigateByUrl('/mas-vendidos')
+  }
+
+  navigateToNewProducts() {
+    this.router.navigateByUrl('/nuevos-productos')
+  }
 }

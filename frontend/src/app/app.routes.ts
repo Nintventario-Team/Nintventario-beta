@@ -35,6 +35,8 @@ export const routes: Routes = [
   { path: 'consolas', component: ProductSectionComponent, data: { section: 'consolas' } },
   { path: 'otros', component: ProductSectionComponent, data: { section: 'otros' } },
   { path: 'articulos', component: ProductSectionComponent, data: { section: 'articulos' } },
+  { path: 'nuevos-productos', component: ProductSectionComponent, data: { section: 'nuevos-productos' } },
+  { path: 'mas-vendidos', component: ProductSectionComponent, data: { section: 'mas-vendidos' } },
   { path: 'locales', component: LocalsComponent, data: { section: 'locals' } },
   { path: 'shoppingCart', component: ShoppingCartComponent },
   { path: 'contacto', component: ContactComponent, data: { section: 'contacto' } },

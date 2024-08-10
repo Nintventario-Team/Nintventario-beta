@@ -7,6 +7,18 @@
 /bazel-out
 /backend/env/
 
+# Cypress
+cypress/screenshots/
+cypress/videos/
+cypress.env.json
+
+# Log files
+*.log
+
+# Cache directories
+.cache/
+.temp/
+
 # Node
 /node_modules
 npm-debug.log

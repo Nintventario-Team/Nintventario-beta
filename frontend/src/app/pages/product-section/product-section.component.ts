@@ -30,9 +30,9 @@ export class ProductSectionComponent implements OnInit {
     | 'articulos'
     | 'nuevos-productos'
     | 'mas-vendidos'
-  genres: string[] = ['Acción', 'Aventura', 'Deportes', 'Estrategia', 'Simulación', 'RPG', 'Puzzle']
-  consoles: string[] = ['PS5', 'Nintendo Switch', 'Xbox 360']
-  funkos: string[] = ['Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies']
+  genres: string[] = ['Todos', 'Acción', 'Aventura', 'Deportes', 'Estrategia', 'Simulación', 'RPG', 'Puzzle']
+  consoles: string[] = ['Todos', 'PS5', 'Nintendo Switch', 'Xbox 360']
+  funkos: string[] = ['Todos', 'Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies']
   articulos: string[] = [
     'PS1',
     'PS2',
@@ -48,6 +48,7 @@ export class ProductSectionComponent implements OnInit {
     'Tazas',
   ]
   platforms: string[] = [
+    'Todos',
     'PS1',
     'PS2',
     'PS3',
@@ -60,7 +61,7 @@ export class ProductSectionComponent implements OnInit {
     'Xbox 360',
     'Nintendo Switch',
   ]
-  consols: string[] = ['PS5', 'Nintendo Switch']
+  consols: string[] = ['Todos', 'PS5', 'Nintendo Switch']
   data: Product[] = []
   public totalProducts: Product[] = []
   page = 1
@@ -68,7 +69,8 @@ export class ProductSectionComponent implements OnInit {
   selectedProduct: Product | undefined
   minPrice?: number = 0
   maxPrice?: number = 1000
-  sortOrder: 'asc' | 'desc' = 'asc'
+  category: string = ''
+  sortOrder: 'asc' | 'desc' | 'alpha-asc' | 'alpha-desc' = 'asc'
   searching: string = ''
   inputValue: string = ''
   showAlert = false
@@ -151,8 +153,9 @@ export class ProductSectionComponent implements OnInit {
     }
   }
 
-  replaceUnderscores(name: string): string {
-    return name.replace(/_/g, ' ')
+  getNameWithoutParentheses(name: string): string {
+    const nameWithoutParentheses = name.replace(/\(.*?\)/g, '').trim()
+    return nameWithoutParentheses.charAt(0).toUpperCase() + nameWithoutParentheses.slice(1).toLowerCase()
   }
 
   search(): void {
@@ -185,14 +188,14 @@ export class ProductSectionComponent implements OnInit {
         otros: 'muñecos',
         articulos: 'acc',
       }
-
       const sectionToFilter = sectionMappings[this.section]
-
-      this.productService.getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter).subscribe(products => {
-        this.data = this.totalProducts = products
-        this.sortProductsFilter(this.sortOrder)
-        this.search()
-      })
+      this.productService
+        .getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter, this.category)
+        .subscribe(products => {
+          this.data = this.totalProducts = products
+          this.sortProductsFilter(this.sortOrder)
+          this.search()
+        })
     }
   }
 
@@ -207,24 +210,43 @@ export class ProductSectionComponent implements OnInit {
       this.data.sort((a, b) => a.price - b.price)
     } else if (order === 'desc') {
       this.data.sort((a, b) => b.price - a.price)
+    } else if (order === 'alpha-asc') {
+      this.data.sort((a, b) => a.name.localeCompare(b.name))
+    } else if (order === 'alpha-desc') {
+      this.data.sort((a, b) => b.name.localeCompare(a.name))
     }
   }
 
   sortProducts(event: Event): void {
     const selectElement = event.target as HTMLSelectElement
     const value = selectElement.value
+
     if (value === 'asc') {
       this.data.sort((a, b) => a.price - b.price)
       this.sortOrder = 'asc'
     } else if (value === 'desc') {
       this.data.sort((a, b) => b.price - a.price)
       this.sortOrder = 'desc'
+    } else if (value === 'alpha-asc') {
+      this.data.sort((a, b) => a.name.localeCompare(b.name))
+      this.sortOrder = 'alpha-asc'
+    } else if (value === 'alpha-desc') {
+      this.data.sort((a, b) => b.name.localeCompare(a.name))
+      this.sortOrder = 'alpha-desc'
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   filterByGenre(genre: string): void {
-    // Filtrar los videojuegos por género
+    if (genre === 'Todos') {
+      this.category = ''
+      this.getFilteredData()
+      return
+    } else if (genre === 'Nintendo Switch') {
+      this.category = 'switch'
+    } else {
+      this.category = genre
+    }
+    this.getFilteredData()
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -382,7 +404,19 @@ export class ProductSectionComponent implements OnInit {
       const trimmedValue = this.inputValue.trim()
       if (trimmedValue) {
         this.router.navigate([page], { queryParams: { q: trimmedValue } })
+      } else if (trimmedValue === '') {
+        this.router.navigate([page])
       }
+    }
+  }
+
+  searchIcon() {
+    const page = '/' + this.section
+    const trimmedValue = this.inputValue.trim()
+    if (trimmedValue) {
+      this.router.navigate([page], { queryParams: { q: trimmedValue } })
+    } else if (trimmedValue === '') {
+      this.router.navigate([page])
     }
   }
 }

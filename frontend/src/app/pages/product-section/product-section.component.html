@@ -4,22 +4,26 @@
 <main>
   <section id="filters">
     <div class="filter">
-      <input
-        [(ngModel)]="inputValue"
-        id="Buscar-input"
-        type="text"
-        placeholder="Buscar"
-        (keydown)="searchProduct($event)"
-      />
+      <div class="search-wrapper">
+        <input
+          [(ngModel)]="inputValue"
+          id="Buscar-input"
+          type="text"
+          placeholder="Buscar"
+          (keydown)="searchProduct($event)"
+        />
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fsearch-icon.svg?alt=media&token=ba27c4e0-8220-426e-abc8-f65b359e2479"
+          alt="Search Icon"
+          class="search-icon"
+          (click)="searchIcon()"
+        />
+      </div>
     </div>
 
     <div class="filter" *ngIf="section === 'videojuegos'">
       <h3>GÉNERO</h3>
       <div class="filter-options genre-filter">
-        <div class="filter-option">
-          <input type="radio" name="genre" value="todos" (click)="getFilteredData()" />
-          Todos
-        </div>
         <div class="filter-option" *ngFor="let genre of genres">
           <input type="radio" name="genre" (click)="filterByGenre(genre)" />
           <label>{{ genre }}</label>
@@ -30,10 +34,6 @@
     <div class="filter" *ngIf="section === 'consolas'">
       <h3>PLATAFORMA</h3>
       <div class="filter-options genre-filter">
-        <div class="filter-option">
-          <input type="radio" name="consol" value="todos" (click)="getFilteredData()" />
-          Todos
-        </div>
         <div class="filter-option" *ngFor="let consol of consols">
           <input type="radio" name="consol" (click)="filterByGenre(consol)" />
           <label>{{ consol }}</label>
@@ -44,10 +44,6 @@
     <div class="filter" *ngIf="section === 'articulos'">
       <h3>CATEGORÍAS</h3>
       <div class="filter-options genre-filter">
-        <div class="filter-option">
-          <input type="radio" name="articulo" value="todos" (click)="getFilteredData()" />
-          Todos
-        </div>
         <div class="filter-option" *ngFor="let articulo of articulos">
           <input type="radio" name="articulo" (click)="filterByGenre(articulo)" />
           <label>{{ articulo }}</label>
@@ -58,10 +54,6 @@
     <div class="filter" *ngIf="section === 'funkopop'">
       <h3>CATEGORÍAS</h3>
       <div class="filter-options genre-filter">
-        <div class="filter-option">
-          <input type="radio" name="funko" value="todos" (click)="getFilteredData()" />
-          Todos
-        </div>
         <div class="filter-option" *ngFor="let funko of funkos">
           <input type="radio" name="funko" (click)="filterByGenre(funko)" />
           <label>{{ funko }}</label>
@@ -72,10 +64,6 @@
     <div class="filter" *ngIf="section === 'videojuegos'">
       <h3>PLATAFORMA</h3>
       <div class="filter-options platform-filter">
-        <div class="filter-option">
-          <input type="radio" name="platform" value="todos" (click)="getFilteredData()" />
-          Todos
-        </div>
         <div class="filter-option" *ngFor="let platform of platforms">
           <input type="radio" name="platform" (click)="filterByGenre(platform)" />
           <label>{{ platform }}</label>
@@ -86,19 +74,19 @@
       <h3>PRODUCTOS</h3>
       <div class="filter-options">
         <div class="filter-option">
-          <input type="radio" name="price" routerLink="/todos" [checked]="allIsSelected"/>
+          <input type="radio" name="price" routerLink="/todos" [checked]="allIsSelected" />
           Todos
         </div>
         <div class="filter-option">
-          <input type="radio" name="price" routerLink="/videojuegos" [checked]="videogameIsSelected"/>
+          <input type="radio" name="price" routerLink="/videojuegos" [checked]="videogameIsSelected" />
           Videojuegos
         </div>
         <div class="filter-option">
-          <input type="radio" name="price" routerLink="/funkopop" [checked]="funkoIsSelected"/>
+          <input type="radio" name="price" routerLink="/funkopop" [checked]="funkoIsSelected" />
           Funko-Pops
         </div>
         <div class="filter-option">
-          <input type="radio" name="price" routerLink="/consolas" [checked]="consolIsSelected"/>
+          <input type="radio" name="price" routerLink="/consolas" [checked]="consolIsSelected" />
           Consolas
         </div>
         <div class="filter-option">
@@ -106,7 +94,7 @@
           Artículos
         </div>
         <div class="filter-option">
-          <input type="radio" name="price" routerLink="/otros" [checked]="otroIsSelected"/>
+          <input type="radio" name="price" routerLink="/otros" [checked]="otroIsSelected" />
           Otros
         </div>
       </div>
@@ -131,6 +119,10 @@
             <input type="radio" name="price" (click)="updatePriceRange(401, 500)" />
             $401 - $500
           </div>
+          <div class="filter-option">
+            <input type="radio" name="price" (click)="updatePriceRange(500, 1000)" />
+            Mayor a $500
+          </div>
         } @else {
           <div class="filter-option">
             <input type="radio" name="price" (click)="updatePriceRange(0, 150)" />
@@ -148,6 +140,10 @@
             <input type="radio" name="price" (click)="updatePriceRange(50, 79.99)" />
             $50 - $79.99
           </div>
+          <div class="filter-option">
+            <input type="radio" name="price" (click)="updatePriceRange(80, 1000)" />
+            Mayor a $80
+          </div>
         }
       </div>
     </div>
@@ -160,6 +156,8 @@
         <select id="orderBySelect" (change)="sortProducts($event)">
           <option value="asc">Más baratos primero</option>
           <option value="desc">Más caros primero</option>
+          <option value="alpha-asc">Orden alfabético A-Z</option>
+          <option value="alpha-desc">Orden alfabético Z-A</option>
         </select>
       </div>
       <div id="products-paginator">
@@ -178,7 +176,7 @@
       >
         <img class="img-product" src="{{ producto.image }}" />
         <div class="product-info">
-          <p class="product-name">{{ replaceUnderscores(producto.name) }}</p>
+          <p class="product-name">{{ getNameWithoutParentheses(producto.name) }}</p>
           <div class="price-container">
             <p class="price-product">${{ producto.price }}</p>
             <div class="icon-container">
@@ -216,13 +214,12 @@
 <div class="details" *ngIf="showDetails && selectedProduct !== undefined">
   <div class="details-container">
     <img id="img-detalles" src="{{ selectedProduct.image }}" />
-    <p id="nombre-text">{{ replaceUnderscores(selectedProduct.name) }}</p>
-    
+    <p id="nombre-text">{{ getNameWithoutParentheses(selectedProduct.name) }}</p>
+
     <p id="precio-text">Precio unitario: ${{ selectedProduct.price }}</p>
     <p id="nombre-text">Detalles</p>
-    <div *ngFor="let detalle of selectedProduct.details?.split(',') || []">
-      <p id="detalles-text">{{ detalle.trim() }}</p>
-    </div>
+    <p id="detalles-text">{{ selectedProduct.details }}</p>
+    <p id="nombre-text">Descripción</p>
     <p id="desc-text">{{ selectedProduct.description }}</p>
     <button id="addToCart-detalles" (click)="addCart($event, selectedProduct)">
       <img

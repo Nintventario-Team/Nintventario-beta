@@ -16,7 +16,7 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.backendUrl}/products/`)
   }
 
-  getFilteredProducts(priceMin?: number, priceMax?: number, productType?: string): Observable<Product[]> {
+  getFilteredProducts(priceMin?: number, priceMax?: number, productType?: string, category?: string, platform?: string): Observable<Product[]> {
     let params = new HttpParams()
     if (priceMin !== undefined) {
       params = params.set('price_min', priceMin.toString())
@@ -26,6 +26,12 @@ export class ProductService {
     }
     if (productType !== undefined) {
       params = params.set('product_type', productType)
+    }
+    if (category !== undefined) {
+      params = params.set('category', category)
+    }
+    if (platform !== undefined) {
+      params = params.set('platform', platform)
     }
 
     return this.http.get<Product[]>(`${this.backendUrl}/filteredProducts/`, {
@@ -42,5 +48,9 @@ export class ProductService {
   }
   getProductById(productId: number): Observable<Product> {
     return this.http.get<Product>(`${this.backendUrl}/get-product-id/${productId}`)
+  }
+  getFilteredProductsByGenre(genre: string): Observable<Product[]> {
+    const url = `${this.backendUrl}/filter?genre=${encodeURIComponent(genre)}&product_type=jue`
+    return this.http.get<Product[]>(url)
   }
 }

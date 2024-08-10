@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { WishlistService } from './wishlist.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { WishlistResponse } from '../interfaces/wishlist'; // Assuming 'wishlist.ts' defines the WishlistResponse interface
 
 describe('WishlistService', () => {
   let service: WishlistService;
@@ -24,16 +25,26 @@ describe('WishlistService', () => {
   });
 
   it('should fetch wishlist items', () => {
-    const mockWishlist = [{ id: 1, name: 'Product 1' }];
+    // Mock data matching the WishlistResponse interface
+    const mockWishlist: WishlistResponse[] = [
+      {
+        id: 1,
+        name: 'Product 1',
+        description: 'A great product',
+        price: 100,
+        image: 'image1.jpg',
+        added_at: '2024-08-01T00:00:00Z'
+      }
+    ];
+
     service.getWishlist().subscribe((items) => {
       expect(items.length).toBe(1);
       expect(items).toEqual(mockWishlist);
     });
 
-    const req = httpMock.expectOne('https://your-api-endpoint/wishlist');
+    const req = httpMock.expectOne('https://nintventario.pythonanywhere.com//wishlist/');
     expect(req.request.method).toBe('GET');
     req.flush(mockWishlist);
   });
 
-  // Add more tests for other service methods
 });

@@ -8,8 +8,7 @@ describe('FooterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FooterComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule,FooterComponent],
     }).compileComponents();
   });
 

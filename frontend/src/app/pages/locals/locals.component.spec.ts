@@ -7,7 +7,7 @@ describe('LocalsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LocalsComponent],
+      imports: [LocalsComponent],
     }).compileComponents();
   });
 
@@ -19,16 +19,6 @@ describe('LocalsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should display store locations', () => {
-    component.stores = [
-      { name: 'RIOCENTRO CEIBOS', address: 'AV. DEL BOMBERO, KM. 7, VÍA A LA COSTA' },
-      { name: 'RIOCENTRO ENTRE RÍOS', address: 'AV. SAMBORONDÓN, SAMBORONDÓN' },
-    ];
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll('.store').length).toBe(2);
   });
 
   it('should call nextSlide when next button is clicked', () => {

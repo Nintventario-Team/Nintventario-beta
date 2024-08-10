@@ -17,12 +17,12 @@ describe('LoginComponent', () => {
     };
 
     routerMock = {
-      navigate: jasmine.createSpy('navigate')
+      navigate: jasmine.createSpy('navigate'),
+      navigateByUrl: jasmine.createSpy('navigateByUrl')  // Add spy for navigateByUrl
     };
 
     await TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [FormsModule],
+      imports: [FormsModule,LoginComponent],
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock }
@@ -50,6 +50,6 @@ describe('LoginComponent', () => {
 
   it('should navigate to home after successful login', () => {
     component.onSubmit();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
+    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/'); // Adjust the test to check for navigateByUrl
   });
 });

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ContactComponent } from './contact.component';
+import { ContactService } from '../../services/contact.service'
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -8,8 +10,8 @@ describe('ContactComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContactComponent],
-      imports: [FormsModule],
+      imports: [FormsModule,ContactComponent,HttpClientTestingModule],      providers: [ContactService], 
+
     }).compileComponents();
   });
 

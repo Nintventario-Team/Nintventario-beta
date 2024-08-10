@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShoppingCartModalComponent } from './shopping-cart-modal.component';
+import { AuthService } from '../../services/auth.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'; // Import MatDialogRef
+import { CartItem } from '../../interfaces/cartItem';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ShoppingCartModalComponent', () => {
   let component: ShoppingCartModalComponent;
@@ -7,7 +11,12 @@ describe('ShoppingCartModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ShoppingCartModalComponent]
+      imports: [ShoppingCartModalComponent,HttpClientTestingModule],
+      providers: [
+        AuthService,
+        { provide: MatDialogRef, useValue: {} }, 
+        {provide:MAT_DIALOG_DATA,useValue:{}}
+      ],
     }).compileComponents();
   });
 
@@ -22,9 +31,19 @@ describe('ShoppingCartModalComponent', () => {
   });
 
   it('should display products in cart', () => {
+    // Mock data matching the CartItem interface
     component.displayedProducts = [
-      { id: 1, name: 'Product 1', image: 'image1.jpg', quantityToBuy: 1, price: 100 }
-    ];
+      { 
+        id: 1, 
+        name: 'Product 1', 
+        image: 'image1.jpg', 
+        quantityToBuy: 1, 
+        price: 100, 
+        maxQuantity: 10, 
+        details: 'Details of product 1' 
+      }
+    ] as CartItem[];
+    
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('.cart-item')).not.toBeNull();
@@ -32,9 +51,26 @@ describe('ShoppingCartModalComponent', () => {
 
   it('should calculate cart subtotal', () => {
     component.displayedProducts = [
-      { id: 1, name: 'Product 1', image: 'image1.jpg', quantityToBuy: 1, price: 100 },
-      { id: 2, name: 'Product 2', image: 'image2.jpg', quantityToBuy: 2, price: 50 }
-    ];
+      { 
+        id: 1, 
+        name: 'Product 1', 
+        image: 'image1.jpg', 
+        quantityToBuy: 1, 
+        price: 100, 
+        maxQuantity: 10, 
+        details: 'Details of product 1' 
+      },
+      { 
+        id: 2, 
+        name: 'Product 2', 
+        image: 'image2.jpg', 
+        quantityToBuy: 2, 
+        price: 50, 
+        maxQuantity: 5, 
+        details: 'Details of product 2' 
+      }
+    ] as CartItem[];
+    
     expect(component.getCartSubtotal()).toBe(200);
   });
 

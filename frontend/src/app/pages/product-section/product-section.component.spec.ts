@@ -1,22 +1,61 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductSectionComponent } from './product-section.component';
 import { ProductService } from '../../services/product.service';
+import { AuthService } from '../../services/auth.service';
+import { WishlistService } from '../../services/wishlist.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { Product } from '../../interfaces/product';
+import { WishlistResponse } from '../../interfaces/wishlist';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ProductSectionComponent', () => {
   let component: ProductSectionComponent;
   let fixture: ComponentFixture<ProductSectionComponent>;
+
   let productServiceMock: any;
+  let authServiceMock: any;
+  let wishlistServiceMock: any;
+  let activatedRouteMock: any;
+  let routerMock: any;
 
   beforeEach(async () => {
     productServiceMock = {
-      getProductsByCategory: jasmine.createSpy('getProductsByCategory').and.returnValue(of([]))
+      getNewestProducts: jasmine.createSpy('getNewestProducts').and.returnValue(of([])),
+      getBestsellingProducts: jasmine.createSpy('getBestsellingProducts').and.returnValue(of([])),
+      getFilteredProducts: jasmine.createSpy('getFilteredProducts').and.returnValue(of([]))
+    };
+
+    authServiceMock = {
+      checkLoginStatus: jasmine.createSpy('checkLoginStatus').and.returnValue(true),
+      getUserInfo: jasmine.createSpy('getUserInfo').and.returnValue(of({ id: 1, first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com' })),
+      isLoggedIn$: of(true)
+    };
+
+    wishlistServiceMock = {
+      addToWishlist: jasmine.createSpy('addToWishlist').and.returnValue(of({})),
+      removeFromWishlist: jasmine.createSpy('removeFromWishlist').and.returnValue(of({})),
+      getWishlist: jasmine.createSpy('getWishlist').and.returnValue(of([]))
+    };
+
+    activatedRouteMock = {
+      data: of({ section: 'videojuegos' }),
+      queryParams: of({ q: 'search-term' })
+    };
+
+    routerMock = {
+      navigate: jasmine.createSpy('navigate')
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ProductSectionComponent],
+      imports: [ProductSectionComponent, HttpClientTestingModule, RouterTestingModule],
       providers: [
-        { provide: ProductService, useValue: productServiceMock }
+        { provide: ProductService, useValue: productServiceMock },
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: WishlistService, useValue: wishlistServiceMock },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: Router, useValue: routerMock },
       ]
     }).compileComponents();
   });
@@ -31,26 +70,60 @@ describe('ProductSectionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getProductsByCategory on init', () => {
-    component.ngOnInit();
-    expect(productServiceMock.getProductsByCategory).toHaveBeenCalled();
+  it('should initialize section, fetch user info and wishlist if logged in', () => {
+    expect(component.section).toBe('videojuegos');
+    expect(authServiceMock.checkLoginStatus).toHaveBeenCalled();
+    expect(authServiceMock.getUserInfo).toHaveBeenCalled();
+    expect(wishlistServiceMock.getWishlist).toHaveBeenCalled();
   });
 
-  it('should display product list', () => {
+  it('should fetch products based on section', () => {
+    component.getFilteredData();
+
+    expect(productServiceMock.getFilteredProducts).toHaveBeenCalled();
+    expect(productServiceMock.getFilteredProducts).toHaveBeenCalledWith(component.minPrice, component.maxPrice, 'jue', component.category);
+  });
+
+  it('should sort products by price asc', () => {
     component.data = [
-      { id: 1, name: 'Product 1', image: 'image1.jpg', price: 100 }
+      { id: 1, name: 'Product 1', price: 100 } as Product,
+      { id: 2, name: 'Product 2', price: 50 } as Product,
     ];
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.product-item')).not.toBeNull();
+    component.sortProductsFilter('asc');
+    expect(component.data[0].price).toBe(50);
+    expect(component.data[1].price).toBe(100);
   });
 
-  it('should filter products by genre', () => {
-    spyOn(component, 'filterByGenre');
-    component.genres = ['Action', 'Adventure'];
-    fixture.detectChanges();
-    const genreOption = fixture.debugElement.nativeElement.querySelector('.filter-option input');
-    genreOption.click();
-    expect(component.filterByGenre).toHaveBeenCalled();
+  it('should add product to wishlist', () => {
+    const product = { id: 1, name: 'Product 1' } as Product;
+    component.addWishlist(product);
+    expect(wishlistServiceMock.addToWishlist).toHaveBeenCalledWith(1);
+  });
+
+  it('should remove product from wishlist', () => {
+    const product = { id: 1, name: 'Product 1' } as Product;
+    component.wishlist = [{ id: 1, name: 'Product 1', description: '', price: 100, image: '', added_at: '' } as WishlistResponse];
+    component.removeWishlist(product);
+    expect(wishlistServiceMock.removeFromWishlist).toHaveBeenCalledWith(1);
+  });
+
+  it('should add product to cart', () => {
+    const product = { id: 1, name: 'Product 1', price: 100, quantity: 10, details: '', image: '' } as Product;
+    spyOn(localStorage, 'setItem');
+    component.addCart(new MouseEvent('click'), product);
+    expect(localStorage.setItem).toHaveBeenCalled();
+  });
+
+  it('should navigate when search icon is clicked', () => {
+    component.inputValue = 'search term';
+    component.searchIcon();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/videojuegos'], { queryParams: { q: 'search term' } });
+  });
+
+  it('should navigate when Enter key is pressed in search', () => {
+    component.inputValue = 'search term';
+    const event = new KeyboardEvent('keydown', { code: 'Enter' });
+    component.searchProduct(event);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/videojuegos'], { queryParams: { q: 'search term' } });
   });
 });

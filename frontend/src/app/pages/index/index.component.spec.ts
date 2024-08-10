@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { IndexComponent } from './index.component';
+import { ProductService } from '../../services/product.service'
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
 
 describe('IndexComponent', () => {
   let component: IndexComponent;
@@ -8,8 +11,13 @@ describe('IndexComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [IndexComponent],
-      imports: [FormsModule],
+      imports: [
+        IndexComponent,
+        FormsModule,
+        HttpClientTestingModule 
+
+      ],
+      providers: [ProductService], 
     }).compileComponents();
   });
 

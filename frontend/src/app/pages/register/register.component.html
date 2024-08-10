@@ -9,7 +9,7 @@
   <body>
     <div class="container active" id="container">
       <div class="form-container sign-up">
-        <form (ngSubmit)="onSubmit()">
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
           <h1>Crea tu cuenta</h1>
           <div class="social-icons">
             <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -18,9 +18,9 @@
             <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
           </div>
           <span>o usa tu correo y contraseña para registrarte</span>
-          <input type="text" placeholder="Nombre" id="first_name" [(ngModel)]="first_name" name="first_name" required />
-          <input type="text" placeholder="Apellido" id="last_name" [(ngModel)]="last_name" name="last_name" required />
-          <input type="email" placeholder="Correo" id="email" [(ngModel)]="email" name="email" required />
+          <input type="text" formControlName="first_name" placeholder="Nombre" id="first_name" [(ngModel)]="first_name" name="first_name" required />
+          <input type="text" formControlName="last_name" placeholder="Apellido" id="last_name" [(ngModel)]="last_name" name="last_name" required />
+          <input type="email" formControlName="email" placeholder="Correo" id="email" [(ngModel)]="email" name="email" required />
           <input
             type="password"
             placeholder="Contraseña"

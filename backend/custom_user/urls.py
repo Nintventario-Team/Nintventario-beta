@@ -15,6 +15,7 @@ from .views import (
     logout_view,
     remove_from_wishlist,
     send_contact_email,
+    send_register_email,
 )
 
 urlpatterns = [
@@ -33,4 +34,5 @@ urlpatterns = [
     path('purchase-history/', get_purchase_history, name='purchase-history'),
     path('get-product-id/<int:product_id>/', get_product_by_id, name='get_product_by_id'),
     path('send-contact-email/', send_contact_email, name='send_contact_email'),
+    path('send-register-email/', send_register_email, name='send_register_email'),
 ]

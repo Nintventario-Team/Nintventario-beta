@@ -14,4 +14,8 @@ export class ContactService {
   sendContactEmail(contactData: any): Observable<any> {
     return this.http.post(this.apiUrl + 'send-contact-email/', contactData)
   }
+
+  sendRegisterEmail(contactData: any): Observable<any> {
+    return this.http.post(this.apiUrl + 'send-register-email/', contactData)
+  }
 }

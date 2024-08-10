@@ -67,6 +67,40 @@ def send_contact_email(request):
         return JsonResponse({'message': 'Correo enviado exitosamente'})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+@csrf_exempt
+def send_register_email(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        asunto = '¡Bienvenido a Mundo Mágico del Nintendo!'
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        send_mail(
+            f'{asunto}',
+            f'''
+            Hola {first_name} {last_name},
+
+            ¡Gracias por registrarte en Mundo Mágico del Nintendo! Estamos encantados de tenerte con nosotros.
+
+            Si necesitas ayuda o tienes algún comentario, puedes encontrarnos fácilmente en nuestra página de contacto:
+            [https://nintventario.web.app/contacto]. 
+            Ahí encontrarás todos los métodos disponibles para comunicarte con nosotros. 
+
+            Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener. 
+
+            ¡Gracias por ser parte de nuestra comunidad!
+
+            Atentamente,
+            Mundo Mágico del Nintendo
+            ''',
+            'nintventario@gmail.com',  # De
+            [email],  # Para
+            fail_silently=False,
+        )
+
+        return JsonResponse({'message': 'Correo enviado exitosamente'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 # AUTH METHODS
 
 

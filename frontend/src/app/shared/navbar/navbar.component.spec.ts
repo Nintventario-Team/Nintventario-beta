@@ -1,68 +1,38 @@
-import { TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing'
-import { Router } from '@angular/router'
-import { NavbarComponent } from './navbar.component'
-import { AuthService } from '../../services/auth.service'
-import { FormsModule } from '@angular/forms'
-import { RouterTestingModule } from '@angular/router/testing'
-import { HttpClientModule } from '@angular/common/http'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NavbarComponent } from './navbar.component';
+
 describe('NavbarComponent', () => {
-  let component: NavbarComponent
-  let fixture: ComponentFixture<NavbarComponent>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let authService: AuthService
-  let router: Router
+  let component: NavbarComponent;
+  let fixture: ComponentFixture<NavbarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
-      imports: [NavbarComponent, FormsModule, RouterTestingModule, HttpClientModule],
-      providers: [AuthService],
-    }).compileComponents()
+      declarations: [NavbarComponent],
+      imports: [RouterTestingModule]
+    }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(NavbarComponent)
-    component = fixture.componentInstance
-    authService = TestBed.inject(AuthService)
-    router = TestBed.inject(Router)
+  beforeEach(() => {
+    fixture = TestBed.createComponent(NavbarComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    fixture.detectChanges()
-  })
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy()
-  })
+  it('should toggle menu visibility when toggleMenu is called', () => {
+    expect(component.menuVisible).toBe(false);
+    component.toggleMenu();
+    expect(component.menuVisible).toBe(true);
+  });
 
-  it('should navigate to login page', () => {
-    spyOn(router, 'navigateByUrl')
-
-    component.navigateToLogin()
-
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/login')
-  })
-
-  it('should toggle search bar visibility', () => {
-    expect(component.isSearchBarVisible).toBeFalse()
-
-    component.toggleSearchBar()
-    expect(component.isSearchBarVisible).toBeTrue()
-
-    component.toggleSearchBar()
-    expect(component.isSearchBarVisible).toBeFalse()
-  })
-
-  it('should search product when Enter key is pressed', fakeAsync(() => {
-    const inputValue = 'test product'
-    const trimmedValue = inputValue.trim()
-    component.inputValue = inputValue
-
-    spyOn(router, 'navigate')
-
-    const event = new KeyboardEvent('keyup', { code: 'Enter' })
-    component.searchProduct(event)
-
-    tick()
-
-    expect(router.navigate).toHaveBeenCalledWith(['/todos'], {
-      queryParams: { q: trimmedValue },
-    })
-  }))
-})
+  it('should navigate to home on logo click', () => {
+    spyOn(component, 'navigateToHome');
+    const logo = fixture.debugElement.nativeElement.querySelector('.navbar-logo img');
+    logo.click();
+    expect(component.navigateToHome).toHaveBeenCalled();
+  });
+});

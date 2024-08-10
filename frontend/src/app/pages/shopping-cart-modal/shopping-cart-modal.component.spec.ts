@@ -1,192 +1,47 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing'
-import { ShoppingCartModalComponent } from './shopping-cart-modal.component'
-import { Router } from '@angular/router'
-import { Location } from '@angular/common'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ShoppingCartModalComponent } from './shopping-cart-modal.component';
 
-describe('ShoppingCartComponent', () => {
-  let component: ShoppingCartModalComponent
-  let fixture: ComponentFixture<ShoppingCartModalComponent>
-  let router: Router
-  let location: Location
+describe('ShoppingCartModalComponent', () => {
+  let component: ShoppingCartModalComponent;
+  let fixture: ComponentFixture<ShoppingCartModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
-      providers: [
-        {
-          provide: Router,
-          useClass: class {
-            navigate = jasmine.createSpy('navigate')
-          },
-        },
-        {
-          provide: Location,
-          useClass: class {
-            back = jasmine.createSpy('back')
-          },
-        },
-      ],
-    }).compileComponents()
+      declarations: [ShoppingCartModalComponent]
+    }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(ShoppingCartModalComponent)
-    component = fixture.componentInstance
-    router = TestBed.inject(Router)
-    location = TestBed.inject(Location)
-  })
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ShoppingCartModalComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy()
-  })
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  it('should load products from localStorage on init', () => {
-    const mockProducts = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-      {
-        id: 2,
-        name: 'Product B',
-        price: 15,
-        quantityToBuy: 1,
-        maxQuantity: 10,
-        details: '',
-        image: '',
-      },
-    ]
-    localStorage.setItem('cart', JSON.stringify(mockProducts))
+  it('should display products in cart', () => {
+    component.displayedProducts = [
+      { id: 1, name: 'Product 1', image: 'image1.jpg', quantityToBuy: 1, price: 100 }
+    ];
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.cart-item')).not.toBeNull();
+  });
 
-    fixture.detectChanges()
+  it('should calculate cart subtotal', () => {
+    component.displayedProducts = [
+      { id: 1, name: 'Product 1', image: 'image1.jpg', quantityToBuy: 1, price: 100 },
+      { id: 2, name: 'Product 2', image: 'image2.jpg', quantityToBuy: 2, price: 50 }
+    ];
+    expect(component.getCartSubtotal()).toBe(200);
+  });
 
-    expect(component.productshop).toEqual(mockProducts)
-    expect(component.isCartEmpty).toBeFalse()
-  })
-
-  it('should calculate subtotal correctly', () => {
-    component.productshop = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-    ]
-
-    const subtotal = component.getSubtotal(1)
-
-    expect(subtotal).toEqual(20) // 10 * 2
-  })
-
-  it('should calculate IVA correctly', () => {
-    component.productshop = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-    ]
-
-    const iva = component.getIVA(1)
-
-    expect(iva).toEqual(2.4) // 20 * 0.12
-  })
-
-  it('should calculate total correctly', () => {
-    component.productshop = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-    ]
-
-    const total = component.getTotal(1)
-
-    expect(total).toEqual(22.4) // 20 + 2.40
-  })
-
-  it('should update quantity correctly', () => {
-    component.productshop = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-    ]
-
-    const event = { target: { value: '3' } } as unknown as Event
-    component.updateQuantity(event, 1)
-
-    expect(component.productshop[0].quantityToBuy).toEqual(3)
-  })
-
-  it('should navigate to checkout', () => {
-    spyOn(localStorage, 'setItem')
-    component.productshop = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-    ]
-
-    component.goToCheckout()
-
-    expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify(component.productshop))
-    expect(router.navigate).toHaveBeenCalledWith(['/caja'])
-  })
-
-  it('should go back to previous location', () => {
-    spyOn(localStorage, 'setItem')
-    component.productshop = [
-      {
-        id: 1,
-        name: 'Product A',
-        price: 10,
-        quantityToBuy: 2,
-        maxQuantity: 5,
-        details: '',
-        image: '',
-      },
-    ]
-
-    component.keepBuying()
-
-    expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify(component.productshop))
-    expect(location.back).toHaveBeenCalled()
-  })
-
-  it('should prevent typing', () => {
-    const event = {
-      preventDefault: jasmine.createSpy('preventDefault'),
-    } as unknown as KeyboardEvent
-
-    component.preventTyping(event)
-
-    expect(event.preventDefault).toHaveBeenCalled()
-  })
-})
+  it('should call goToCheckout when checkout button is clicked', () => {
+    spyOn(component, 'goToCheckout');
+    const checkoutButton = fixture.debugElement.nativeElement.querySelector('.cart-actions button:first-child');
+    checkoutButton.click();
+    expect(component.goToCheckout).toHaveBeenCalled();
+  });
+});

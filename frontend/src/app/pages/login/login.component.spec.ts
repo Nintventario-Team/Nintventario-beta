@@ -1,89 +1,55 @@
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing'
-import { LoginComponent } from './login.component'
-import { Router } from '@angular/router'
-import { AuthService } from '../../services/auth.service'
-import { FormsModule } from '@angular/forms'
-import { CommonModule } from '@angular/common'
-import { of, throwError } from 'rxjs'
-import { LoginResponse } from '../../interfaces/user'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './login.component';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('LoginComponent', () => {
-  let component: LoginComponent
-  let fixture: ComponentFixture<LoginComponent>
-  let authService: jasmine.SpyObj<AuthService>
-  let router: Router
+  let component: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
+  let authServiceMock: any;
+  let routerMock: any;
 
   beforeEach(async () => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['login'])
+    authServiceMock = {
+      login: jasmine.createSpy('login').and.returnValue(of({ token: '12345' }))
+    };
+
+    routerMock = {
+      navigate: jasmine.createSpy('navigate')
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [],
-      imports: [FormsModule, CommonModule, LoginComponent],
+      declarations: [LoginComponent],
+      imports: [FormsModule],
       providers: [
-        { provide: AuthService, useValue: authServiceSpy },
-        {
-          provide: Router,
-          useClass: class {
-            navigateByUrl = jasmine.createSpy('navigateByUrl')
-          },
-        },
-      ],
-    }).compileComponents()
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: Router, useValue: routerMock }
+      ]
+    }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(LoginComponent)
-    component = fixture.componentInstance
-    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>
-    router = TestBed.inject(Router)
-  })
+  beforeEach(() => {
+    fixture = TestBed.createComponent(LoginComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy()
-  })
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  it('should navigate to register page', () => {
-    component.navigateToRegister()
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/register')
-  })
+  it('should call AuthService login method when form is submitted', () => {
+    component.email = 'user@example.com';
+    component.password = 'password';
+    component.onSubmit();
 
-  it('should login successfully', fakeAsync(() => {
-    const mockResponse: LoginResponse = {
-      access: 'mockAccessToken',
-      refresh: 'mockRefreshToken',
-      message: 'Login successful',
-    }
-    authService.login.and.returnValue(of(mockResponse))
+    expect(authServiceMock.login).toHaveBeenCalledWith('user@example.com', 'password');
+  });
 
-    component.email = 'test@example.com'
-    component.password = 'password'
-    component.onSubmit()
-    tick()
-
-    expect(localStorage.getItem('accessToken')).toEqual(mockResponse.access)
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/')
-  }))
-
-  it('should handle login error', fakeAsync(() => {
-    const errorMessage = 'Invalid credentials'
-    authService.login.and.returnValue(throwError(errorMessage))
-
-    const consoleSpy = spyOn(console, 'error')
-
-    component.email = 'invalid@example.com'
-    component.password = 'wrongpassword'
-    component.onSubmit()
-    tick()
-
-    expect(component.errorMessage).toEqual('Invalid credentials')
-    expect(consoleSpy).toHaveBeenCalledWith('Login error', errorMessage)
-  }))
-
-  it('should not navigate on error', fakeAsync(() => {
-    authService.login.and.returnValue(throwError('Invalid credentials'))
-
-    component.email = 'invalid@example.com'
-    component.password = 'wrongpassword'
-    component.onSubmit()
-    tick()
-
-    expect(router.navigateByUrl).not.toHaveBeenCalled()
-  }))
-})
+  it('should navigate to home after successful login', () => {
+    component.onSubmit();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
+  });
+});

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MetodosPagoComponent } from './metodos-pago.component';
 
 describe('MetodosPagoComponent', () => {
@@ -8,10 +7,11 @@ describe('MetodosPagoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MetodosPagoComponent]
-    })
-    .compileComponents();
+      declarations: [MetodosPagoComponent]
+    }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(MetodosPagoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -19,5 +19,10 @@ describe('MetodosPagoComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display payment methods', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.payment-methods')).not.toBeNull();
   });
 });

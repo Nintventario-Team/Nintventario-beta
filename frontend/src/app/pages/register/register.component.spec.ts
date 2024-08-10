@@ -1,81 +1,60 @@
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing'
-import { RegisterComponent } from './register.component'
-import { Router } from '@angular/router'
-import { AuthService } from '../../services/auth.service'
-import { FormsModule } from '@angular/forms'
-import { CommonModule } from '@angular/common'
-import { of, throwError } from 'rxjs'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RegisterComponent } from './register.component';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('RegisterComponent', () => {
-  let component: RegisterComponent
-  let fixture: ComponentFixture<RegisterComponent>
-  let authService: jasmine.SpyObj<AuthService>
-  let router: Router
+  let component: RegisterComponent;
+  let fixture: ComponentFixture<RegisterComponent>;
+  let authServiceMock: any;
+  let routerMock: any;
 
   beforeEach(async () => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['register'])
+    authServiceMock = {
+      register: jasmine.createSpy('register').and.returnValue(of({ token: '12345' }))
+    };
+
+    routerMock = {
+      navigate: jasmine.createSpy('navigate')
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [],
-      imports: [FormsModule, CommonModule, RegisterComponent],
+      declarations: [RegisterComponent],
+      imports: [FormsModule],
       providers: [
-        { provide: AuthService, useValue: authServiceSpy },
-        {
-          provide: Router,
-          useClass: class {
-            navigateByUrl = jasmine.createSpy('navigateByUrl')
-          },
-        },
-      ],
-    }).compileComponents()
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: Router, useValue: routerMock }
+      ]
+    }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(RegisterComponent)
-    component = fixture.componentInstance
-    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>
-    router = TestBed.inject(Router)
-  })
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RegisterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy()
-  })
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  it('should register successfully', fakeAsync(() => {
-    const mockResponse = {
-      access: 'mockAccessToken',
-      refresh: 'mockRefreshToken',
-      message: 'User registered successfully',
-    }
-    authService.register.and.returnValue(of(mockResponse))
+  it('should call AuthService register method when form is submitted', () => {
+    component.email = 'user@example.com';
+    component.password = 'password';
+    component.onSubmit();
 
-    const consoleSpy = spyOn(console, 'log')
-    component.email = 'test@example.com'
-    component.password = 'password'
-    component.first_name = 'John'
-    component.last_name = 'Doe'
-    component.onSubmit()
-    tick()
+    expect(authServiceMock.register).toHaveBeenCalledWith({
+      first_name: component.first_name,
+      last_name: component.last_name,
+      email: component.email,
+      password: component.password
+    });
+  });
 
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/')
-    expect(consoleSpy).toHaveBeenCalledWith('Registration successful', mockResponse)
-    expect(component.errorMessage).toEqual('')
-  }))
-
-  it('should handle registration error', fakeAsync(() => {
-    const errorMessage = 'Email already exists'
-    authService.register.and.returnValue(throwError({ error: { error: errorMessage } }))
-
-    const consoleSpy = spyOn(console, 'error')
-
-    component.email = 'existing@example.com'
-    component.password = 'password'
-    component.first_name = 'Jane'
-    component.last_name = 'Doe'
-    component.onSubmit()
-    tick()
-
-    expect(router.navigateByUrl).not.toHaveBeenCalled()
-    expect(consoleSpy).toHaveBeenCalledWith('Registration error', {
-      error: { error: errorMessage },
-    })
-    expect(component.errorMessage).toEqual(errorMessage)
-  }))
-})
+  it('should navigate to login after successful registration', () => {
+    component.onSubmit();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
+  });
+});

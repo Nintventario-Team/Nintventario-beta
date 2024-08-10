@@ -1,22 +1,35 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-
-import { FooterComponent } from './footer.component'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FooterComponent } from './footer.component';
 
 describe('FooterComponent', () => {
-  let component: FooterComponent
-  let fixture: ComponentFixture<FooterComponent>
+  let component: FooterComponent;
+  let fixture: ComponentFixture<FooterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FooterComponent],
-    }).compileComponents()
+      declarations: [FooterComponent],
+      imports: [RouterTestingModule],
+    }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(FooterComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+  beforeEach(() => {
+    fixture = TestBed.createComponent(FooterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+
+  it('should have social media links', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.social-icons a')).not.toBeNull();
+  });
+
+  it('should have footer navigation links', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.footer-text nav a')).not.toBeNull();
+  });
+});

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ProductService } from '../../services/product.service'
@@ -88,16 +89,30 @@ export class IndexComponent {
   }
 
   searchProduct($event: KeyboardEvent) {
-    const codeValue = $event.code
-    if (codeValue === 'Enter') {
-      const trimmedValue = this.inputValue.trim()
+    if ($event.code === 'Enter' || ($event as any).type === 'click') {
+      const trimmedValue = this.inputValue.trim();
       if (trimmedValue) {
-        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } })
+        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } });
       }
     }
   }
 
+  search() {
+    const trimmedValue = this.inputValue.trim();
+      if (trimmedValue) {
+        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } });
+      }
+  }
+
   navigateToAll() {
     this.router.navigateByUrl('/todos')
+  }
+
+  navigateToBestSellingProducts() {
+    this.router.navigateByUrl('/mas-vendidos')
+  }
+
+  navigateToNewProducts() {
+    this.router.navigateByUrl('/nuevos-productos')
   }
 }

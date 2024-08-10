@@ -17,18 +17,21 @@
 <div class="search-container">
   <p>¿Buscas algo en especial?</p>
   <div class="search-box">
-    <input [(ngModel)]="inputValue" type="text" placeholder="Buscar" (keydown)="searchProduct($event)">
+    <div class="search-wrapper">
+      <input [(ngModel)]="inputValue" type="text" placeholder="Buscar" (keydown)="searchProduct($event)">
+      <img src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fsearch-icon.svg?alt=media&token=ba27c4e0-8220-426e-abc8-f65b359e2479" alt="Search Icon" class="search-icon" (click)="search()">
+    </div>
     <img src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fmario__png__by_justletmein21_dfdk2sz-pre.png?alt=media&token=2b06cd1e-ef8c-414b-8c2d-70a7a595d453" alt="Mario" class="mario-image">
   </div>
 </div>
 
 <!-- Category section -->
 <div class="categories-container">
-  <div class="category best-sellers" (click)="navigateToAll()">
+  <div class="category best-sellers" (click)="navigateToBestSellingProducts()">
     <img src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fhome%20page%2FmarioLuigi.png?alt=media&token=fa6dcc9f-3846-4ac7-b9eb-2520140bd823" alt="Mario y Luigi" class="category-image">
     <p>¡Más vendidos!</p>
   </div>
-  <div class="category new-arrivals" (click)="navigateToAll()">
+  <div class="category new-arrivals" (click)="navigateToNewProducts()">
     <img src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fhome%20page%2Fcapitan.png?alt=media&token=0b4ab572-b02f-454c-90ef-3137effcca95" alt="Capitán América" class="category-image">
     <p>¡Lo más reciente!</p>
   </div>

@@ -7,6 +7,8 @@ from rest_framework_simplejwt.tokens import RefreshToken # type: ignore
 from rest_framework.decorators import api_view, permission_classes, authentication_classes  # noqa: E501
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication # type: ignore
+from django.core.mail import send_mail
+from django.http import JsonResponse
 
 import json
 
@@ -40,6 +42,64 @@ def get_filtered_products(request):
     products = Product.objects.filter(**filters)
     serializer = ProductSerializer(products, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+# EMAIL METHOD
+@csrf_exempt
+def send_contact_email(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        cedula = data.get('cedula')
+        nombres = data.get('nombres')
+        telefono = data.get('telefono')
+        email = data.get('email')
+        ciudad = data.get('ciudad')
+        asunto = data.get('asunto')
+        comentario = data.get('comentario')
+
+        send_mail(
+            f'Contacto desde la web: {asunto}',
+            f'Cédula: {cedula}\nNombre: {nombres}\nTeléfono: {telefono}\nEmail: {email}\nCiudad: {ciudad}\nComentario: {comentario}',
+            'nintventario@gmail.com',  # De
+            ['jorgemawyincabay@gmail.com'],  # Para
+            fail_silently=False,
+        )
+
+        return JsonResponse({'message': 'Correo enviado exitosamente'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def send_register_email(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        asunto = '¡Bienvenido a Mundo Mágico del Nintendo!'
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        send_mail(
+            f'{asunto}',
+            f'''
+            Hola {first_name} {last_name},
+
+            ¡Gracias por registrarte en Mundo Mágico del Nintendo! Estamos encantados de tenerte con nosotros.
+
+            Si necesitas ayuda o tienes algún comentario, puedes encontrarnos fácilmente en nuestra página de contacto:
+            [https://nintventario.web.app/contacto]. 
+            Ahí encontrarás todos los métodos disponibles para comunicarte con nosotros. 
+
+            Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener. 
+
+            ¡Gracias por ser parte de nuestra comunidad!
+
+            Atentamente,
+            Mundo Mágico del Nintendo
+            ''',
+            'nintventario@gmail.com',  # De
+            [email],  # Para
+            fail_silently=False,
+        )
+
+        return JsonResponse({'message': 'Correo enviado exitosamente'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 # AUTH METHODS
 

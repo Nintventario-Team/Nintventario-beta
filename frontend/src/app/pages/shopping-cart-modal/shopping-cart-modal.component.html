@@ -24,7 +24,11 @@
         <img [src]="product.image" alt="{{ product.name }}" />
         <div class="item-details">
           <h3>{{ replaceUnderscores(product.name) }}</h3>
-          <p>Cantidad: {{ product.quantityToBuy }}</p>
+          <div class="quantity-controls">
+            <button (click)="decreaseQuantity(product)">-</button>
+            <input type="number" [value]="product.quantityToBuy" readonly />
+            <button (click)="increaseQuantity(product)">+</button>
+          </div>
           <p class="item-price">${{ product.price }}</p>
         </div>
       </div>

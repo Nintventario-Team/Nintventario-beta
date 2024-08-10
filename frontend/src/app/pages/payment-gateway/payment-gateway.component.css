@@ -1,18 +1,19 @@
 * {
   box-sizing: border-box;
 }
+
 .main_container {
   display: grid;
-  grid-template-columns: 0.8fr 1fr; 
-  grid-column-gap: 50px;
+  grid-template-columns: 1fr;
+  grid-column-gap: 20px;
   max-width: 1100px;
   justify-content: space-between;
   margin: 0 auto;
   background-color: #fff;
   padding: 20px;
-  margin-top: 10px;}
+  margin-top: 10px;
+}
 
-/* Header de la página */
 #banner-first {
   background-color: #eca400;
   display: flex;
@@ -26,29 +27,21 @@
 }
 
 #payment-button {
-  grid-column: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  max-width: 462px;
   position: relative;
   z-index: 100;
-  margin-right: 100px;
+  margin-bottom: 20px;
 }
+
 #paypal-button-container {
   width: 100%;
 }
 
 .cart-modal {
-  grid-column: 2;
-  margin-left: 50px;
-  position: sticky;
-  height: 70vh;
-  top: 20%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
   max-width: 600px;
   background-color: #fff;
@@ -56,7 +49,6 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .cart-content {
@@ -90,7 +82,6 @@
 
 .cart-details {
   width: 100%;
-  position: sticky;
   background-color: #f1f1f1;
   padding: 15px;
   border-radius: 10px;
@@ -162,6 +153,7 @@
 .change_data {
   margin-left: auto;
 }
+
 .delete-btn {
   background-color: transparent;
   border: none;
@@ -171,4 +163,37 @@
 .delete-btn img {
   width: 40px;
   height: 40px;
+}
+
+@media (min-width: 768px) {
+  .main_container {
+    grid-template-columns: 0.8fr 1fr;
+  }
+}
+
+@media (max-width: 1140px) {
+  .main_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #payment-button {
+    order: 2;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .cart-modal {
+    order: 1;
+    margin-top: 0;
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 767px) {
+  #banner-first p {
+    padding: 0.3em 0 0 1em;
+  }
 }

@@ -173,6 +173,39 @@
   color: #001d4a;
 }
 
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-controls button {
+  background-color: #001d4a;
+  color: #fff;
+  border: none;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+  border-radius: 4px;
+}
+
+.quantity-controls button:hover {
+  background-color: #eca400;
+  color: #001d4a;
+}
+
+.quantity-controls input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  padding: 5px;
+}
+
 .close-btn {
   background: none;
   border: none;

@@ -1,43 +1,88 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-  </head>
-
-  <body>
-    <div class="container active" id="container">
-      <div class="form-container sign-up">
-        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-          <h1>Crea tu cuenta</h1>
-          <div class="social-icons">
-            <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-            <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-          </div>
-          <span>o usa tu correo y contraseña para registrarte</span>
-          <input type="text" formControlName="first_name" placeholder="Nombre" id="first_name" required />
-          <input type="text" formControlName="last_name" placeholder="Apellido" id="last_name" required />
-          <input type="email" formControlName="email" placeholder="Correo" id="email" required />
-          <input type="password" placeholder="Contraseña" id="password" formControlName="password" required />
-          <button type="submit">Registrarse</button>
-        </form>
+<div class="container active" id="container">
+  <div class="form-container sign-in" id="form-container">
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <h1>Crea tu cuenta</h1>
+      <input
+        type="text"
+        formControlName="first_name"
+        placeholder="Nombre"
+        id="first_name"
+        [ngClass]="{
+          'input-error': contactForm.get('first_name')?.invalid && contactForm.get('first_name')?.touched,
+        }"
+        required
+      />
+      <div
+        *ngIf="contactForm.get('first_name')?.invalid && contactForm.get('first_name')?.touched"
+        class="error-message"
+      >
+        El nombre es obligatorio.
       </div>
-      <div class="toggle-container">
-        <div class="toggle">
-          <div class="toggle-panel toggle-left">
-            <img
-              id="mario"
-              src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2FLogo2.png?alt=media&token=53e19d22-3f2a-4cc4-a3c4-25e3b16d25b9"
-              alt=""
-            />
-            <p>Si ya posees una cuenta, inicia sesión</p>
-            <button class="hidden" id="login" (click)="navigateToLogin()">Inicia sesión</button>
-          </div>
-        </div>
+
+      <input
+        type="text"
+        formControlName="last_name"
+        placeholder="Apellido"
+        id="last_name"
+        [ngClass]="{
+          'input-error': contactForm.get('last_name')?.invalid && contactForm.get('last_name')?.touched,
+        }"
+        required
+      />
+      <div *ngIf="contactForm.get('last_name')?.invalid && contactForm.get('last_name')?.touched" class="error-message">
+        El apellido es obligatorio.
+      </div>
+
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Correo"
+        id="email"
+        [ngClass]="{ 'input-error': contactForm.get('email')?.invalid && contactForm.get('email')?.touched }"
+        required
+      />
+      <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="error-message">
+        Debes ingresar un correo válido.
+      </div>
+
+      <input
+        type="password"
+        placeholder="Contraseña"
+        id="password"
+        formControlName="password"
+        [ngClass]="{ 'input-error': contactForm.get('password')?.invalid && contactForm.get('password')?.touched }"
+        required
+      />
+      <div *ngIf="contactForm.get('password')?.invalid && contactForm.get('password')?.touched" class="error-message">
+        La contraseña debe tener al menos 8 caracteres.
+      </div>
+
+      <button type="submit">Registrarse</button>
+    </form>
+  </div>
+  <div class="toggle-container" id="toggle-container">
+    <div class="toggle" id="toggle">
+      <div class="toggle-panel toggle-right toggle-right2" id="toggle-panel">
+        <h1></h1>
+        <img
+          id="mario"
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2FLogo2.png?alt=media&token=53e19d22-3f2a-4cc4-a3c4-25e3b16d25b9"
+          alt=""
+        />
+        <p>Si ya posees una cuenta, inicia sesión</p>
+        <button class="hidden" id="login" (click)="navigateToLogin()">Inicia sesión</button>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</div>
+
+<!-- Alerta -->
+<div class="alert" *ngIf="showAlert" [ngClass]="alertClass">
+  <span>
+    {{ alertMessage }}
+    <button class="close-alert" (click)="closeAlert()">X</button>
+  </span>
+  <div class="progress-bar">
+    <div class="progress" [ngStyle]="{ width: progressWidth + '%', 'background-color': progressColor }"></div>
+  </div>
+</div>

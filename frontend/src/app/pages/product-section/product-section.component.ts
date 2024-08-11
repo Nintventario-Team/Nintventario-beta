@@ -11,6 +11,7 @@ import { User } from '../../interfaces/user'
 import { WishlistService } from '../../services/wishlist.service'
 import { WishlistResponse } from '../../interfaces/wishlist'
 import { FormsModule } from '@angular/forms'
+import { CartService } from '../../services/cart.service'
 
 @Component({
   selector: 'app-product-section',
@@ -94,6 +95,7 @@ export class ProductSectionComponent implements OnInit {
     private authService: AuthService,
     private wishlistService: WishlistService,
     private router: Router,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
@@ -265,7 +267,7 @@ export class ProductSectionComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  addCart(event: Event, selectedProduct: any): void {
+  addCart(event: Event, selectedProduct: Product): void {
     event.stopPropagation()
 
     if (!selectedProduct) {
@@ -283,31 +285,8 @@ export class ProductSectionComponent implements OnInit {
       image: selectedProduct.image,
     }
 
-    let cart: CartItem[] = []
-
-    const cartJson = localStorage.getItem('cart')
-    if (cartJson) {
-      try {
-        cart = JSON.parse(cartJson)
-      } catch (e) {
-        console.error('Error parsing cart data:', e)
-        cart = []
-      }
-    }
-
-    const itemIndex = cart.findIndex(item => item.id === cartItem.id)
-
-    if (itemIndex < 0 && cartItem.maxQuantity > 0) {
-      cart.push(cartItem)
-      this.showAlertMessage('Producto añadido al carrito')
-    } else if (cart[itemIndex] && cartItem.maxQuantity > cart[itemIndex].quantityToBuy) {
-      cart[itemIndex].quantityToBuy++
-      this.showAlertMessage('Producto añadido al carrito')
-    } else {
-      alert(`Producto ${cartItem.name} sin stock`)
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart))
+    this.cartService.addToCart(cartItem) // Asegúrate de que esta línea esté correcta
+    this.showAlertMessage('Producto añadido al carrito')
   }
 
   showAlertMessage(message: string): void {
@@ -420,3 +399,5 @@ export class ProductSectionComponent implements OnInit {
     }
   }
 }
+export { CartItem }
+

@@ -16,10 +16,6 @@ import { CommonModule } from '@angular/common'
 })
 export class RegisterComponent {
   contactForm: FormGroup
-  email: string = ''
-  password: string = ''
-  first_name: string = ''
-  last_name: string = ''
   errorMessage: string = ''
 
   constructor(
@@ -32,21 +28,24 @@ export class RegisterComponent {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     })
   }
 
   onSubmit(): void {
-    this.authService.register(this.email, this.password, this.first_name, this.last_name).subscribe(
-      response => {
-        console.log('Registration successful', response)
-        this.router.navigateByUrl('/')
-      },
-      error => {
-        this.errorMessage = error.error.error || 'An error occurred'
-        console.error('Registration error', error)
-      },
-    )
     if (this.contactForm.valid) {
+      const { email, password, first_name, last_name } = this.contactForm.value
+      this.authService.register(email, password, first_name, last_name).subscribe(
+        response => {
+          console.log('Registration successful', response)
+          this.router.navigateByUrl('/')
+        },
+        error => {
+          this.errorMessage = error.error.error || 'An error occurred'
+          console.error('Registration error', error)
+        },
+      )
+
       this.contactService.sendRegisterEmail(this.contactForm.value).subscribe(
         response => {
           alert('Correo enviado exitosamente')
@@ -58,6 +57,7 @@ export class RegisterComponent {
       )
     }
   }
+
   navigateToLogin() {
     this.router.navigateByUrl('/login')
   }

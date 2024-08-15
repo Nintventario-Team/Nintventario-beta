@@ -25,7 +25,7 @@
       <h3>GÉNERO</h3>
       <div class="filter-options genre-filter">
         <div class="filter-option" *ngFor="let genre of genres">
-          <input type="radio" name="genre" (click)="filterByGenre(genre)" />
+          <input type="radio" name="genre" (click)="filterByGenreAndPlatform(selectedPlatform, genre)" />
           <label>{{ genre }}</label>
         </div>
       </div>
@@ -65,7 +65,7 @@
       <h3>PLATAFORMA</h3>
       <div class="filter-options platform-filter">
         <div class="filter-option" *ngFor="let platform of platforms">
-          <input type="radio" name="platform" (click)="filterByGenre(platform)" />
+          <input type="radio" name="platform" (click)="filterByGenreAndPlatform(platform, selectedGenre)" />
           <label>{{ platform }}</label>
         </div>
       </div>

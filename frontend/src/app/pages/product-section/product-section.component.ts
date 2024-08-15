@@ -88,6 +88,8 @@ export class ProductSectionComponent implements OnInit {
   allIsSelected: boolean = false
   user: User | null = null
   wishlist: WishlistResponse[] = []
+  selectedPlatform: string = ''
+  selectedGenre: string = ''
 
   constructor(
     private route: ActivatedRoute,
@@ -191,8 +193,22 @@ export class ProductSectionComponent implements OnInit {
         articulos: 'acc',
       }
       const sectionToFilter = sectionMappings[this.section]
+      let category = ''
+      if(this.section === 'videojuegos') {
+        if (this.selectedPlatform) {
+          category += this.selectedPlatform
+        }
+        if (this.selectedGenre) {
+          if (category) {
+            category += ', '
+          }
+          category += this.selectedGenre
+        }
+      }else{
+        category = this.category
+      }
       this.productService
-        .getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter, this.category)
+        .getFilteredProducts(this.minPrice, this.maxPrice, sectionToFilter, category)
         .subscribe(products => {
           this.data = this.totalProducts = products
           this.sortProductsFilter(this.sortOrder)
@@ -251,9 +267,16 @@ export class ProductSectionComponent implements OnInit {
     this.getFilteredData()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  filterByPlatform(platform: string): void {
-    // Filtrar los videojuegos por plataforma
+  filterByGenreAndPlatform(platform?: string, genre?: string): void {
+    if (platform) {
+      this.selectedPlatform = platform === 'Todos' ? '' : platform
+    }
+
+    if (genre) {
+      this.selectedGenre = genre === 'Todos' ? '' : genre
+    }
+
+    this.getFilteredData()
   }
 
   openDetails(producto: Product): void {
@@ -285,7 +308,7 @@ export class ProductSectionComponent implements OnInit {
       image: selectedProduct.image,
     }
 
-    this.cartService.addToCart(cartItem) // Asegúrate de que esta línea esté correcta
+    this.cartService.addToCart(cartItem)
     this.showAlertMessage('Producto añadido al carrito')
   }
 

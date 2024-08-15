@@ -1,14 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
-}
-
-#mario {
-  height: 50%;
 }
 
 body {
@@ -18,6 +13,8 @@ body {
   justify-content: center;
   flex-direction: column;
   height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -27,8 +24,59 @@ body {
   position: relative;
   overflow: hidden;
   width: 768px;
-  max-width: 100%;
+  max-width: 1100px;
   min-height: 480px;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+@media (max-width: 830px) {
+  .container {
+    margin: 0 20px;
+    margin-top: 50px;
+    max-width: calc(100% - 40px);
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  #container {
+    flex-direction: column;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+
+  #form-container {
+    order: 1;
+    width: 100%;
+  }
+
+  #toggle-panel {
+    order: 2;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  #toggle-container {
+    width: 100%;
+    height: auto;
+  }
+
+  #toggle {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .toggle-right2 {
+    width: 100%;
+  }
 }
 
 .container p {
@@ -96,10 +144,16 @@ body {
   transition: all 0.6s ease-in-out;
 }
 
-.sign-up {
-  left: 50%; /* Cambia el valor a 50% */
+.sign-in {
+  left: 0;
   width: 50%;
-  opacity: 1; /* Cambia el valor a 1 */
+  z-index: 0;
+}
+
+.sign-up {
+  left: 0;
+  width: 50%;
+  opacity: 0;
   z-index: 1;
   transition: all 0.5s;
 }
@@ -117,11 +171,16 @@ body {
   margin: 0 3px;
   width: 40px;
   height: 40px;
+  transition: all 0.5s;
 }
 
 .social-icons a:hover {
   scale: 1.3;
   border: 1px solid #000;
+}
+
+#mario {
+  height: 50%;
 }
 
 .toggle-container {
@@ -131,13 +190,9 @@ body {
   width: 50%;
   height: 100%;
   overflow: hidden;
+  transition: all 0.6s ease-in-out;
   border-radius: 150px 0 0 100px;
   z-index: 0;
-}
-
-.container.active .toggle-container {
-  transform: translateX(-100%);
-  border-radius: 0 150px 100px 0;
 }
 
 .toggle {
@@ -148,10 +203,6 @@ body {
   left: -100%;
   height: 100%;
   width: 200%;
-}
-
-.container.active .toggle {
-  transform: translateX(50%);
 }
 
 .toggle-panel {
@@ -167,6 +218,65 @@ body {
   top: 0;
 }
 
-.container.active .toggle-left {
-  transform: translateX(0);
+.toggle-right {
+  right: 0;
+}
+
+.input-error {
+  border: 2px solid #f44336; 
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/*Alert css*/
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 300px;
+  flex-direction: column;
+}
+
+.alert-success {
+  background-color: #4CAF50;
+}
+
+.alert-error {
+  background-color: #f44336;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #ccc;
+  height: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--progress-color);
+  width: 100%;
+  transition: width 0.2s linear;
 }

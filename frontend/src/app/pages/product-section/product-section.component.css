@@ -607,11 +607,11 @@ input[type='radio'] {
   justify-content: space-between;
   align-items: center;
   min-width: 300px;
-  flex-direction: column; /* Para que la barra de progreso esté debajo del mensaje */
+  flex-direction: column;
 }
 
 .alert span {
-  flex-grow: 1; /* Ocupa el espacio disponible */
+  flex-grow: 1;
 }
 
 .close-alert {
@@ -638,6 +638,8 @@ input[type='radio'] {
   width: 100%;
   transition: width 0.2s linear;
 }
+
+/* Estilos para el header de productos */
 
 #products-header {
   display: flex;

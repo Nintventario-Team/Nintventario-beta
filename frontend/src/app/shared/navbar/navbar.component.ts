@@ -18,6 +18,7 @@ import { WishlistService } from '../../services/wishlist.service'
 import { WishlistModalComponent } from '../../pages/wishlist-modal/wishlist-modal.component'
 import { User } from '../../interfaces/user'
 import { CartItem } from '../../interfaces/cartItem'
+import { CartService } from '../../services/cart.service'
 
 @Component({
   selector: 'app-navbar',
@@ -88,6 +89,7 @@ export class NavbarComponent {
     private authService: AuthService,
     public dialog: MatDialog,
     private wishlistService: WishlistService,
+    private cartService: CartService,
   ) {
     this.isLoggedIn = this.authService.checkLoginStatus()
     this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
@@ -175,6 +177,14 @@ export class NavbarComponent {
       this.productshop = []
       this.isCartEmpty = true
     }
+
+    this.cartService.totalProducts$.subscribe(total => {
+      if (total === 0) {
+        this.totalProducts = 0
+      } else {
+        this.totalProducts = total 
+      }
+    })
   }
 
   logout() {

@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-
 * {
   margin: 0;
   padding: 0;
@@ -14,6 +13,8 @@ body {
   justify-content: center;
   flex-direction: column;
   height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -23,8 +24,58 @@ body {
   position: relative;
   overflow: hidden;
   width: 768px;
-  max-width: 100%;
+  max-width: 1100px;
   min-height: 480px;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+@media (max-width: 830px) {
+  .container {
+    margin: 0 20px;
+    margin-top: 50px;
+    max-width: calc(100% - 40px);
+  }
+}
+
+@media (max-width: 600px) {
+
+  #container {
+    flex-direction: column;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+
+  #form-container {
+    order: 1;
+    width: 100%;
+  }
+
+  #toggle-panel {
+    order: 2;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  #toggle-container {
+    width: 100%;
+    height: auto;
+  }
+
+  #toggle {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .toggle-right2 {
+    width: 100%;
+  }
 }
 
 .container p {
@@ -97,6 +148,7 @@ body {
   width: 50%;
   z-index: 0;
 }
+
 .sign-up {
   left: 0;
   width: 50%;
@@ -167,4 +219,57 @@ body {
 
 .toggle-right {
   right: 0;
+}
+
+/*Alert css*/
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 300px;
+  flex-direction: column;
+}
+
+.alert-success {
+  background-color: #4CAF50;
+}
+
+.alert-error {
+  background-color: #f44336;
+}
+
+.alert span {
+  flex-grow: 1;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #ccc;
+  height: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--progress-color);
+  width: 100%;
+  transition: width 0.2s linear;
 }

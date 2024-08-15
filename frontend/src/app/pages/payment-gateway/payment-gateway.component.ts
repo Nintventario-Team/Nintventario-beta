@@ -8,6 +8,7 @@ import { OrderService } from '../../services/order.service'
 import { Item } from '../../interfaces/order'
 import { AuthService } from '../../services/auth.service'
 import { User } from '../../interfaces/user'
+import { CartService } from '../../services/cart.service'
 
 @Component({
   selector: 'app-payment-gateway',
@@ -28,6 +29,7 @@ export class PaymentGatewayComponent {
     private paymentService: PaymentService,
     private orderService: OrderService,
     private authService: AuthService,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
@@ -200,8 +202,8 @@ export class PaymentGatewayComponent {
   deleteCartItem(productID: number) {
     const confirmation = confirm('¿Estás seguro de que deseas eliminar este artículo del carrito?')
     if (confirmation) {
+      this.cartService.removeFromCart(productID)
       this.productshop = this.productshop?.filter(item => item.id !== productID)
-      localStorage.setItem('cart', JSON.stringify(this.productshop))
     }
   }
 }

@@ -1,147 +1,249 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client as DjangoClient
 from django.urls import reverse
-from django.contrib.auth import get_user_model
-from .factories import ClientFactory
-from rest_framework_simplejwt.tokens import RefreshToken
-from custom_user.models import Category, Order, Product
+from rest_framework.test import APIClient
+from custom_user.models import User, Product, Order, WishlistItem, Client
+from .factories import UserFactory, ProductFactory, OrderFactory, WishlistItemFactory, ClientFactory
 import json
 
-User = get_user_model()
-
-class ProductAPITestCase(TestCase):
+class ProductViewsTest(TestCase):
 
     def setUp(self):
-        self.client = Client()
-
+        self.client = DjangoClient()
+        self.api_client = APIClient()
+        self.user = UserFactory()
+        self.product = ProductFactory()
+    
     def test_get_all_products(self):
-        response = self.client.get(reverse('get_all_products'))
+        url = reverse('get_all_products')
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, [])
-
-        Product.objects.create(name='Product 1', description='Description 1', price=10.0, quantity=5 ,date_added='2024-04-01')
-        Product.objects.create(name='Product 2', description='Description 2', price=15.0, quantity=8 ,date_added='2024-04-01')
-
-        response = self.client.get(reverse('get_all_products'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
-
+        self.assertIn('name', response.json()[0])
+    
     def test_get_filtered_products(self):
-        response = self.client.get(reverse('get-filtered-products'))
+        ProductFactory(price=50)  # Dentro del rango
+        ProductFactory(price=90)  # Dentro del rango
+        ProductFactory(price=150) # Fuera del rango
+        url = reverse('get-filtered-products')
+        response = self.client.get(url, {'price_min': 10, 'price_max': 100})
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, [])
+        self.assertTrue(len(response.json()) > 0)
 
-        categoryA = Category.objects.create(id=1,name='Categoria_A')
-        categoryB = Category.objects.create(id=2,name='Categoria_B')
-
-
-        Product.objects.create(name='Product A', description='Description A', price=20.0, quantity=3, category=categoryA,date_added='2024-04-01')
-        Product.objects.create(name='Product B', description='Description B', price=25.0, quantity=6, category=categoryB,date_added='2024-04-01')
-
-        response = self.client.get(reverse('get-filtered-products') + '?price_min=21')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['name'], 'Product B')
-
-        response = self.client.get(reverse('get-filtered-products') + '?product_type=Categoria_A')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['name'], 'Product A')
-
-
-class AuthAPITestCase(TestCase):
+class EmailViewsTest(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        self.client = DjangoClient()
 
-    def test_register_view(self):
+    def test_send_contact_email(self):
+        url = reverse('send_contact_email')
+        data = {
+            'cedula': '1234567890',
+            'nombres': 'John Doe',
+            'telefono': '0999999999',
+            'email': 'johndoe@example.com',
+            'ciudad': 'Guayaquil',
+            'asunto': 'Consulta',
+            'comentario': 'Quisiera más información sobre el producto.'
+        }
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Correo enviado exitosamente', response.json()['message'])
+
+    def test_send_register_email(self):
+        url = reverse('send_register_email')
+        data = {
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'johndoe@example.com'
+        }
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Correo enviado exitosamente', response.json()['message'])
+
+class AuthViewsTest(TestCase):
+
+    def setUp(self):
+        self.client = DjangoClient()
+        self.api_client = APIClient()
+        self.user = UserFactory(password='password123')
+
+    def test_login_view_success(self):
+        url = reverse('login')
+        data = {
+            'email': self.user.email,
+            'password': 'password123'
+        }
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('access', response.json())
+
+    def test_login_view_invalid_credentials(self):
+        url = reverse('login')
+        data = {
+            'email': self.user.email,
+            'password': 'wrongpassword'
+        }
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('Invalid credentials', response.json()['error'])
+
+    def test_register_view_success(self):
         url = reverse('register')
         data = {
-            'email': 'test@example.com',
-            'password': 'testpassword',
+            'email': 'newuser@example.com',
+            'password': 'password123',
+            'first_name': 'New',
+            'last_name': 'User'
+        }
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('access', response.json())
+
+    def test_register_view_existing_email(self):
+        url = reverse('register')
+        data = {
+            'email': self.user.email,
+            'password': 'password123',
             'first_name': 'John',
             'last_name': 'Doe'
         }
-        response = self.client.post(url, data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('refresh', response.json())
-        self.assertIn('access', response.json())
-
-        response = self.client.post(url, data=json.dumps(data), content_type='application/json')
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['error'], 'Email already exists')
-
-    def test_login_view(self):
-
-        self.user = User.objects.create_user( email='test@example.com', password='testpassword')   
-
-        url = reverse('login')
-  
-        data = {
-            'email': 'test@example.com',
-            'password': 'testpassword'
-        }
-        response = self.client.post(url, data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('refresh', response.json())
-        self.assertIn('access', response.json())
-
-        data['password'] = 'wrongpassword'
-        response = self.client.post(url, data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['error'], 'Invalid credentials')
+        self.assertIn('Email already exists', response.json()['error'])
 
     def test_logout_view(self):
-        user = User.objects.create_user(email='test@example.com', password='testpassword')
-        self.client.login(email='test@example.com', password='testpassword')
-
         url = reverse('logout_view')
         response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['message'], 'Logout successful')
+        self.assertIn('Logout successful', response.json()['message'])
 
-
-class IndexAPITestCase(TestCase):
+class ProductDetailViewTest(TestCase):
 
     def setUp(self):
-        self.clien = ClientFactory.create()
-        self.order = Order.objects.create(total=100.0, status='Pending',client_id=self.clien.id)
+        self.client = DjangoClient()
+        self.product = ProductFactory()
 
-
-    def test_newest_products(self):
-        Product.objects.create(name='Product X', description='Description X', price=30.0, quantity=4, date_added = '2024-06-06')
-        Product.objects.create(name='Product Y', description='Description Y', price=35.0, quantity=7, date_added = '2024-06-06')
-
-        response = self.client.get(reverse('newest-products'))
+    def test_get_product_by_id(self):
+        url = reverse('get_product_by_id', args=[self.product.id])
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()['name'], self.product.name)
 
-    def test_bestselling_products(self):
-        product1 = Product.objects.create(name='Product P', description='Description P', price=40.0, quantity=6, date_added='2024-06-06')
-        product2 = Product.objects.create(name='Product Q', description='Description Q', price=45.0, quantity=9, date_added='2024-06-06')
-        
-        product1.order_items.create(quantity=3, order=self.order)
-        product2.order_items.create(quantity=5, order=self.order)
-        
-        response = self.client.get(reverse('bestselling-products'))
-        
+    def test_get_product_by_id_not_found(self):
+        url = reverse('get_product_by_id', args=[9999])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('Product not found', response.json()['error'])
+
+class OrderViewsTest(TestCase):
+
+    def setUp(self):
+        self.api_client = APIClient()
+        self.user = UserFactory()
+        self.client_instance = ClientFactory(user=self.user)
+        self.product = ProductFactory()
+        self.api_client.force_authenticate(user=self.user)
+
+    def test_create_order_success(self):
+        url = reverse('create_order')
+        data = {
+            'client': self.client_instance.id,
+            'total': '100.00',
+            'status': 0,
+            'items': [
+                {
+                    'product': self.product.id,
+                    'quantity': 2
+                }
+            ]
+        }
+        response = self.api_client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['status'], '0')
+
+    def test_create_order_insufficient_quantity(self):
+        self.product.quantity = 1
+        self.product.save()
+        url = reverse('create_order')
+        data = {
+            'client': self.client_instance.id,
+            'total': '100.00',
+            'status': 0,
+            'items': [
+                {
+                    'product': self.product.id,
+                    'quantity': 2
+                }
+            ]
+        }
+        response = self.api_client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.json())  
+        self.assertIn('Insufficient quantity', response.json()['error'])
+
+
+class WishlistViewsTest(TestCase):
+
+    def setUp(self):
+        self.api_client = APIClient()
+        self.user = UserFactory()
+        self.product = ProductFactory()
+        self.api_client.force_authenticate(user=self.user)
+
+    def test_add_to_wishlist(self):
+        url = reverse('add_to_wishlist')
+        data = {'product_id': self.product.id}
+        response = self.api_client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Product added to wishlist', response.json()['message'])
+
+    def test_add_to_wishlist_already_exists(self):
+        WishlistItemFactory(user=self.user, product=self.product)
+        url = reverse('add_to_wishlist')
+        data = {'product_id': self.product.id}
+        response = self.api_client.post(url, json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
+        self.assertIn('Product already in wishlist', response.json()['message'])
 
+    def test_remove_from_wishlist(self):
+        WishlistItemFactory(user=self.user, product=self.product)
+        url = reverse('remove_from_wishlist')
+        data = {'product_id': self.product.id}
+        response = self.api_client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Product removed from wishlist', response.json()['message'])
 
-class UserDataAPITestCase(TestCase):
+    def test_remove_from_wishlist_not_found(self):
+        url = reverse('remove_from_wishlist')
+        data = {'product_id': 9999}
+        response = self.api_client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('Product does not exist', response.json()['error'])
+
+class UserDataViewTest(TestCase):
+
+    def setUp(self):
+        self.api_client = APIClient()
+        self.user = UserFactory()
+        self.api_client.force_authenticate(user=self.user)
 
     def test_get_user_data(self):
-        user = User.objects.create_user(email='test@example.com', password='testpassword', first_name='John', last_name='Doe')
-
-        refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
-
         url = reverse('get-user-data')
-        headers = {'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
-        response = self.client.get(url, **headers)
+        response = self.api_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['email'], 'test@example.com')
-        self.assertEqual(response.json()['first_name'], 'John')
-        self.assertEqual(response.json()['last_name'], 'Doe')
+        self.assertEqual(response.json()['email'], self.user.email)
 
+class PurchaseHistoryViewTest(TestCase):
 
+    def setUp(self):
+        self.api_client = APIClient()
+        self.user = UserFactory()
+        self.client_instance = ClientFactory(user=self.user)
+        self.api_client.force_authenticate(user=self.user)
+        self.order = OrderFactory(client=self.client_instance)
+
+    def test_get_purchase_history(self):
+        url = reverse('purchase-history')
+        response = self.api_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.order.id)

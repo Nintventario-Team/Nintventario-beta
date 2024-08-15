@@ -1,80 +1,69 @@
-
 import factory
-from factory import Faker
 from factory.django import DjangoModelFactory
-from custom_user.models import User, Client, Category, Product, Order, OrderItem,LOCALS,STATUS
-from django_use_email_as_username.models import BaseUserManager
-from django.utils import timezone
+from custom_user.models import User, Client, Category, Product, Order, OrderItem, WishlistItem,LOCALS,STATUS
 
-
-class UserFactory(factory.django.DjangoModelFactory):
+class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    id = factory.Sequence(lambda n: n + 1)
+    email = factory.Faker('email')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
-    email = factory.Faker('email')
-    password = factory.Faker('password')
+    password = factory.PostGenerationMethodCall('set_password', 'defaultpassword')
 
-    is_superuser = False
-    is_staff = False
-    is_active = True
-
-    date_joined = factory.Faker('date_time_this_month',tzinfo=timezone.get_current_timezone())
-
-
-class ClientFactory(factory.django.DjangoModelFactory):
+class ClientFactory(DjangoModelFactory):
     class Meta:
         model = Client
 
-    id = factory.Sequence(lambda n: n + 1)
-    dni = factory.Sequence(lambda n: f'DNI-{n}')
-    direction = factory.Faker('address')
-    
-    cellphone = factory.Faker('numerify', text='+' + '#' * 14) 
-    city = factory.Faker('city')
+    dni = factory.Faker('ssn')
     user = factory.SubFactory(UserFactory)
-   
+    direction = factory.Faker('address')
+    cellphone = factory.Faker('phone_number')
+    city = factory.Faker('city')
 
-
-class CategoryFactory(factory.django.DjangoModelFactory):
+class CategoryFactory(DjangoModelFactory):
     class Meta:
         model = Category
 
-    id = factory.Sequence(lambda n: n + 1)
-    name = factory.Sequence(lambda n: f'Category {n}')
+    name = factory.Faker('word')
     description = factory.Faker('text')
 
-class OrderFactory(factory.django.DjangoModelFactory):
+class ProductFactory(DjangoModelFactory):
+    class Meta:
+        model = Product
+
+    name = factory.Faker('word')
+    description = factory.Faker('text')
+    price = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
+    quantity = factory.Faker('random_int', min=1, max=100)
+    category = factory.SubFactory(CategoryFactory)
+    date_added = factory.Faker('date')
+    local = factory.Faker('random_element', elements=[choice[0] for choice in LOCALS])
+    image = factory.Faker('image_url')
+    details = factory.Faker('text')
+
+class OrderFactory(DjangoModelFactory):
     class Meta:
         model = Order
 
-    id = factory.Sequence(lambda n: n + 1)
-    total = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
-    status = factory.Iterator(['0', '1', '2', '3', '4'])
     client = factory.SubFactory(ClientFactory)
-    date_created = factory.Faker('date_time_this_year',tzinfo=timezone.get_current_timezone())
-    date_update = factory.Faker('date_time_between_dates', datetime_start=factory.SelfAttribute('..date_created'),tzinfo=timezone.get_current_timezone())
+    total = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
+    status = factory.Faker('random_element', elements=[choice[0] for choice in STATUS])
+    date_created = factory.Faker('date_time_this_year')
+    date_update = factory.Faker('date_time_this_year')
 
-class ProductFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = Product
-    id = factory.Sequence(lambda n: n + 1)
-
-    name = factory.Sequence(lambda n: f'Product {n}')
-    description = factory.Faker('text')
-    price = factory.Faker('pydecimal', left_digits=4, right_digits=2, positive=True)
-    quantity = factory.Faker('random_int', min=1, max=100)
-    category = factory.SubFactory(CategoryFactory)
-    date_added = factory.Faker('date_time_this_year',tzinfo=timezone.get_current_timezone())
-    local = factory.Iterator(['0', '1', '2', '3', '4'])
-    image = factory.Faker('image_url')
-
-class OrderItemFactory(factory.django.DjangoModelFactory):
+class OrderItemFactory(DjangoModelFactory):
     class Meta:
         model = OrderItem
 
     order = factory.SubFactory(OrderFactory)
     product = factory.SubFactory(ProductFactory)
     quantity = factory.Faker('random_int', min=1, max=10)
+
+class WishlistItemFactory(DjangoModelFactory):
+    class Meta:
+        model = WishlistItem
+
+    user = factory.SubFactory(UserFactory)
+    product = factory.SubFactory(ProductFactory)
+    added_at = factory.Faker('date_time_this_year')

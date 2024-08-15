@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication # type: ignore
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from rest_framework.exceptions import ValidationError
 
 import json
 
@@ -245,7 +246,7 @@ def create_order(request):
             try:
                 order = serializer.save()
                 return JsonResponse(serializer.data, status=201)
-            except serializers.ValidationError as e:
+            except ValidationError  as e:
                 return JsonResponse({'error': str(e)}, status=400)
         else:
             return JsonResponse(serializer.errors, status=400)

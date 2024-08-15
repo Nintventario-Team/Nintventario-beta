@@ -8,7 +8,9 @@ import { of } from 'rxjs';
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let authServiceMock: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let routerMock: any;
 
   beforeEach(async () => {

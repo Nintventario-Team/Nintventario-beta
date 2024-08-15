@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router'
 describe('SobreNosotrosComponent', () => {
   let component: SobreNosotrosComponent
   let fixture: ComponentFixture<SobreNosotrosComponent>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let activatedRouteMock: any
 
   beforeEach(async () => {

@@ -2,21 +2,26 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { LoginResponse, User } from '../interfaces/user';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { CartService } from './cart.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
+  let cartServiceMock: jasmine.SpyObj<CartService>;
 
   beforeEach(() => {
+    const spy = jasmine.createSpyObj('CartService', ['resetCart']);
+    
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        { provide: CartService, useValue: spy }
+      ],
     });
     service = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
+    cartServiceMock = TestBed.inject(CartService) as jasmine.SpyObj<CartService>;
   });
 
   afterEach(() => {
@@ -75,18 +80,21 @@ describe('AuthService', () => {
   });
 
   describe('logout', () => {
-    it('should log out the user', () => {
-      localStorage.setItem('accessToken', 'access-token'); // Mock the accessToken in localStorage
+    it('should log out the user and reset the cart', () => {
+      localStorage.setItem('accessToken', 'access-token'); 
+
       service.logout().subscribe((response) => {
-        expect(response).toBeUndefined();
+        expect(response).toEqual({});
       });
 
       const req = httpMock.expectOne(service.logoutUrl);
       expect(req.request.method).toBe('POST');
       req.flush({});
 
-      expect(service.isLoggedInSubject.value).toBe(false);
+      expect(service.checkLoginStatus()).toBe(false);
       expect(localStorage.getItem('accessToken')).toBeNull();
+      expect(localStorage.getItem('cart')).toBe('[]');
+      expect(cartServiceMock.resetCart).toHaveBeenCalled();
     });
   });
 
@@ -124,17 +132,11 @@ describe('AuthService', () => {
 
   describe('BehaviorSubject and Observables', () => {
     it('should emit the correct initial login status based on localStorage', () => {
-      // Mocking a scenario where accessToken is present in localStorage
       localStorage.setItem('accessToken', 'access-token');
+      expect(service.checkLoginStatus()).toBe(true);
   
-      const serviceWithMockedLocalStorage = TestBed.inject(AuthService);
-      expect(serviceWithMockedLocalStorage.isLoggedInSubject.value).toBe(true);
-  
-      // Clearing localStorage and testing the service's initial state
       localStorage.removeItem('accessToken');
-      const serviceWithoutLocalStorage = new AuthService(TestBed.inject(HttpClient)); // Inject HttpClient directly
-      expect(serviceWithoutLocalStorage.isLoggedInSubject.value).toBe(false);
+      expect(service.checkLoginStatus()).toBe(false);
     });
   });
-  
 });

@@ -4,6 +4,7 @@ import { ProductSectionComponent } from './product-section.component';
 import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
 import { WishlistService } from '../../services/wishlist.service';
+import { CartService } from '../../services/cart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { Product } from '../../interfaces/product';
@@ -18,6 +19,7 @@ describe('ProductSectionComponent', () => {
   let productServiceMock: any;
   let authServiceMock: any;
   let wishlistServiceMock: any;
+  let cartServiceMock: any;
   let activatedRouteMock: any;
   let routerMock: any;
 
@@ -25,28 +27,32 @@ describe('ProductSectionComponent', () => {
     productServiceMock = {
       getNewestProducts: jasmine.createSpy('getNewestProducts').and.returnValue(of([])),
       getBestsellingProducts: jasmine.createSpy('getBestsellingProducts').and.returnValue(of([])),
-      getFilteredProducts: jasmine.createSpy('getFilteredProducts').and.returnValue(of([]))
+      getFilteredProducts: jasmine.createSpy('getFilteredProducts').and.returnValue(of([])),
     };
 
     authServiceMock = {
       checkLoginStatus: jasmine.createSpy('checkLoginStatus').and.returnValue(true),
       getUserInfo: jasmine.createSpy('getUserInfo').and.returnValue(of({ id: 1, first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com' })),
-      isLoggedIn$: of(true)
+      isLoggedIn$: of(true),
     };
 
     wishlistServiceMock = {
       addToWishlist: jasmine.createSpy('addToWishlist').and.returnValue(of({})),
       removeFromWishlist: jasmine.createSpy('removeFromWishlist').and.returnValue(of({})),
-      getWishlist: jasmine.createSpy('getWishlist').and.returnValue(of([]))
+      getWishlist: jasmine.createSpy('getWishlist').and.returnValue(of([])),
+    };
+
+    cartServiceMock = {
+      addToCart: jasmine.createSpy('addToCart').and.callThrough(),
     };
 
     activatedRouteMock = {
       data: of({ section: 'videojuegos' }),
-      queryParams: of({ q: 'search-term' })
+      queryParams: of({ q: 'search-term' }),
     };
 
     routerMock = {
-      navigate: jasmine.createSpy('navigate')
+      navigate: jasmine.createSpy('navigate'),
     };
 
     await TestBed.configureTestingModule({
@@ -55,6 +61,7 @@ describe('ProductSectionComponent', () => {
         { provide: ProductService, useValue: productServiceMock },
         { provide: AuthService, useValue: authServiceMock },
         { provide: WishlistService, useValue: wishlistServiceMock },
+        { provide: CartService, useValue: cartServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: Router, useValue: routerMock },
       ]
@@ -112,7 +119,15 @@ describe('ProductSectionComponent', () => {
     const product = { id: 1, name: 'Product 1', price: 100, quantity: 10, details: '', image: '' } as Product;
     spyOn(localStorage, 'setItem');
     component.addCart(new MouseEvent('click'), product);
-    expect(localStorage.setItem).toHaveBeenCalled();
+    expect(cartServiceMock.addToCart).toHaveBeenCalledWith({
+      id: 1,
+      name: 'Product 1',
+      price: 100,
+      maxQuantity: 10,
+      quantityToBuy: 1,
+      details: '',
+      image: ''
+    });
   });
 
   it('should navigate when search icon is clicked', () => {
@@ -127,4 +142,36 @@ describe('ProductSectionComponent', () => {
     component.searchProduct(event);
     expect(routerMock.navigate).toHaveBeenCalledWith(['/videojuegos'], { queryParams: { q: 'search term' } });
   });
+
+  it('should validate wishlist addition or removal based on login status', () => {
+    const product = { id: 1, name: 'Product 1' } as Product;
+    component.isLoggedIn = true;
+  
+    const isProductInWishlistSpy = spyOn(component, 'isProductInWishlist').and.returnValue(false);
+  
+    component.validateWishlist(new MouseEvent('click'), product);
+    expect(wishlistServiceMock.addToWishlist).toHaveBeenCalledWith(1);
+  
+    isProductInWishlistSpy.and.returnValue(true);
+    component.validateWishlist(new MouseEvent('click'), product);
+    expect(wishlistServiceMock.removeFromWishlist).toHaveBeenCalledWith(1);
+  });
+  
+
+  it('should show an alert message when a product is added to the cart', () => {
+    spyOn(component, 'showAlertMessage');
+    const product = { id: 1, name: 'Product 1', price: 100, quantity: 10, details: '', image: '' } as Product;
+    component.addCart(new MouseEvent('click'), product);
+    expect(component.showAlertMessage).toHaveBeenCalledWith('Producto añadido al carrito');
+  });
+
+  it('should filter by genre and platform', () => {
+    spyOn(component, 'getFilteredData');
+
+    component.filterByGenreAndPlatform('PS5', 'Acción');
+    expect(component.selectedPlatform).toBe('PS5');
+    expect(component.selectedGenre).toBe('Acción');
+    expect(component.getFilteredData).toHaveBeenCalled();
+  });
+
 });

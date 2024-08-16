@@ -1,0 +1,13 @@
+<testsuite name="features.productFiltering_feature.Filtered Product View" tests="1" errors="0" failures="0" skipped="0" time="0.010494" timestamp="2024-08-15T19:15:38.928687" hostname="Kev-Roldan"><testcase classname="features.productFiltering_feature.Filtered Product View" name="View filtered products by category" status="passed" time="0.010494"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: View filtered products by category
+    Given a category named "Electronics" exists ... passed in 0.003s
+    And a product exists with name "Smartphone" in the "Electronics" category ... passed in 0.003s
+    When I view products filtered by the "Electronics" category ... passed in 0.003s
+    Then I should see the product "Smartphone" ... passed in 0.001s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

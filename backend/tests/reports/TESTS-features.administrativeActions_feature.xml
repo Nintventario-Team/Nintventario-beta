@@ -1,0 +1,60 @@
+<testsuite name="features.administrativeActions_feature.Administrative Actions" tests="3" errors="0" failures="3" skipped="0" time="1.879906" timestamp="2024-08-15T18:23:54.255730" hostname="Kev-Roldan"><testcase classname="features.administrativeActions_feature.Administrative Actions" name="Admin adds a new product" status="failed" time="0.690017"><failure type="AssertionError" message="Expected 201 Created, but got 404">
+<![CDATA[
+Failing step: Then the product should be created ... failed in 0.000s
+Location: tests/acceptance/features/administrativeActions_feature.feature:6
+Assertion Failed: Expected 201 Created, but got 404
+Captured logging:
+WARNING:django.request:Not Found: /admin/products/]]>
+</failure><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Admin adds a new product
+    Given I am authenticated as an admin ... passed in 0.679s
+    When I add a new product with name "Admin Product" and price "25.00" ... passed in 0.011s
+    Then the product should be created ... failed in 0.000s
+    And I should receive a confirmation message ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="features.administrativeActions_feature.Administrative Actions" name="Admin updates an existing product" status="failed" time="0.591877"><failure type="AssertionError" message="Expected product name to be 'Updated Product', but got 'Old Product'">
+<![CDATA[
+Failing step: Then the product's name should be updated ... failed in 0.004s
+Location: tests/acceptance/features/administrativeActions_feature.feature:13
+Assertion Failed: Expected product name to be 'Updated Product', but got 'Old Product'
+Captured logging:
+WARNING:django.request:Not Found: /admin/products/1/]]>
+</failure><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Admin updates an existing product
+    Given a product exists with name "Old Product" ... passed in 0.003s
+    And I am authenticated as an admin ... passed in 0.581s
+    When I update the product's name to "Updated Product" ... passed in 0.004s
+    Then the product's name should be updated ... failed in 0.004s
+    And I should receive a confirmation message ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="features.administrativeActions_feature.Administrative Actions" name="Admin deletes a product" status="failed" time="0.598013"><failure type="AssertionError" message="Expected product to be deleted, but it still exists">
+<![CDATA[
+Failing step: Then the product should no longer exist ... failed in 0.005s
+Location: tests/acceptance/features/administrativeActions_feature.feature:20
+Assertion Failed: Expected product to be deleted, but it still exists
+Captured logging:
+WARNING:django.request:Not Found: /admin/products/2/]]>
+</failure><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Admin deletes a product
+    Given a product exists with name "Deletable Product" ... passed in 0.004s
+    And I am authenticated as an admin ... passed in 0.590s
+    When I delete the product ... passed in 0.000s
+    Then the product should no longer exist ... failed in 0.005s
+    And I should receive a confirmation message ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

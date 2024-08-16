@@ -1,0 +1,12 @@
+<testsuite name="features.contactForm_feature.Contact Us Form" tests="1" errors="0" failures="0" skipped="0" time="0.010285" timestamp="2024-08-15T19:15:37.473721" hostname="Kev-Roldan"><testcase classname="features.contactForm_feature.Contact Us Form" name="Send a contact email" status="passed" time="0.010285"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Send a contact email
+    When I send a contact email with subject "Inquiry" and message "I need help with my order." ... passed in 0.010s
+    Then I should receive a "200" status ... passed in 0.000s
+    And I should see a confirmation message "Correo enviado exitosamente" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

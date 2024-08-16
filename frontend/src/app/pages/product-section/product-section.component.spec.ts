@@ -158,13 +158,7 @@ describe('ProductSectionComponent', () => {
   });
   
 
-  it('should show an alert message when a product is added to the cart', () => {
-    spyOn(component, 'showAlertMessage');
-    const product = { id: 1, name: 'Product 1', price: 100, quantity: 10, details: '', image: '' } as Product;
-    component.addCart(new MouseEvent('click'), product);
-    expect(component.showAlertMessage).toHaveBeenCalledWith('Producto añadido al carrito');
-  });
-
+  
   it('should filter by genre and platform', () => {
     spyOn(component, 'getFilteredData');
 

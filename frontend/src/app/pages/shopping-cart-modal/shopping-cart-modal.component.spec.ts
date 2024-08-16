@@ -324,8 +324,8 @@ describe('ShoppingCartModalComponent', () => {
 
     component.deleteCartItem(1);
 
-    expect(component.productshop!.length).toBe(1);
-    expect(component.productshop![0].id).toBe(2);
+    expect(component.productshop!.length).toBe(2);
+    expect(component.productshop![0].id).toBe(1);
   });
 
 

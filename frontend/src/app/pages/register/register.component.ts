@@ -59,7 +59,7 @@ export class RegisterComponent {
             },
           )
           this.alertService.setAlert(this.alertTopic, this.alertMessage, this.alertType)
-          this.router.navigate(['/'])
+          this.router.navigateByUrl('/')
 
         },
         error => {

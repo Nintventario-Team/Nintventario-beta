@@ -73,28 +73,29 @@ describe('RegisterComponent', () => {
       password: 'password123'
     });
     component.onSubmit();
-
-    expect(component.alertMessage).toBe('Este correo ya tiene una cuenta registrada');
-    expect(component.showAlert).toBe(true);
-    expect(component.alertClass).toBe('alert-error');
+  
+    expect(component.alertTopic).toBe('Error al crear cuenta');
+    expect(component.alertMessage).toBe('El correo ya está registrado.');
+    expect(component.alertType).toBe('error');
   });
+  
+ it('should show general error message on registration failure', () => {
+  authServiceMock.register.and.returnValue(throwError({ error: { error: 'Some error' } }));
 
-  it('should show general error message on registration failure', () => {
-    authServiceMock.register.and.returnValue(throwError({ error: 'Some error' }));
-    
-    component.contactForm.setValue({
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'user@example.com',
-      password: 'password123'
-    });
-    component.onSubmit();
-
-    expect(component.alertMessage).toBe('Ocurrió un error durante el registro');
-    expect(component.showAlert).toBe(true);
-    expect(component.alertClass).toBe('alert-error');
+  component.contactForm.setValue({
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'user@example.com',
+    password: 'password123'
   });
+  component.onSubmit();
 
+  expect(component.alertTopic).toBe('Error al crear cuenta');
+  expect(component.alertMessage).toBe('Ocurrió un error durante el registro.');
+  expect(component.alertType).toBe('error');
+});
+
+  
   it('should show validation error message if form is invalid', () => {
     component.contactForm.setValue({
       first_name: '',
@@ -103,11 +104,12 @@ describe('RegisterComponent', () => {
       password: '123'
     });
     component.onSubmit();
-
-    expect(component.alertMessage).toBe('Por favor, completa todos los campos correctamente');
-    expect(component.showAlert).toBe(true);
-    expect(component.alertClass).toBe('alert-error');
+  
+    expect(component.alertTopic).toBe('Error al crear cuenta');
+    expect(component.alertMessage).toBe('Porfavor rellena todos los campos.');
+    expect(component.alertType).toBe('error');
   });
+  
 
   it('should navigate to login when navigateToLogin is called', () => {
     component.navigateToLogin();

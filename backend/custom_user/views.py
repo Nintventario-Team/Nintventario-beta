@@ -9,6 +9,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication # type: ignore
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 
 import json
 
@@ -17,7 +23,56 @@ from .models import Order, Product, User, WishlistItem,Client
 from .serializers import OrderSerializer, ProductSerializer
 from custom_user import serializers
 
+token_generator = PasswordResetTokenGenerator()
 # PRODUCT METHODS
+
+@csrf_exempt
+@api_view(['POST'])
+def request_password_reset(request):
+    try:
+        data = json.loads(request.body)
+        email = data.get('email')
+        user = get_object_or_404(User, email=email)
+
+        token = token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        # Aquí es donde cambias la URL para apuntar a tu frontend
+        reset_url = f"https://nintventario.firebaseapp.com/reset-password/{uid}/{token}/"
+
+        send_mail(
+            'Password Reset Request',
+            f'Click the link to reset your password: {reset_url}',
+            'your_email@example.com',
+            [user.email],
+            fail_silently=False,
+        )
+
+        return JsonResponse({'message': 'Password reset link sent'}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def password_reset_confirm(request, uidb64, token):
+    try:
+        data = json.loads(request.body)
+        new_password = data.get('new_password')
+        if len(new_password) < 8:
+            return JsonResponse({'error': 'Password must be at least 8 characters long'}, status=400)
+
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = get_object_or_404(User, pk=uid)
+
+        if not token_generator.check_token(user, token):
+            return JsonResponse({'error': 'Invalid or expired token'}, status=400)
+
+        user.set_password(new_password)
+        user.save()
+
+        return JsonResponse({'message': 'Password has been reset successfully'}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 
 def get_all_products(request):
@@ -30,6 +85,7 @@ def get_filtered_products(request):
     price_min = request.GET.get('price_min', None)
     price_max = request.GET.get('price_max', None)
     product_type = request.GET.get('product_type', None)
+    category = request.GET.get('category', None)
 
     filters = {}
     if price_min is not None:
@@ -38,10 +94,14 @@ def get_filtered_products(request):
         filters['price__lte'] = price_max
     if product_type is not None:
         filters['category__name__icontains'] = product_type
+    if category is not None:
+        filters['details__icontains'] = category
+
 
     products = Product.objects.filter(**filters)
     serializer = ProductSerializer(products, many=True)
     return JsonResponse(serializer.data, safe=False)
+
 
 # EMAIL METHOD
 @csrf_exempt
@@ -83,10 +143,10 @@ def send_register_email(request):
             ¡Gracias por registrarte en Mundo Mágico del Nintendo! Estamos encantados de tenerte con nosotros.
 
             Si necesitas ayuda o tienes algún comentario, puedes encontrarnos fácilmente en nuestra página de contacto:
-            [https://nintventario.web.app/contacto]. 
-            Ahí encontrarás todos los métodos disponibles para comunicarte con nosotros. 
+            [https://nintventario.firebaseapp.com/contacto].
+            Ahí encontrarás todos los métodos disponibles para comunicarte con nosotros.
 
-            Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener. 
+            Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener.
 
             ¡Gracias por ser parte de nuestra comunidad!
 
@@ -99,6 +159,98 @@ def send_register_email(request):
         )
 
         return JsonResponse({'message': 'Correo enviado exitosamente'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def send_buy_email(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            asunto = '¡Confirmación de la compra!'
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            email = data.get('email')
+            products = data.get('products', [])
+            total = data.get('total', 0)
+            subtotal = data.get('subtotal', 0)
+            iva = data.get('iva', 0)
+
+            if not (first_name and last_name and email and products):
+                return JsonResponse({'error': 'Datos incompletos'}, status=400)
+
+            # Asegurarse de que el precio y el total sean números
+            total = float(total)
+            subtotal = float(subtotal)
+            iva = float(iva)
+            for product in products:
+                product['price'] = float(product['price'])
+                product['quantity'] = int(product['quantity'])
+
+            # Construir tabla de productos en HTML con bordes completos
+            product_rows = ''.join([
+                f'''
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{product["name"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{product["quantity"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${product["price"]:.2f}</td>
+                </tr>
+                '''
+                for product in products
+            ])
+            product_table = f'''
+            <table style="width:100%; border:1px solid #ccc; border-collapse: collapse;">
+                <tr>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Producto</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Cantidad</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Precio</th>
+                </tr>
+                {product_rows}
+                <tr>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 8px; text-align: right;"><strong>Subtotal</strong></td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"><strong>${subtotal:.2f}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 8px; text-align: right;"><strong>IVA</strong></td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"><strong>${iva:.2f}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 8px; text-align: right;"><strong>Total</strong></td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"><strong>${total:.2f}</strong></td>
+                </tr>
+            </table>
+            '''
+
+            message_html = f'''
+                <p>Hola {first_name} {last_name},</p>
+                <p>¡Gracias por tu compra!</p>
+                <p>Tu reserva ha sido recibida y ahora está siendo procesada. Los detalles de la reserva se muestran abajo.</p>
+
+                {product_table}
+
+                <p>Para más información sobre tu pedido visita:</p>
+                <p><a href="https://nintventario.firebaseapp.com/userDetails/userPurchaseHistory">https://nintventario.firebaseapp.com/userDetails/userPurchaseHistory</a></p>
+
+                <p>Si necesitas ayuda o tienes algún comentario, puedes encontrarnos fácilmente en nuestra página de contacto:</p>
+                <p><a href="https://nintventario.firebaseapp.com/contacto">https://nintventario.firebaseapp.com/contacto</a></p>
+
+                <p>Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener.</p>
+
+                <p>Atentamente,</p>
+                <p>Mundo Mágico del Nintendo</p>
+            '''
+
+            email_message = EmailMultiAlternatives(
+                subject=asunto,
+                body=message_html,
+                from_email='nintventario@gmail.com',
+                to=[email]
+            )
+            email_message.attach_alternative(message_html, "text/html")
+            email_message.send()
+
+            return JsonResponse({'message': 'Correo enviado exitosamente'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 # AUTH METHODS
@@ -181,7 +333,7 @@ def logout_view(request):
 
 
 def newest_products(request):
-    newest_products = Product.objects.order_by('-date_added')[:4]
+    newest_products = Product.objects.order_by('-date_added')[:12]
     serialized_products = [
         {
             'id': product.pk,
@@ -198,7 +350,7 @@ def newest_products(request):
 def bestselling_products(request):
     bestselling_products = Product.objects.annotate(
         total_quantity=Count('order_items__quantity')
-    ).order_by('-total_quantity')[:4]
+    ).order_by('-total_quantity')[:12]
     serialized_products = [
         {
             'id': product.pk,
@@ -233,13 +385,13 @@ def get_user_data(request):
 def create_order(request):
     try:
         data = json.loads(request.body.decode('utf-8'))
-        
+
         try:
             client = Client.objects.get(user=request.user)
-            data['client'] = client.id  
+            data['client'] = client.id
         except Client.DoesNotExist:
             return JsonResponse({'error': 'Client not found'}, status=404)
-        
+
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():
             try:
@@ -317,7 +469,7 @@ def get_purchase_history(request):
         client = Client.objects.get(user=request.user)
     except Client.DoesNotExist:
         return JsonResponse({'error': 'Client not found'}, status=404)
-    
+
     # Fetch orders for the found client
     orders = Order.objects.filter(client=client).order_by('-date_created')
     serializer = OrderSerializer(orders, many=True)

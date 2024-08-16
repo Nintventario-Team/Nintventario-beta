@@ -14,6 +14,8 @@ import { UserPurchaseHistoryComponent } from './pages/user-details/user-purchase
 import { TerminosCondicionesComponent } from './pages/terminos-condiciones/terminos-condiciones.component'
 import { MetodosPagoComponent } from './pages/metodos-pago/metodos-pago.component'
 import { SobreNosotrosComponent } from './pages/sobre-nosotros/sobre-nosotros.component'
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component'
+import { EmailChangeConfirmationComponent } from './pages/email-change-confirmation/email-change-confirmation.component'
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -44,5 +46,7 @@ export const routes: Routes = [
   { path: 'terminos-condiciones', component: TerminosCondicionesComponent },
   { path: 'metodos-pago', component: MetodosPagoComponent },
   { path: 'sobre-nosotros', component: SobreNosotrosComponent },
+  { path: 'reset-password/:uid/:token', component: ResetPasswordComponent },
+  { path: 'change-confirmation-email', component: EmailChangeConfirmationComponent },
   { path: '**', redirectTo: '' },
 ]

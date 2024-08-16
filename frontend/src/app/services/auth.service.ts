@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, BehaviorSubject } from 'rxjs'
@@ -62,5 +63,14 @@ export class AuthService {
       Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
     })
     return this.http.get<User>(this.userInfoUrl, { headers })
+  }
+
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/password-reset/`, { email })
+  }
+
+  resetPassword(uid: string, token: string, newPassword: string): Observable<any> {
+    const body = { new_password: newPassword }
+    return this.http.post(`${this.baseUrl}/password-reset-confirm/${uid}/${token}/`, body)
   }
 }

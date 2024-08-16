@@ -1,0 +1,45 @@
+<div
+  class="alert"
+  [ngClass]="{ 'error-alert': alertType === 'error', 'confirm-alert': alertType === 'confirm' }"
+  *ngIf="showAlert"
+>
+  <div class="alert-content">
+    <div class="icon-and-text">
+      <img
+        [src]="iconUrl"
+        class="icon-check-circle"
+        alt="alert-icon"
+        [ngStyle]="{
+          filter:
+            alertType === 'verify' || alertType === 'confirm'
+              ? 'invert(30%) sepia(100%) saturate(999%) hue-rotate(190deg)'
+              : alertType === 'error'
+                ? 'invert(21%) sepia(95%) saturate(6993%) hue-rotate(1deg) brightness(109%) contrast(105%)'
+                : '',
+        }"
+      />
+      <div class="text-content">
+        <span class="alert-title">{{ alertTopic }}</span>
+        <div class="alert-message">{{ alertMessage }}</div>
+      </div>
+    </div>
+    <button class="close-alert" (click)="closeAlert()">
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fx.svg?alt=media&token=b742d8e9-ba3d-4722-8aea-be78bf8dd7d0"
+        class="icon-close-circle"
+        alt="close-icon"
+      />
+    </button>
+  </div>
+  <div *ngIf="alertType !== 'confirm'" class="progress-bar">
+    <div
+      class="progress"
+      [ngStyle]="{ width: progressWidth + '%', backgroundColor: alertType === 'error' ? 'red' : '' }"
+    ></div>
+  </div>
+  <div *ngIf="alertType === 'confirm'" class="confirm-buttons">
+    <button class="confirm-btn" (click)="confirm(true)">Aceptar</button>
+    <button class="confirm-btn" (click)="confirm(false)">Cancelar</button>
+  </div>
+</div>
+

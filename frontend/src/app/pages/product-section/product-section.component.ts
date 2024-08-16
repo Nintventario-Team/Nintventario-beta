@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, RouterLinkActive, RouterLink, Router } from '@angular/router'
 import { CommonModule } from '@angular/common'
 import { NgxPaginationModule } from 'ngx-pagination'
@@ -12,16 +12,18 @@ import { WishlistService } from '../../services/wishlist.service'
 import { WishlistResponse } from '../../interfaces/wishlist'
 import { FormsModule } from '@angular/forms'
 import { CartService } from '../../services/cart.service'
+import { AlertComponent } from '../../shared/alert/alert.component'
 
 @Component({
   selector: 'app-product-section',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, RouterLinkActive, RouterLink, FormsModule],
+  imports: [CommonModule, NgxPaginationModule, RouterLinkActive, RouterLink, FormsModule, AlertComponent],
   providers: [],
   templateUrl: './product-section.component.html',
   styleUrl: './product-section.component.css',
 })
 export class ProductSectionComponent implements OnInit {
+  @ViewChild(AlertComponent) alertComponent!: AlertComponent
   section!:
     | 'todos'
     | 'videojuegos'
@@ -75,10 +77,9 @@ export class ProductSectionComponent implements OnInit {
   searching: string = ''
   inputValue: string = ''
   showAlert = false
+  alertTopic = ''
+  alertType: 'verify' | 'error' | 'confirm' = 'verify'
   alertMessage = ''
-  alertTimeout: any
-  progressWidth = 100
-  progressInterval: any
   isLoggedIn: boolean = false
   videogameIsSelected: boolean = false
   funkoIsSelected: boolean = false
@@ -194,7 +195,7 @@ export class ProductSectionComponent implements OnInit {
       }
       const sectionToFilter = sectionMappings[this.section]
       let category = ''
-      if(this.section === 'videojuegos') {
+      if (this.section === 'videojuegos') {
         if (this.selectedPlatform) {
           category += this.selectedPlatform
         }
@@ -204,7 +205,7 @@ export class ProductSectionComponent implements OnInit {
           }
           category += this.selectedGenre
         }
-      }else{
+      } else {
         category = this.category
       }
       this.productService
@@ -309,38 +310,10 @@ export class ProductSectionComponent implements OnInit {
     }
 
     this.cartService.addToCart(cartItem)
-    this.showAlertMessage('Producto añadido al carrito')
-  }
-
-  showAlertMessage(message: string): void {
-    this.alertMessage = message
-    this.showAlert = true
-    this.progressWidth = 100
-
-    clearInterval(this.progressInterval)
-    clearTimeout(this.alertTimeout)
-
-    const totalDuration = 7000
-    const intervalDuration = 100
-    const decrementAmount = (intervalDuration / totalDuration) * 100
-
-    this.progressInterval = setInterval(() => {
-      this.progressWidth -= decrementAmount
-      if (this.progressWidth <= 0) {
-        this.closeAlert()
-      }
-    }, intervalDuration)
-
-    this.alertTimeout = setTimeout(() => {
-      this.showAlert = false
-      clearInterval(this.progressInterval)
-    }, totalDuration)
-  }
-
-  closeAlert(): void {
-    this.showAlert = false
-    clearTimeout(this.alertTimeout)
-    clearInterval(this.progressInterval)
+    this.alertTopic = 'Producto añadido'
+    this.alertMessage = 'El producto ha sido añadido al carrito.'
+    this.alertType = 'verify'
+    this.alertComponent.resetAlert()
   }
 
   addWishlist(product: Product) {
@@ -348,11 +321,17 @@ export class ProductSectionComponent implements OnInit {
       response => {
         this.loadWishlist()
         console.log('Producto añadido a la wishlist', response)
-        alert('Producto añadido a la wishlist')
+        this.alertTopic = 'Producto añadido'
+        this.alertMessage = 'El producto ha sido añadido a la wishlist.'
+        this.alertType = 'verify'
+        this.alertComponent.resetAlert()
       },
       error => {
         console.error('Error añadiendo producto a la wishlist', error)
-        alert('Error añadiendo producto a la wishlist')
+        this.alertTopic = 'Error'
+        this.alertMessage = 'Error añadiendo producto a la wishlist.'
+        this.alertType = 'error'
+        this.alertComponent.resetAlert()
       },
     )
   }
@@ -362,11 +341,17 @@ export class ProductSectionComponent implements OnInit {
       response => {
         console.log('Producto eliminado de la wishlist', response)
         this.wishlist = this.wishlist.filter(p => p.id !== product.id)
-        alert('Producto eliminado de la wishlist')
+        this.alertTopic = 'Producto eliminado'
+        this.alertMessage = 'El producto ha sido eliminado de la wishlist.'
+        this.alertType = 'verify'
+        this.alertComponent.resetAlert()
       },
       error => {
         console.error('Error eliminando producto de la wishlist', error)
-        alert('Error eliminando producto de la wishlist')
+        this.alertTopic = 'Error'
+        this.alertMessage = 'Error eliminando el producto de la wishlist.'
+        this.alertType = 'error'
+        this.alertComponent.resetAlert()
       },
     )
   }
@@ -395,7 +380,10 @@ export class ProductSectionComponent implements OnInit {
         this.addWishlist(product)
       }
     } else {
-      alert('Necesitas estar loggeado para eliminar un producto de la wishlist')
+      this.alertTopic = 'Error'
+      this.alertMessage = 'Por favor inicia sesión para eliminar productos de la wishlist.'
+      this.alertType = 'error'
+      this.alertComponent.resetAlert()
     }
   }
 

@@ -8,6 +8,7 @@ import { FooterComponent } from './shared/footer/footer.component'
 import { BannerComponent } from './shared/banner/banner.component'
 import { MidBannerComponent } from './shared/mid-banner/mid-banner.component'
 import { FormsModule } from '@angular/forms'
+import { AlertComponent } from './shared/alert/alert.component'
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ import { FormsModule } from '@angular/forms'
     BannerComponent,
     FormsModule,
     MidBannerComponent,
+    AlertComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

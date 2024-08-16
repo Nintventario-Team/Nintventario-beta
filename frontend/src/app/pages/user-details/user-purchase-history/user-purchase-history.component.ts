@@ -1,21 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component } from '@angular/core'
 import { CdkAccordionModule } from '@angular/cdk/accordion'
 import { OrderResponse } from '../../../interfaces/order'
 import { OrderService } from '../../../services/order.service'
 import { ProductService } from '../../../services/product.service'
 import { Product } from '../../../interfaces/product'
+import { SlicePipe } from '@angular/common'
 
 @Component({
   selector: 'app-user-purchase-history',
   standalone: true,
-  imports: [CdkAccordionModule],
+  imports: [CdkAccordionModule, SlicePipe],
   templateUrl: './user-purchase-history.component.html',
   styleUrl: './user-purchase-history.component.css',
 })
 export class UserPurchaseHistoryComponent {
   expandedIndex = 0
   orders: OrderResponse[] = []
-  products:Product[]=[]
+  products: Product[] = []
 
   constructor(
     private purchaseHistoryService: OrderService,
@@ -51,8 +53,7 @@ export class UserPurchaseHistoryComponent {
     productIdsArray.forEach(id => {
       this.productService.getProductById(id).subscribe(
         (product: Product) => {
-            this.products.push(product)
-          
+          this.products.push(product)
         },
         (error: any) => {
           console.error(`Error loading product with ID ${id}`, error)

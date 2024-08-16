@@ -36,8 +36,8 @@ def request_password_reset(request):
 
         token = token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        # Aquí es donde cambias la URL para apuntar a tu frontend
-        reset_url = f"https://nintventario.firebaseapp.com/reset-password/{uid}/{token}/"
+        
+        reset_url = f"https://nintventario.web.app/reset-password/{uid}/{token}/"
 
         send_mail(
             'Password Reset Request',
@@ -143,7 +143,7 @@ def send_register_email(request):
             ¡Gracias por registrarte en Mundo Mágico del Nintendo! Estamos encantados de tenerte con nosotros.
 
             Si necesitas ayuda o tienes algún comentario, puedes encontrarnos fácilmente en nuestra página de contacto:
-            [https://nintventario.firebaseapp.com/contacto].
+            [https://nintventario.web.app/contacto].
             Ahí encontrarás todos los métodos disponibles para comunicarte con nosotros.
 
             Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener.
@@ -174,11 +174,11 @@ def send_buy_email(request):
             total = data.get('total', 0)
             subtotal = data.get('subtotal', 0)
             iva = data.get('iva', 0)
+            pickup_location = data.get('pickup_location', 'No especificado')
 
-            if not (first_name and last_name and email and products):
+            if not (first_name, last_name, email, products, pickup_location):
                 return JsonResponse({'error': 'Datos incompletos'}, status=400)
 
-            # Asegurarse de que el precio y el total sean números
             total = float(total)
             subtotal = float(subtotal)
             iva = float(iva)
@@ -186,7 +186,6 @@ def send_buy_email(request):
                 product['price'] = float(product['price'])
                 product['quantity'] = int(product['quantity'])
 
-            # Construir tabla de productos en HTML con bordes completos
             product_rows = ''.join([
                 f'''
                 <tr>
@@ -227,11 +226,13 @@ def send_buy_email(request):
 
                 {product_table}
 
+                <p><strong>Lugar de retiro:</strong> {pickup_location}</p>
+
                 <p>Para más información sobre tu pedido visita:</p>
-                <p><a href="https://nintventario.firebaseapp.com/userDetails/userPurchaseHistory">https://nintventario.firebaseapp.com/userDetails/userPurchaseHistory</a></p>
+                <p><a href="https://nintventario.web.app/userDetails/userPurchaseHistory">https://nintventario.web.app/userDetails/userPurchaseHistory</a></p>
 
                 <p>Si necesitas ayuda o tienes algún comentario, puedes encontrarnos fácilmente en nuestra página de contacto:</p>
-                <p><a href="https://nintventario.firebaseapp.com/contacto">https://nintventario.firebaseapp.com/contacto</a></p>
+                <p><a href="https://nintventario.web.app/contacto">https://nintventario.web.app/contacto</a></p>
 
                 <p>Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener.</p>
 
@@ -244,6 +245,91 @@ def send_buy_email(request):
                 body=message_html,
                 from_email='nintventario@gmail.com',
                 to=[email]
+            )
+            email_message.attach_alternative(message_html, "text/html")
+            email_message.send()
+
+            return JsonResponse({'message': 'Correo enviado exitosamente'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def send_buy_email_to_company(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            asunto = 'Nueva reserva de productos'
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            email = data.get('email')
+            products = data.get('products', [])
+            total = data.get('total', 0)
+            subtotal = data.get('subtotal', 0)
+            iva = data.get('iva', 0)
+            pickup_location = data.get('pickup_location', 'No especificado')
+
+            if not (first_name, last_name, email, products, pickup_location):
+                return JsonResponse({'error': 'Datos incompletos'}, status=400)
+
+            total = float(total)
+            subtotal = float(subtotal)
+            iva = float(iva)
+            for product in products:
+                product['price'] = float(product['price'])
+                product['quantity'] = int(product['quantity'])
+
+            product_rows = ''.join([
+                f'''
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{product["name"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{product["quantity"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${product["price"]:.2f}</td>
+                </tr>
+                '''
+                for product in products
+            ])
+            product_table = f'''
+            <table style="width:100%; border:1px solid #ccc; border-collapse: collapse;">
+                <tr>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Producto</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Cantidad</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Precio</th>
+                </tr>
+                {product_rows}
+                <tr>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 8px; text-align: right;"><strong>Subtotal</strong></td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"><strong>${subtotal:.2f}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 8px; text-align: right;"><strong>IVA</strong></td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"><strong>${iva:.2f}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 8px; text-align: right;"><strong>Total</strong></td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"><strong>${total:.2f}</strong></td>
+                </tr>
+            </table>
+            '''
+
+            message_html = f'''
+                <p>El cliente: {first_name} {last_name}, ha solicitado los siguientes productos</p>
+                <p><strong>Correo del cliente:</strong> {email}</p>
+
+                {product_table}
+
+                <p><strong>Lugar en donde lo va a retirar:</strong> {pickup_location}</p>
+
+
+                <p>Atentamente,</p>
+                <p>Mundo Mágico del Nintendo</p>
+            '''
+
+            email_message = EmailMultiAlternatives(
+                subject=asunto,
+                body=message_html,
+                from_email='nintventario@gmail.com',
+                to=['jorgemawyincabay@gmail.com']
             )
             email_message.attach_alternative(message_html, "text/html")
             email_message.send()

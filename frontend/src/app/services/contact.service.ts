@@ -22,4 +22,8 @@ export class ContactService {
   sendBuyEmail(contactData: any): Observable<any> {
     return this.http.post(this.apiUrl + 'send-buy-email/', contactData)
   }
+
+  sendBuyEmailToCompany(contactData: any): Observable<any> {
+    return this.http.post(this.apiUrl + 'send-buy-email-to-company/', contactData)
+  }
 }

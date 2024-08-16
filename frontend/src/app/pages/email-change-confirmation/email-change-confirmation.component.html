@@ -8,19 +8,19 @@
 <div class="container" id="container">
   <div class="form-container sign-in" id="form-container">
     <form (ngSubmit)="onSubmit()">
-      <h1>Iniciar sesión</h1>
-      <input type="email" placeholder="Correo" id="email" [(ngModel)]="email" name="email" required />
+      <h1>Restablecer Contraseña</h1>
       <input
-        type="password"
-        placeholder="Contraseña"
-        id="password"
-        [(ngModel)]="password"
-        name="password"
+        type="email"
+        placeholder="Correo"
+        id="email"
+        [(ngModel)]="email"
+        name="email"
         required
       />
-      <a id="forgetPass" (click)="navigateToConfirmationEmail()">→ ¿Olvidaste tu contraseña? ←</a>
-      <button type="submit">Iniciar</button>
-      <p class="register-text">¿No tienes cuenta? <a id="textRegis" (click)="navigateToRegister()">Regístrate</a></p>
+      <button type="submit">Enviar Enlace de Restablecimiento</button>
+      <p class="register-text">
+        ¿Recuerdas tu contraseña? <a id="textLogin" (click)="navigateToLogin()">Inicia sesión</a>
+      </p>
     </form>
   </div>
   <div class="toggle-container" id="toggle-container">
@@ -30,10 +30,9 @@
         <img
           id="mario"
           src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2FLogo2.png?alt=media&token=53e19d22-3f2a-4cc4-a3c4-25e3b16d25b9"
-          alt=""
+          alt="Logo"
         />
-        <p>Si no tienes una cuenta aún, registrate!.</p>
-        <button class="hidden" id="register" (click)="navigateToRegister()">Resgistrarse</button>
+        <p>Introduce tu correo para restablecer la contraseña.</p>
       </div>
     </div>
   </div>

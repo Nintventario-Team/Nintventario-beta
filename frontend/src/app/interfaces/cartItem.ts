@@ -6,4 +6,5 @@ export interface CartItem {
   quantityToBuy: number
   details: string
   image: string
+  updatedPrice?: number
 }

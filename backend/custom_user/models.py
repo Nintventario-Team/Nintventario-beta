@@ -43,7 +43,7 @@ class Product(models.Model):
     date_added = models.DateField()
     local = models.CharField(max_length=20, default='Ceibos', choices=LOCALS)
     image = models.TextField(default='https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png')
-    details = models.TextField(blank=True, default='')
+    details = models.TextField(default='No hay detalles')
     def __str__(self):
         return self.name
 

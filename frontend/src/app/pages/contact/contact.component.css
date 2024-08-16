@@ -110,6 +110,13 @@ textarea {
   height: 100px;
 }
 
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
 button {
   padding: 10px;
   border: none;

@@ -16,6 +16,9 @@ from .views import (
     remove_from_wishlist,
     send_contact_email,
     send_register_email,
+    send_buy_email,
+    request_password_reset,
+    password_reset_confirm
 )
 
 urlpatterns = [
@@ -35,4 +38,7 @@ urlpatterns = [
     path('get-product-id/<int:product_id>/', get_product_by_id, name='get_product_by_id'),
     path('send-contact-email/', send_contact_email, name='send_contact_email'),
     path('send-register-email/', send_register_email, name='send_register_email'),
+    path('send-buy-email/', send_buy_email, name='send_buy_email'),
+    path('password-reset/', request_password_reset, name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>/', password_reset_confirm, name='password_reset_confirm'),
 ]

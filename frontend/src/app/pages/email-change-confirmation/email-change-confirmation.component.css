@@ -35,12 +35,6 @@ body {
   flex-direction: row;
 }
 
-#forgetPass{
-
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 .register-text {
   display: none;
   font-size: 13px;
@@ -57,13 +51,12 @@ body {
 }
 
 @media (max-width: 600px) {
-
   .register-text {
     display: block;
     text-align: center;
   }
 
-  .register-text #textRegis{
+  .register-text #textLogin {
     color: #2d54a8;
     text-decoration: underline;
     cursor: pointer;

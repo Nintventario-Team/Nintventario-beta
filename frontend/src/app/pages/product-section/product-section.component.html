@@ -1,3 +1,10 @@
+<app-alert
+  [showAlert]="showAlert"
+  [alertTopic]="alertTopic"
+  [alertMessage]="alertMessage"
+  [alertType]="alertType"
+></app-alert>
+
 <section id="banner-first">
   <p>Inicio / {{ section.charAt(0).toUpperCase() + section.slice(1).toLowerCase() }}</p>
 </section>
@@ -198,17 +205,6 @@
     </div>
   </section>
 </main>
-
-<!-- Alerta -->
-<div class="alert" *ngIf="showAlert">
-  <span>
-    {{ alertMessage }}
-    <button class="close-alert" (click)="closeAlert()">X</button>
-  </span>
-  <div class="progress-bar">
-    <div class="progress" [ngStyle]="{ width: progressWidth + '%' }"></div>
-  </div>
-</div>
 
 <!-- Detalles del producto -->
 <div class="details" *ngIf="showDetails && selectedProduct !== undefined">

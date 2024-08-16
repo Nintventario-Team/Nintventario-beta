@@ -1,3 +1,10 @@
+<app-alert
+  [showAlert]="showAlert"
+  [alertTopic]="alertTopic"
+  [alertMessage]="alertMessage"
+  [alertType]="alertType"
+></app-alert>
+
 <div class="cart-modal">
   <div class="cart-header">
     <h3>Mi carrito</h3>
@@ -29,7 +36,7 @@
             <input type="number" [value]="product.quantityToBuy" readonly />
             <button (click)="increaseQuantity(product)">+</button>
           </div>
-          <p class="item-price">${{ product.price }}</p>
+          <p class="item-price">${{ product.updatedPrice || product.price }}</p>
         </div>
       </div>
     </div>

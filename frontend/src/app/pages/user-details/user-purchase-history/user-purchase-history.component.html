@@ -11,19 +11,23 @@
         [attr.aria-controls]="'accordion-body-' + index"
       >
         <div class="order-accordion-item-header" (click)="accordionItem.toggle()">
-          <img src="https://cdn-icons-png.flaticon.com/512/12115/12115767.png" alt="" class="orderImage" />
-          <div class="order-data">
-            <h3>Orden Numero {{ index + 1 }}</h3>
-            <p>
-              <strong>Fecha de Creacion:</strong>
-              {{ item.date_created }}
-            </p>
-            <p>
-              <strong>Total de Compra:</strong>
-              ${{ item.total }}
-            </p>
+          <div class="order-header-left">
+            <img src="https://cdn-icons-png.flaticon.com/512/12115/12115767.png" alt="" class="orderImage" />
+            <div class="order-data">
+              <h3>Orden Numero {{ index + 1 }}</h3>
+              <p>
+                <strong>Fecha de Creación:</strong>
+                {{ item.date_created | slice:0:10 }}
+              </p>
+              <p>
+                <strong>Total de Compra:</strong>
+                ${{ item.total }}
+              </p>
+            </div>
           </div>
-          <span class="order-accordion-item-description">Click to {{ accordionItem.expanded ? 'close' : 'open' }}</span>
+          <span class="order-accordion-item-description">
+            Click to {{ accordionItem.expanded ? 'close' : 'open' }}
+          </span>
         </div>
         <div
           class="order-accordion-item-body"
@@ -40,7 +44,7 @@
 
                   <div class="order_data">
                     <p>
-                      <strong>Description:</strong>
+                      <strong>Descripción:</strong>
                       {{ p.description }}
                     </p>
                     <p>
@@ -55,7 +59,7 @@
                   </div>
                   <div class="order_price">
                     <p>
-                      {{ p.price }}
+                      ${{ p.price }}
                     </p>
                   </div>
                 </div>

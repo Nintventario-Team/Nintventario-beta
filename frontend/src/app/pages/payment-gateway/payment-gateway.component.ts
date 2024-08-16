@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
 import { CreateOrderData, loadScript, OnApproveData, OnClickActions } from '@paypal/paypal-js'
 import { PaymentService } from '../../services/payment.service'
 import { CartItem } from '../../interfaces/cartItem'
@@ -9,27 +9,46 @@ import { Item } from '../../interfaces/order'
 import { AuthService } from '../../services/auth.service'
 import { User } from '../../interfaces/user'
 import { CartService } from '../../services/cart.service'
+import { ContactService } from '../../services/contact.service'
+import { AlertComponent } from '../../shared/alert/alert.component'
+import { AlertService } from '../../services/alert.service'
+
 
 @Component({
   selector: 'app-payment-gateway',
   standalone: true,
-  imports: [],
+  imports: [AlertComponent],
   templateUrl: './payment-gateway.component.html',
   styleUrl: './payment-gateway.component.css',
 })
 export class PaymentGatewayComponent {
+  @ViewChild(AlertComponent) alertComponent!: AlertComponent
   public productshop?: CartItem[]
   public IVA = 0.12
   isLoading: boolean = false
   user: User | null = null
   isLoggedIn: boolean = false
+  first_name = ''
+  last_name = ''
+  email = ''
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  products: any[] = []
+  total = 0
+  subtotal = 0
+  iva = 0
+  showAlert = false
+  alertTopic = ''
+  alertType: 'verify' | 'error' | 'confirm' = 'verify'
+  alertMessage = ''
 
   constructor(
     private router: Router,
+    private alertService: AlertService,
     private paymentService: PaymentService,
     private orderService: OrderService,
     private authService: AuthService,
     private cartService: CartService,
+    private contactService: ContactService, // Inyectar ContactService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +70,11 @@ export class PaymentGatewayComponent {
       this.authService.getUserInfo().subscribe(
         (data: User) => {
           this.user = data
+          this.first_name = this.user.first_name
+          this.last_name = this.user.last_name
+          this.email = this.user.email
           console.log(this.user)
+          console.log('sddsdsd ', this.first_name)
         },
         (error: unknown) => {
           console.error('Error fetching user info:', error)
@@ -62,6 +85,7 @@ export class PaymentGatewayComponent {
     }
     this.authService.isLoggedIn$.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn))
   }
+
   loadPayPalScript() {
     loadScript({ clientId: 'test', locale: 'es_EC', buyerCountry: 'EC' })
       .then(paypal => {
@@ -135,8 +159,15 @@ export class PaymentGatewayComponent {
   completeTransaction(transaction: Capture) {
     this.saveOrder()
 
-    alert(`Transaction ${transaction.status}: ${transaction.id}`)
+    // Enviar correo de confirmación
+    this.sendConfirmationEmail()
+    this.alertTopic = 'Transacción completada'
+    this.alertMessage = `Transaction ${transaction.status}: ${transaction.id}`
+    this.alertType = 'verify'
+    this.alertComponent.resetAlert()
+    this.alertService.setAlert(this.alertTopic, this.alertMessage, this.alertType)
     localStorage.setItem('cart', JSON.stringify([]))
+    this.cartService.resetCart()
     this.router.navigate([''])
   }
 
@@ -145,7 +176,7 @@ export class PaymentGatewayComponent {
       product: cartItem.id,
       quantity: cartItem.quantityToBuy,
     }))
-
+    this.total = this.getCartTotal()
     const orderData = {
       client: this.user!.id,
       total: this.getCartTotal(),
@@ -155,6 +186,25 @@ export class PaymentGatewayComponent {
 
     this.orderService.createOrder(orderData).subscribe(response => {
       console.log('Order created:', response)
+    })
+  }
+
+  sendConfirmationEmail() {
+    const contactData = {
+      first_name: this.first_name,
+      last_name: this.last_name,
+      email: this.email,
+      products: this.productshop!.map(cartItem => ({
+        name: cartItem.name,
+        quantity: cartItem.quantityToBuy,
+        price: cartItem.price,
+      })),
+      total: this.total,
+      subtotal: this.getCartSubtotal(),
+      iva: this.getCartIVA(),
+    }
+    this.contactService.sendBuyEmail(contactData).subscribe(response => {
+      console.log('Confirmation email sent:', response)
     })
   }
 
@@ -200,10 +250,21 @@ export class PaymentGatewayComponent {
   }
 
   deleteCartItem(productID: number) {
-    const confirmation = confirm('¿Estás seguro de que deseas eliminar este artículo del carrito?')
+    this.alertTopic = 'Artículo eliminado'
+    this.alertMessage = '¿Estás seguro de que deseas eliminar este artículo del carrito?'
+    this.alertType = 'confirm'
+    this.alertComponent.resetAlert()
+    /*const confirmation = confirm('¿Estás seguro de que deseas eliminar este artículo del carrito?')
     if (confirmation) {
       this.cartService.removeFromCart(productID)
       this.productshop = this.productshop?.filter(item => item.id !== productID)
-    }
+    }*/
+    const subscription = this.alertComponent.confirmAction.subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.cartService.removeFromCart(productID)
+        this.productshop = this.productshop?.filter(item => item.id !== productID)
+      }
+      subscription.unsubscribe()
+    })
   }
 }

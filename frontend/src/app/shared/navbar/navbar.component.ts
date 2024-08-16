@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core'
+import { Component, HostListener, ViewChild } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import {
   RouterLinkActive,
@@ -19,15 +19,17 @@ import { WishlistModalComponent } from '../../pages/wishlist-modal/wishlist-moda
 import { User } from '../../interfaces/user'
 import { CartItem } from '../../interfaces/cartItem'
 import { CartService } from '../../services/cart.service'
+import { AlertComponent } from '../../shared/alert/alert.component'
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterLink, RouterModule, FormsModule],
+  imports: [CommonModule, RouterLinkActive, RouterLink, RouterModule, FormsModule, AlertComponent],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
+  @ViewChild(AlertComponent) alertComponent!: AlertComponent
   isSearchBarVisible = false
   isLoggedIn: boolean | undefined
   username: string | undefined
@@ -39,6 +41,10 @@ export class NavbarComponent {
   isCartEmpty: boolean = true
   public productshop?: CartItem[]
   public totalProducts: number = 0
+  showAlert = false
+  alertTopic = ''
+  alertType: 'verify' | 'error' | 'confirm' = 'verify'
+  alertMessage = ''
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectedCategory: any
   categories = [
@@ -182,7 +188,7 @@ export class NavbarComponent {
       if (total === 0) {
         this.totalProducts = 0
       } else {
-        this.totalProducts = total 
+        this.totalProducts = total
       }
     })
   }
@@ -208,7 +214,11 @@ export class NavbarComponent {
         },
       )
     } else {
-      alert('Necesitas estar loggeado para tener acceso a la wishtlist')
+      this.alertTopic = 'Error al abrir lista de deseos'
+      this.alertMessage = 'Por favor inicia sesión para ver tu lista de deseos.'
+      this.alertType = 'error'
+      this.alertComponent.resetAlert()
+      console.log('User not authenticated')
     }
   }
 

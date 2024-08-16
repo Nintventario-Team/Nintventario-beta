@@ -1,3 +1,10 @@
+<app-alert
+  [showAlert]="showAlert"
+  [alertTopic]="alertTopic"
+  [alertMessage]="alertMessage"
+  [alertType]="alertType"
+></app-alert>
+
 <div class="container active" id="container">
   <div class="form-container sign-in" id="form-container">
     <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
@@ -58,6 +65,7 @@
       </div>
 
       <button type="submit">Registrarse</button>
+      <p class="register-text">¿Ya posees una cuenta? <a id="textRegis" (click)="navigateToLogin()">Inicia sesión</a></p>
     </form>
   </div>
   <div class="toggle-container" id="toggle-container">
@@ -73,16 +81,5 @@
         <button class="hidden" id="login" (click)="navigateToLogin()">Inicia sesión</button>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- Alerta -->
-<div class="alert" *ngIf="showAlert" [ngClass]="alertClass">
-  <span>
-    {{ alertMessage }}
-    <button class="close-alert" (click)="closeAlert()">X</button>
-  </span>
-  <div class="progress-bar">
-    <div class="progress" [ngStyle]="{ width: progressWidth + '%', 'background-color': progressColor }"></div>
   </div>
 </div>

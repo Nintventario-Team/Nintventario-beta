@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth.service'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { ContactService } from '../../services/contact.service'
 import { CommonModule } from '@angular/common'
+import { AlertComponent } from '../../shared/alert/alert.component'
+import { AlertService } from '../../services/alert.service'
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule, AlertComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  @ViewChild(AlertComponent) alertComponent!: AlertComponent
   contactForm: FormGroup
-  errorMessage: string = ''
-  alertMessage: string = ''
-  showAlert: boolean = false
-  alertClass: string = ''
-  progressWidth: number = 100
-  progressColor: string = ''
-  progressInterval: any
-  alertTimeout: any
+  showAlert = false
+  alertTopic = ''
+  alertType: 'verify' | 'error' | 'confirm' = 'verify'
+  alertMessage = ''
 
   constructor(
+    private alertService: AlertService,
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
@@ -46,74 +46,47 @@ export class RegisterComponent {
       this.authService.register(email, password, first_name, last_name).subscribe(
         response => {
           console.log('Registration successful', response)
-          this.showAlertMessage('Registro exitoso', 'success')
-
+          this.alertTopic = 'Creación de cuenta exitosa'
+          this.alertMessage = 'La cuenta ha sido creada exitosamente.'
+          this.alertType = 'verify'
+          this.alertComponent.resetAlert()
           this.contactService.sendRegisterEmail(this.contactForm.value).subscribe(
             response => {
-              alert('Correo enviado exitosamente')
-              this.contactForm.reset()
+              console.log('Email sent', response)
             },
             error => {
-              alert('Error al enviar el correo')
+              console.error('Email error', error)
             },
           )
+          this.alertService.setAlert(this.alertTopic, this.alertMessage, this.alertType)
+          this.router.navigate(['/'])
 
-          this.router.navigateByUrl('/')
         },
         error => {
           if (error.error.error === 'Email already exists') {
-            this.showAlertMessage('Este correo ya tiene una cuenta registrada', 'error')
+            this.alertTopic = 'Error al crear cuenta'
+            this.alertMessage = 'El correo ya está registrado.'
+            this.alertType = 'error'
+            this.alertComponent.resetAlert()
           } else {
-            this.showAlertMessage('Ocurrió un error durante el registro', 'error')
+            this.alertTopic = 'Error al crear cuenta'
+            this.alertMessage = 'Ocurrió un error durante el registro.'
+            this.alertType = 'error'
+            this.alertComponent.resetAlert()
           }
           console.error('Registration error', error)
         },
       )
     } else {
-      this.showAlertMessage('Por favor, completa todos los campos correctamente', 'error')
-      this.contactForm.markAllAsTouched() 
+      this.alertTopic = 'Error al crear cuenta'
+      this.alertMessage = 'Porfavor rellena todos los campos.'
+      this.alertType = 'error'
+      this.alertComponent.resetAlert()
+      this.contactForm.markAllAsTouched()
     }
   }
 
   navigateToLogin() {
     this.router.navigateByUrl('/login')
-  }
-
-  showAlertMessage(message: string, type: string): void {
-    this.alertMessage = message
-    this.showAlert = true
-    this.progressWidth = 100
-
-    if (type === 'success') {
-      this.alertClass = 'alert-success'
-      this.progressColor = '#4CAF50'
-    } else {
-      this.alertClass = 'alert-error'
-      this.progressColor = '#f44336'
-    }
-
-    clearInterval(this.progressInterval)
-    clearTimeout(this.alertTimeout)
-
-    const totalDuration = 7000
-    const intervalDuration = 100
-    const decrementAmount = (intervalDuration / totalDuration) * 100
-
-    this.progressInterval = setInterval(() => {
-      this.progressWidth -= decrementAmount
-      if (this.progressWidth <= 0) {
-        this.closeAlert()
-      }
-    }, intervalDuration)
-
-    this.alertTimeout = setTimeout(() => {
-      this.showAlert = false
-      clearInterval(this.progressInterval)
-    }, totalDuration)
-  }
-
-  closeAlert(): void {
-    this.showAlert = false
-    clearInterval(this.progressInterval)
   }
 }

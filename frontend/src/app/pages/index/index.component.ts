@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ProductService } from '../../services/product.service'
 import { Router, RouterLink, RouterLinkActive, RouterModule } from '@angular/router'
 import { Product } from '../../interfaces/product'
 import { FormsModule } from '@angular/forms'
+import { AlertComponent } from '../../shared/alert/alert.component'
+import { AlertService } from '../../services/alert.service'
 
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterLink, RouterModule, FormsModule],
+  imports: [CommonModule, RouterLinkActive, RouterLink, RouterModule, FormsModule, AlertComponent],
   providers: [ProductService],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class IndexComponent {
+  @ViewChild(AlertComponent) alertComponent!: AlertComponent
   public bestSellers: Product[] = []
   public newProducts: Product[] = []
   showDetails: boolean = false
@@ -26,6 +29,10 @@ export class IndexComponent {
     'https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fhome%20page%2FbannerC2.jpg?alt=media&token=ca1295fc-ece8-446b-a1f6-046c409292c0',
     'https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fhome%20page%2FbannerC3.jpg?alt=media&token=52b6f77b-3627-48f6-a825-c206f5c7362c',
   ]
+  showAlert = false
+  alertTopic = ''
+  alertType: 'verify' | 'error' | 'confirm' = 'verify'
+  alertMessage = ''
   currentSlide = 0
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   slideInterval: any
@@ -49,8 +56,9 @@ export class IndexComponent {
   nextSlide() {
     this.currentSlide = this.currentSlide < this.images.length - 1 ? this.currentSlide + 1 : 0
   }
-  
+
   constructor(
+    private alertService: AlertService,
     private productService: ProductService,
     private router: Router,
   ) {}
@@ -60,6 +68,13 @@ export class IndexComponent {
     this.NewestProducts()
     console.log('entre a INIT')
     this.BestsellingProducts()
+    if (this.alertService.showAlert) {
+      this.alertTopic = this.alertService.alertTopic
+      this.alertMessage = this.alertService.alertMessage
+      this.alertType = this.alertService.alertType
+      this.showAlert = true
+      this.alertService.clearAlert()
+    }
   }
 
   NewestProducts() {
@@ -90,18 +105,18 @@ export class IndexComponent {
 
   searchProduct($event: KeyboardEvent) {
     if ($event.code === 'Enter' || ($event as any).type === 'click') {
-      const trimmedValue = this.inputValue.trim();
+      const trimmedValue = this.inputValue.trim()
       if (trimmedValue) {
-        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } });
+        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } })
       }
     }
   }
 
   search() {
-    const trimmedValue = this.inputValue.trim();
-      if (trimmedValue) {
-        this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } });
-      }
+    const trimmedValue = this.inputValue.trim()
+    if (trimmedValue) {
+      this.router.navigate(['/todos'], { queryParams: { q: trimmedValue } })
+    }
   }
 
   navigateToAll() {

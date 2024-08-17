@@ -18,7 +18,7 @@ class ClientFactory(DjangoModelFactory):
     dni = factory.Faker('ssn')
     user = factory.SubFactory(UserFactory)
     direction = factory.Faker('address')
-    cellphone = factory.Faker('phone_number')
+    cellphone = factory.Faker('numerify', text='###########') 
     city = factory.Faker('city')
 
 class CategoryFactory(DjangoModelFactory):

@@ -43,7 +43,7 @@ def request_password_reset(request):
         send_mail(
             'Password Reset Request',
             f'Click the link to reset your password: {reset_url}',
-            'your_email@example.com',
+            'nintventario@gmail.com',
             [user.email],
             fail_silently=False,
         )

@@ -41,7 +41,7 @@ jobs:
       mysql:
         image: mysql:8.0  
         env:
-          MYSQL_ROOT_PASSWORD: ''  
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: database_nintventario
         ports:
           - 3306:3306

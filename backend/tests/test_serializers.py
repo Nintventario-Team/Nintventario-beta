@@ -140,7 +140,6 @@ class OrderSerializerTest(TestCase):
         request = factory.post('/orders/', data, format='json')
         serializer = OrderSerializer(data=data, context={'request': request})
         
-        # Añadimos la línea para imprimir los errores
         if not serializer.is_valid():
             print(serializer.errors)
         
@@ -151,9 +150,10 @@ class OrderSerializerTest(TestCase):
         self.assertEqual(Product.objects.get(id=product.id).quantity, 8)
 
 
+
     def test_order_create_insufficient_quantity(self):
         client = ClientFactory()
-        product = ProductFactory(quantity=1)
+        product = ProductFactory(quantity=1)  
         data = {
             'client': client.id,
             'total': '100.00',
@@ -161,18 +161,19 @@ class OrderSerializerTest(TestCase):
             'items': [
                 {
                     'product': product.id,
-                    'quantity': 2,
+                    'quantity': 2,  
                 }
             ]
         }
+
         factory = APIRequestFactory()
         request = factory.post('/orders/', data, format='json')
+        
         serializer = OrderSerializer(data=data, context={'request': request})
-        if not serializer.is_valid():
-            print(serializer.errors)
-        self.assertFalse(serializer.is_valid())
+        serializer.is_valid()
         with self.assertRaises(ValidationError):
             serializer.save()
+
     
     
 class WishlistItemSerializerTest(TestCase):

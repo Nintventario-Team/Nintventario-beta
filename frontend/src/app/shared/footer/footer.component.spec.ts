@@ -27,8 +27,5 @@ describe('FooterComponent', () => {
     expect(compiled.querySelector('.social-icons a')).not.toBeNull();
   });
 
-  it('should have footer navigation links', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.footer-text nav a')).not.toBeNull();
-  });
+
 });

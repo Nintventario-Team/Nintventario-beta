@@ -1,5 +1,7 @@
 from behave import given
+from custom_user.models import Category
 from tests.factories import CategoryFactory, UserFactory, ClientFactory, ProductFactory
+from django.core.exceptions import ObjectDoesNotExist
 
 @given('a product exists with a quantity of "{quantity}"')
 def step_given_product_exists_with_quantity(context, quantity):
@@ -26,4 +28,9 @@ def step_given_category_exists(context, category_name):
 
 @given('a product exists with name "{product_name}" in the "{category_name}" category')
 def step_given_product_in_category(context, product_name, category_name):
-    context.product = ProductFactory(name=product_name, category=context.category)
+    
+    try:
+        category = Category.objects.get(name=category_name)
+    except ObjectDoesNotExist:
+        category = CategoryFactory(name=category_name)
+    context.product = ProductFactory(name=product_name, category=category)

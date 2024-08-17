@@ -27,7 +27,6 @@ describe('UserPurchaseHistoryComponent', () => {
   })
 
   it('should display order list', () => {
-    // Mock data matching the OrderResponse interface
     component.orders = [
       {
         id: 1,
@@ -45,7 +44,6 @@ describe('UserPurchaseHistoryComponent', () => {
       },
     ] as OrderResponse[]
 
-    // Mock data matching the Product interface
     component.products = [
       {
         id: 1,

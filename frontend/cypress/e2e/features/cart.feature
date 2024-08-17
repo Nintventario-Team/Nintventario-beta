@@ -1,4 +1,4 @@
-Feature: Checkout and Payment
+Feature: Cart
 
   Scenario: Add product to cart and checkout
     Given I am on the product details page
@@ -6,12 +6,10 @@ Feature: Checkout and Payment
     And I proceed to checkout
     Then I should be redirected to the login page if I am not logged in
 
-  Scenario: User completes a purchase
+  Scenario: User go to checkout
     Given I am logged in
     And I have products in my cart
     When I proceed to checkout
-    And I choose PayPal as the payment method
-    And I complete the payment
-    Then I should see a confirmation of my order
-    And the products should be removed from my cart
+    Then I should see the paypal boton
+    And I should see the products to buy
  

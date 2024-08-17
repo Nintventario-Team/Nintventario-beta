@@ -9,7 +9,7 @@ Feature: Product Listing
   Scenario: View product details
     Given I am on the products page
     When I click on a product
-    Then I should be redirected to the product details page
+    Then I should  see the modal product details page
     And I should see detailed information about the product
     And I should see an option to add the product to the wishlist or cart
  

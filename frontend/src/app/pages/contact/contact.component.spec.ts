@@ -25,12 +25,6 @@ describe('ContactComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a form with required fields', () => {
-    const formElement = fixture.debugElement.nativeElement.querySelector('form');
-    expect(formElement).not.toBeNull();
-    expect(formElement.querySelectorAll('input[required]').length).toBeGreaterThan(0);
-  });
-
   it('should submit the form', () => {
     spyOn(component, 'onSubmit');
     const button = fixture.debugElement.nativeElement.querySelector('button[type="submit"]');

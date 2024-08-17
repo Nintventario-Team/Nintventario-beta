@@ -188,13 +188,15 @@
             <p class="price-product">${{ producto.price }}</p>
             <div class="icon-container">
               <img
-                class="icon-products" id="addToWishlist"
+                class="icon-products"
+                id="addToWishlist"
                 [ngClass]="{ 'in-wishlist': isProductInWishlist(producto) }"
                 (click)="validateWishlist($event, producto)"
                 src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Ffavoritefill.png?alt=media&token=c241acf9-6766-4971-8885-dacc9481e16c"
               />
               <img
-                class="icon-products" id="addToCart"
+                class="icon-products"
+                id="addToCart"
                 (click)="addCart($event, producto)"
                 src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fcart-plus-fill.svg?alt=media&token=5f945936-14bf-4dec-b83e-c6105db787c3"
               />
@@ -217,19 +219,24 @@
     <p id="detalles-text">{{ selectedProduct.details }}</p>
     <p id="nombre-text">Descripción</p>
     <p id="desc-text">{{ selectedProduct.description }}</p>
-    <button id="addToCart-detalles" (click)="addCart($event, selectedProduct)">
-      <img
-        id="cart-icon-detalles"
-        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fwhite-add-cart-icon.png?alt=media&token=979c21f2-7eb4-4a00-abe4-897c1802ec9f"
-      />
-      AGREGAR AL CARRITO
-    </button>
     <button id="closeButton-detalles" (click)="closeDetails()">X</button>
-    <img
-    class="icon-products" id="addToWishlist"
-    [ngClass]="{ 'in-wishlist': isProductInWishlist(selectedProduct) }"
-    (click)="validateWishlist($event, selectedProduct)"
-    src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Ffavoritefill.png?alt=media&token=c241acf9-6766-4971-8885-dacc9481e16c"
-  />
+
+    <div class="buttons">
+      <button id="addToCart-detalles" (click)="addCart($event, selectedProduct)">
+        <img
+          id="cart-icon-detalles"
+          src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Fwhite-add-cart-icon.png?alt=media&token=979c21f2-7eb4-4a00-abe4-897c1802ec9f"
+        />
+        AGREGAR AL CARRITO
+      </button>
+      <div class="wishlist_container_button"> <img
+        class="icon-products icon-products-details"
+        id="addToWishlist"
+        [ngClass]="{ 'in-wishlist': isProductInWishlist(selectedProduct) }"
+        (click)="validateWishlist($event, selectedProduct)"
+        src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Ffavoritefill.png?alt=media&token=c241acf9-6766-4971-8885-dacc9481e16c"
+      /></div>
+     
+    </div>
   </div>
 </div>

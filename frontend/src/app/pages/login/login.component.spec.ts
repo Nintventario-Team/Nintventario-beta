@@ -50,6 +50,6 @@ describe('LoginComponent', () => {
 
   it('should navigate to home after successful login', () => {
     component.onSubmit();
-    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/'); // Adjust the test to check for navigateByUrl
+    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/'); 
   });
 });

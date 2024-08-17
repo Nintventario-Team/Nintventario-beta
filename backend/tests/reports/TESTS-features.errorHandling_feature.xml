@@ -1,31 +1,31 @@
-<testsuite name="features.errorHandling_feature.Error Handling and Validation" tests="3" errors="0" failures="0" skipped="0" time="1.173575" timestamp="2024-08-15T19:15:38.860481" hostname="Kev-Roldan"><testcase classname="features.errorHandling_feature.Error Handling and Validation" name="Attempt to create an order with insufficient product quantity" status="passed" time="0.61834"><system-out>
+<testsuite name="features.errorHandling_feature.Error Handling and Validation" tests="3" errors="0" failures="0" skipped="0" time="1.200721" timestamp="2024-08-17T00:44:34.515176" hostname="Kev-Roldan"><testcase classname="features.errorHandling_feature.Error Handling and Validation" name="Attempt to create an order with insufficient product quantity" status="passed" time="0.624213"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Attempt to create an order with insufficient product quantity
-    Given a product exists with a quantity of "1" ... passed in 0.593s
-    When I attempt to create an order with a quantity of "2" for that product ... passed in 0.025s
+    Given a product exists with a quantity of "1" ... passed in 0.598s
+    When I attempt to create an order with a quantity of "2" for that product ... passed in 0.026s
     Then I should receive a "400" status ... passed in 0.000s
     And I should see an error message "Insufficient quantity" ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="features.errorHandling_feature.Error Handling and Validation" name="Attempt to view a product that does not exist" status="passed" time="0.005001"><system-out>
+</system-out></testcase><testcase classname="features.errorHandling_feature.Error Handling and Validation" name="Attempt to view a product that does not exist" status="passed" time="0.004963"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Attempt to view a product that does not exist
-    When I attempt to view the product with ID "9999" ... passed in 0.004s
-    Then I should receive a "404" status ... passed in 0.001s
+    When I attempt to view the product with ID "9999" ... passed in 0.005s
+    Then I should receive a "404" status ... passed in 0.000s
     And I should see an error message "Product not found" ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="features.errorHandling_feature.Error Handling and Validation" name="Attempt to register with an already taken email" status="passed" time="0.550234"><system-out>
+</system-out></testcase><testcase classname="features.errorHandling_feature.Error Handling and Validation" name="Attempt to register with an already taken email" status="passed" time="0.571545"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Attempt to register with an already taken email
-    Given a user already exists with the email "existinguser@example.com" ... passed in 0.548s
+    Given a user already exists with the email "existinguser@example.com" ... passed in 0.570s
     When I attempt to register with the email "existinguser@example.com" ... passed in 0.002s
     Then I should receive a "400" status ... passed in 0.000s
     And I should see an error message "Email already exists" ... passed in 0.000s

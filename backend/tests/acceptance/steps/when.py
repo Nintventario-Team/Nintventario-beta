@@ -82,8 +82,12 @@ def step_when_delete_product(context):
 
 @when('I view products filtered by the "{category_name}" category')
 def step_when_view_filtered_products(context, category_name):
-    response = context.client.get(f'/filteredProducts/?category={category_name}')
+    body = {
+        "category": category_name
+    }
+    response = context.client.post('/filteredProducts/', data=body, content_type='application/json')
     context.response = response
+
 
 @when('I send a contact email with subject "{subject}" and message "{message}"')
 def step_when_send_contact_email(context, subject, message):

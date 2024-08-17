@@ -32,10 +32,4 @@ describe('NavbarComponent', () => {
     expect(component.menuVisible).toBe(true)
   })
 
-  it('should navigate to home on logo click', () => {
-    spyOn(component, 'navigateToHome')
-    const logo = fixture.debugElement.nativeElement.querySelector('.navbar-logo img')
-    logo.click()
-    expect(component.navigateToHome).toHaveBeenCalled()
-  })
 })

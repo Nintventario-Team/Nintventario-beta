@@ -4,8 +4,8 @@ Feature: Wishlist Management
     Given I am logged in
     And I am on the product details page
     When I click the "Add to Wishlist" button
-    Then the product should be added to my wishlist
-    And I should see a confirmation message
+    Then I should see a confirmation message
+    And the product should be added to my wishlist
 
   Scenario: View wishlist
     Given I am logged in

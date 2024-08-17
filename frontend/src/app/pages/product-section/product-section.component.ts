@@ -13,6 +13,7 @@ import { WishlistResponse } from '../../interfaces/wishlist'
 import { FormsModule } from '@angular/forms'
 import { CartService } from '../../services/cart.service'
 import { AlertComponent } from '../../shared/alert/alert.component'
+import { PlatformService } from '../../services/platform.service'
 
 @Component({
   selector: 'app-product-section',
@@ -37,17 +38,17 @@ export class ProductSectionComponent implements OnInit {
   consoles: string[] = ['Todos', 'PS5', 'Nintendo Switch', 'Xbox 360']
   funkos: string[] = ['Todos', 'Heroes', 'Marvel', 'Comics', 'Animation', 'Disney', 'Television', 'Movies']
   articulos: string[] = [
+    'Todos',
+    'Cables',
+    'Cargadores',
+    'Nintendo 3DS',
+    'Nintendo Switch',
+    'Nintendo Wii',
     'PS1',
     'PS2',
     'PS3',
     'PS4',
     'PS5',
-    'Wii',
-    'Nintendo 3DS',
-    'Nintendo Switch',
-    'Nintendo Wii',
-    'Computadores',
-    'Televisores',
     'Tazas',
   ]
   platforms: string[] = [
@@ -91,8 +92,9 @@ export class ProductSectionComponent implements OnInit {
   wishlist: WishlistResponse[] = []
   selectedPlatform: string = ''
   selectedGenre: string = ''
-
+  genresSelected: string = ''
   constructor(
+    private platformService: PlatformService,
     private route: ActivatedRoute,
     private productService: ProductService,
     private authService: AuthService,
@@ -156,6 +158,22 @@ export class ProductSectionComponent implements OnInit {
     if (this.section === 'todos') {
       this.allIsSelected = true
     }
+    this.platformService.currentPlatform.subscribe(platform => {
+      this.selectedPlatform = platform
+      this.filterByGenreAndPlatform(this.selectedPlatform, '')
+    })
+    this.platformService.currentFunkoCategory.subscribe(category => {
+      this.genresSelected = category
+      this.filterByGenre(this.genresSelected)
+    })
+    this.platformService.CurrentConsolaCategory.subscribe(category => {
+      this.genresSelected = category
+      this.filterByGenre(this.genresSelected)
+    })
+    this.platformService.CurrentArticleCategory.subscribe(category => {
+      this.genresSelected = category
+      this.filterByGenre(this.genresSelected)
+    })
   }
 
   getNameWithoutParentheses(name: string): string {
@@ -256,12 +274,25 @@ export class ProductSectionComponent implements OnInit {
   }
 
   filterByGenre(genre: string): void {
+    if (this.section === 'articulos') {
+      if (genre === 'Nintendo Switch') {
+        this.category = 'SWITCH'
+      }
+    }
     if (genre === 'Todos') {
       this.category = ''
-      this.getFilteredData()
-      return
     } else if (genre === 'Nintendo Switch') {
       this.category = 'switch'
+    } else if (genre === 'Tazas') {
+      this.category = 'taza'
+    } else if (genre === 'Cargadores') {
+      this.category = 'cargador'
+    } else if (genre === 'Cables') {
+      this.category = 'Transferencia'
+    } else if (genre === 'Nintendo Wii') {
+      this.category = 'wii'
+    } else if (genre === 'Nintendo 3DS') {
+      this.category = '3ds'
     } else {
       this.category = genre
     }
@@ -271,6 +302,11 @@ export class ProductSectionComponent implements OnInit {
   filterByGenreAndPlatform(platform?: string, genre?: string): void {
     if (platform) {
       this.selectedPlatform = platform === 'Todos' ? '' : platform
+      if (this.selectedPlatform === 'Nintendo 3DS') {
+        this.selectedPlatform = '3ds'
+      } else if (this.selectedPlatform === 'PSP Vita') {
+        this.selectedPlatform = 'vita'
+      }
     }
 
     if (genre) {

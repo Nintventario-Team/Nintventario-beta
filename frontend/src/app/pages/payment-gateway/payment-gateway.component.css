@@ -112,6 +112,39 @@
   color: #333;
 }
 
+#pickup-location {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+#pickup-location label {
+  font-family: 'Montserrat', sans-serif;
+  color: #00274d;
+  margin-bottom: 5px;
+}
+
+#pickup-location select {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+}
+
+.invalid {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
 .loading-overlay {
   position: fixed;
   top: 0;

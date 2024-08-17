@@ -12,12 +12,12 @@ import { CartService } from '../../services/cart.service'
 import { ContactService } from '../../services/contact.service'
 import { AlertComponent } from '../../shared/alert/alert.component'
 import { AlertService } from '../../services/alert.service'
-
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-payment-gateway',
   standalone: true,
-  imports: [AlertComponent],
+  imports: [AlertComponent, CommonModule],
   templateUrl: './payment-gateway.component.html',
   styleUrl: './payment-gateway.component.css',
 })
@@ -40,6 +40,8 @@ export class PaymentGatewayComponent {
   alertTopic = ''
   alertType: 'verify' | 'error' | 'confirm' = 'verify'
   alertMessage = ''
+  selectedLocation: string = ''
+  isLocationInvalid: boolean = false
 
   constructor(
     private router: Router,
@@ -151,18 +153,28 @@ export class PaymentGatewayComponent {
       })
   }
 
+  onLocationChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement
+    this.selectedLocation = selectElement.value
+    this.isLocationInvalid = this.selectedLocation === ''
+  }
+
   getCartFromLocalStorage(): unknown {
     const cart = localStorage.getItem('cart')
     return cart ? JSON.parse(cart) : {}
   }
 
   completeTransaction(transaction: Capture) {
+    if (!this.selectedLocation) {
+      this.isLocationInvalid = true
+      return
+    }
     this.saveOrder()
 
     // Enviar correo de confirmación
     this.sendConfirmationEmail()
     this.alertTopic = 'Transacción completada'
-    this.alertMessage = `Transaction ${transaction.status}: ${transaction.id}`
+    this.alertMessage = `Transaction ${transaction.status}: ${transaction.id}- Retiro en: ${this.selectedLocation}`
     this.alertType = 'verify'
     this.alertComponent.resetAlert()
     this.alertService.setAlert(this.alertTopic, this.alertMessage, this.alertType)
@@ -202,8 +214,13 @@ export class PaymentGatewayComponent {
       total: this.total,
       subtotal: this.getCartSubtotal(),
       iva: this.getCartIVA(),
+      pickup_location: this.selectedLocation,
     }
     this.contactService.sendBuyEmail(contactData).subscribe(response => {
+      console.log('Confirmation email sent:', response)
+    })
+
+    this.contactService.sendBuyEmailToCompany(contactData).subscribe(response => {
       console.log('Confirmation email sent:', response)
     })
   }

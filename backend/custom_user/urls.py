@@ -18,7 +18,8 @@ from .views import (
     send_register_email,
     send_buy_email,
     request_password_reset,
-    password_reset_confirm
+    password_reset_confirm,
+    send_buy_email_to_company
 )
 
 urlpatterns = [
@@ -41,4 +42,5 @@ urlpatterns = [
     path('send-buy-email/', send_buy_email, name='send_buy_email'),
     path('password-reset/', request_password_reset, name='password_reset'),
     path('password-reset-confirm/<uidb64>/<token>/', password_reset_confirm, name='password_reset_confirm'),
+    path('send-buy-email-to-company/', send_buy_email_to_company, name='send_buy_email_to_company'),
 ]

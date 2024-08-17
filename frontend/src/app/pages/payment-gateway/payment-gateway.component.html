@@ -20,6 +20,17 @@
   </section>
   <section class="cart-modal">
     <div class="cart-content">
+      <section id="pickup-location">
+        <label for="location-select">Seleccione un local para retirar:</label>
+        <select id="location-select" (change)="onLocationChange($event)" [class.invalid]="isLocationInvalid">
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="Riocentro Ceibos">Riocentro Ceibos</option>
+          <option value="Riocentro Entre Ríos">Riocentro Entre Ríos</option>
+          <option value="C.T.T Terrestre">C.T.T Terrestre</option>
+          <option value="Paseo Shopping Machala">Paseo Shopping Machala</option>
+        </select>
+        <div *ngIf="isLocationInvalid" class="error-message">Por favor, selecciona un lugar de retiro.</div>
+      </section>
       @for (product of productshop; track $index) {
         <div class="cart-item">
           <img [src]="product.image" alt="{{ product.name }}" />
@@ -30,7 +41,10 @@
           </div>
           <div class="change_data">
             <button class="delete-btn" (click)="deleteCartItem(product.id)">
-              <img src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Ftrashicon.png?alt=media&token=302ba841-f298-43e1-a61f-af0731ffa40f" alt="Eliminar">
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/nintventario.appspot.com/o/img%2Ftrashicon.png?alt=media&token=302ba841-f298-43e1-a61f-af0731ffa40f"
+                alt="Eliminar"
+              />
             </button>
           </div>
         </div>

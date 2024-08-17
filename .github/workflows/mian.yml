@@ -76,5 +76,6 @@ jobs:
 
     - name: Run tests
       run: |
-        python backend/manage.py test
+        cd backend
+        python manage.py test
 

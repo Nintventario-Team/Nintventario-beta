@@ -20,6 +20,7 @@ import { User } from '../../interfaces/user'
 import { CartItem } from '../../interfaces/cartItem'
 import { CartService } from '../../services/cart.service'
 import { AlertComponent } from '../../shared/alert/alert.component'
+import { PlatformService } from '../../services/platform.service'
 
 @Component({
   selector: 'app-navbar',
@@ -60,7 +61,6 @@ export class NavbarComponent {
         'PS3',
         'PS4',
         'PS5',
-        'Xbox',
         'Xbox One',
         'Xbox 360',
       ],
@@ -74,7 +74,8 @@ export class NavbarComponent {
       title: 'Artículos',
       items: [
         'Todos',
-        'Computadores',
+        'Cables',
+        'Cargadores',
         'Nintendo 3DS',
         'Nintendo Wii',
         'Nintendo switch',
@@ -83,7 +84,6 @@ export class NavbarComponent {
         'PS3',
         'PS4',
         'PS5',
-        'Televisores',
         'Tazas',
       ],
     },
@@ -91,6 +91,7 @@ export class NavbarComponent {
   ]
 
   constructor(
+    private platformService: PlatformService,
     private router: Router,
     private authService: AuthService,
     public dialog: MatDialog,
@@ -108,6 +109,58 @@ export class NavbarComponent {
 
   openMenu() {
     this.submenuVisible = !this.submenuVisible
+  }
+
+  navigateToVideojuegos(platform: string) {
+    console.log('Platform:', platform)
+    if(platform == 'nintendo 3ds') {
+      this.platformService.setPlatform('3ds')
+    } else if(platform == 'nintendo wii') {
+      this.platformService.setPlatform('wii')
+    } else if(platform == 'nintendo switch') {
+      this.platformService.setPlatform('switch')
+    }else{
+      this.platformService.setPlatform(platform)
+    }
+    this.router.navigate(['/videojuegos'])
+    this.toggleMenu() // Cierra el menú móvil después de navegar
+  }
+
+  navigateToFunkos(category: string) {
+    this.platformService.setFunkoCategory(category)
+    this.router.navigate(['/funkopop'])
+    this.toggleMenu() // Cierra el menú móvil después de navegar
+  }
+
+  navigateToConsola(category: string) {
+    if (category == 'nintendo switch') {
+      this.platformService.setConsolaCategory('switch')
+    }else{
+      this.platformService.setConsolaCategory(category)
+    }
+    this.router.navigate(['/consolas'])
+    this.toggleMenu() // Cierra el menú móvil después de navegar
+  }
+
+  navigateToArticle(category: string) {
+    if (category == 'cables') {
+      this.platformService.setArticleCategory('transferencia')
+    }else if (category == 'tazas') {
+      this.platformService.setArticleCategory('taza')
+    }else if (category == 'cargadores') {
+      this.platformService.setArticleCategory('cargador')
+    } else if (category == 'nintendo 3ds') {
+      this.platformService.setArticleCategory('3ds')
+    } else if (category == 'nintendo wii') {
+      this.platformService.setArticleCategory('wii')
+    } else if (category == 'nintendo switch') {
+      this.platformService.setArticleCategory('switch')
+    } else {
+      this.platformService.setArticleCategory(category)
+    }
+    
+    this.router.navigate(['/articulos'])
+    this.toggleMenu() // Cierra el menú móvil después de navegar
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

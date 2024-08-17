@@ -145,6 +145,7 @@ body {
   color: #333333;
   text-decoration: none;
   transition: color 0.3s;
+  cursor: pointer;
 }
 
 .dropdown-column a:hover {
